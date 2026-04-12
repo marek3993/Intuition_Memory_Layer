@@ -44,6 +44,8 @@ PACK_B_CASES_PATH = SCRIPT_DIR / "sample_support_cases_pack_b.json"
 PACK_B_LABELS_PATH = SCRIPT_DIR / "sample_support_labels_pack_b.json"
 PACK_C_CASES_PATH = SCRIPT_DIR / "sample_support_cases_pack_c.json"
 PACK_C_LABELS_PATH = SCRIPT_DIR / "sample_support_labels_pack_c.json"
+PACK_D_CASES_PATH = SCRIPT_DIR / "sample_support_cases_pack_d.json"
+PACK_D_LABELS_PATH = SCRIPT_DIR / "sample_support_labels_pack_d.json"
 EXPORT_PATH = ARTIFACTS_DIR / "support_label_pack_comparison.json"
 MARKDOWN_EXPORT_PATH = ARTIFACTS_DIR / "support_label_pack_comparison.md"
 DECISION_MEMO_EXPORT_PATH = ARTIFACTS_DIR / "support_label_pack_decision_memo.md"
@@ -570,11 +572,11 @@ def choose_recommended_next_step(slice_results: Sequence[dict[str, Any]]) -> tup
     calibrated_losses_to_baseline = 0
     calibrated_ties_to_baseline = 0
     calibrated_losses_to_default = 0
-    combined_abc_result = next(
+    combined_abcd_result = next(
         (
             slice_result
             for slice_result in slice_results
-            if slice_result["slice_name"] == "combined_abc"
+            if slice_result["slice_name"] == "combined_abcd"
         ),
         None,
     )
@@ -595,11 +597,11 @@ def choose_recommended_next_step(slice_results: Sequence[dict[str, Any]]) -> tup
             elif relation == "ties":
                 calibrated_ties_to_baseline += 1
 
-    if combined_abc_result is not None:
-        combined_default_accuracy = float(combined_abc_result["accuracies"]["iml"])
-        combined_calibrated_accuracy = float(combined_abc_result["accuracies"]["calibrated_iml"])
-        combined_naive_accuracy = float(combined_abc_result["accuracies"]["naive_summary"])
-        combined_full_history_accuracy = float(combined_abc_result["accuracies"]["full_history"])
+    if combined_abcd_result is not None:
+        combined_default_accuracy = float(combined_abcd_result["accuracies"]["iml"])
+        combined_calibrated_accuracy = float(combined_abcd_result["accuracies"]["calibrated_iml"])
+        combined_naive_accuracy = float(combined_abcd_result["accuracies"]["naive_summary"])
+        combined_full_history_accuracy = float(combined_abcd_result["accuracies"]["full_history"])
         combined_baseline_best = max(combined_naive_accuracy, combined_full_history_accuracy)
         if (
             combined_calibrated_accuracy < combined_baseline_best
@@ -673,7 +675,10 @@ def build_markdown_report(slice_results: Sequence[dict[str, Any]]) -> str:
     lines = [
         "# Support Label Pack Comparison Summary",
         "",
-        "Compact human-readable comparison for `pack_a`, `pack_b`, `pack_c`, `combined_ab`, and `combined_abc`.",
+        (
+            "Compact human-readable comparison for `pack_a`, `pack_b`, `pack_c`, "
+            "`pack_d`, `combined_ab`, `combined_abc`, and `combined_abcd`."
+        ),
         "",
     ]
     for slice_result in slice_results:
@@ -832,6 +837,11 @@ def main() -> None:
             labels_paths=(PACK_C_LABELS_PATH,),
         ),
         evaluate_slice(
+            "pack_d",
+            cases_paths=(PACK_D_CASES_PATH,),
+            labels_paths=(PACK_D_LABELS_PATH,),
+        ),
+        evaluate_slice(
             "combined_ab",
             cases_paths=(PACK_A_CASES_PATH, PACK_B_CASES_PATH),
             labels_paths=(PACK_A_LABELS_PATH, PACK_B_LABELS_PATH),
@@ -840,6 +850,21 @@ def main() -> None:
             "combined_abc",
             cases_paths=(PACK_A_CASES_PATH, PACK_B_CASES_PATH, PACK_C_CASES_PATH),
             labels_paths=(PACK_A_LABELS_PATH, PACK_B_LABELS_PATH, PACK_C_LABELS_PATH),
+        ),
+        evaluate_slice(
+            "combined_abcd",
+            cases_paths=(
+                PACK_A_CASES_PATH,
+                PACK_B_CASES_PATH,
+                PACK_C_CASES_PATH,
+                PACK_D_CASES_PATH,
+            ),
+            labels_paths=(
+                PACK_A_LABELS_PATH,
+                PACK_B_LABELS_PATH,
+                PACK_C_LABELS_PATH,
+                PACK_D_LABELS_PATH,
+            ),
         ),
     ]
     export_payload = build_export_payload(slice_results)
