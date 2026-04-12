@@ -343,11 +343,42 @@ def build_aggregate_summary(
         "incorrect_predictions": active_summary["incorrect_predictions"],
         "accuracy": active_summary["accuracy"],
         "methods": method_summaries,
+        "comparison_diagnostics": build_comparison_diagnostics(active_results),
         "calibration_applied_count": sum(
             1
             for calibration_result in calibration_results
             if calibration_result is not None and calibration_result.applied
         ),
+    }
+
+
+def build_comparison_diagnostics(
+    active_results: Sequence[LabelEvaluationResult],
+) -> dict[str, int]:
+    iml_only_correct_vs_baselines = 0
+    baselines_only_correct_vs_iml = 0
+    all_methods_correct = 0
+    all_methods_wrong = 0
+
+    for result in active_results:
+        active_correct = result.correct
+        naive_correct = result.naive_summary_correct
+        full_history_correct = result.full_history_correct
+
+        if active_correct and not naive_correct and not full_history_correct:
+            iml_only_correct_vs_baselines += 1
+        if not active_correct and (naive_correct or full_history_correct):
+            baselines_only_correct_vs_iml += 1
+        if active_correct and naive_correct and full_history_correct:
+            all_methods_correct += 1
+        if not active_correct and not naive_correct and not full_history_correct:
+            all_methods_wrong += 1
+
+    return {
+        "iml_only_correct_vs_baselines": iml_only_correct_vs_baselines,
+        "baselines_only_correct_vs_iml": baselines_only_correct_vs_iml,
+        "all_methods_correct": all_methods_correct,
+        "all_methods_wrong": all_methods_wrong,
     }
 
 
@@ -567,6 +598,11 @@ def print_route_quality_summary(label: str, summary: dict[str, Any]) -> None:
     )
 
 
+def print_comparison_diagnostics(summary: dict[str, int]) -> None:
+    for key, value in summary.items():
+        print(f"{key}={value}")
+
+
 def print_summary(
     payload: dict[str, Any],
     json_export_path: Path,
@@ -577,6 +613,7 @@ def print_summary(
 ) -> None:
     aggregate_summary = payload["aggregate_summary"]
     method_summaries = aggregate_summary["methods"]
+    comparison_diagnostics = aggregate_summary["comparison_diagnostics"]
     flag_breakdown = payload["flag_breakdown"]
 
     print("support_v1 decision-point label evaluation")
@@ -614,6 +651,8 @@ def print_summary(
     print_route_quality_summary("full_history", method_summaries["full_history"])
     if use_calibration:
         print_route_quality_summary("original_iml", method_summaries["original_iml"])
+    print("comparison_diagnostics:")
+    print_comparison_diagnostics(comparison_diagnostics)
     print("flag_breakdown:")
     for flag_name in FLAG_FIELDS:
         flag_summary = flag_breakdown[flag_name]
