@@ -1,0 +1,289 @@
+{
+  "export_name": "zendesk_like_support_export_sample",
+  "exported_at": "2026-04-12T18:00:00+00:00",
+  "source_system": "zendesk_like",
+  "organizations": [
+    {
+      "organization_id": 9101,
+      "entity_id": "acct_riverpath",
+      "external_account_id": "001RP00001882",
+      "name": "RiverPath Logistics",
+      "details": {
+        "segment": "mid_market",
+        "plan_tier": "growth"
+      }
+    },
+    {
+      "organization_id": 9102,
+      "entity_id": "acct_skyline",
+      "external_account_id": "001RP00001883",
+      "name": "Skyline Health Ops",
+      "details": {
+        "segment": "enterprise",
+        "plan_tier": "enterprise_plus"
+      }
+    }
+  ],
+  "users": [
+    {
+      "user_id": 2001,
+      "role": "end_user",
+      "name": "Mila Tran",
+      "email": "mila.tran@riverpath.example",
+      "organization_id": 9101,
+      "tags": [
+        "ops_lead"
+      ]
+    },
+    {
+      "user_id": 2002,
+      "role": "end_user",
+      "name": "Priya Nair",
+      "email": "priya.nair@skyline.example",
+      "organization_id": 9102,
+      "tags": [
+        "support_contact"
+      ]
+    },
+    {
+      "user_id": 3001,
+      "role": "agent",
+      "name": "Jordan Lee",
+      "group_name": "Technical Support"
+    },
+    {
+      "user_id": 4001,
+      "role": "system",
+      "name": "Follow-up SLA Timer"
+    },
+    {
+      "user_id": 5001,
+      "role": "qa",
+      "name": "Nadia Chen",
+      "group_name": "Support QA"
+    }
+  ],
+  "tickets": [
+    {
+      "id": 88021,
+      "external_id": "RP-88021",
+      "subject": "Carrier label sync stalled after credentials rotation",
+      "requester_id": 2001,
+      "organization_id": 9101,
+      "assignee_id": 3001,
+      "created_at": "2026-02-03T08:15:00+00:00",
+      "updated_at": "2026-02-05T14:30:00+00:00",
+      "closed_at": "2026-02-05T14:30:00+00:00",
+      "status": "solved",
+      "priority": "normal",
+      "via": {
+        "channel": "email",
+        "source": {
+          "from": {
+            "address": "ops@riverpath.example"
+          }
+        }
+      },
+      "tags": [
+        "carrier_sync",
+        "credentials_rotation"
+      ],
+      "ticket_form": {
+        "id": "enterprise_support",
+        "name": "Technical Issue"
+      },
+      "custom_fields": {
+        "product_area": "shipping",
+        "environment": "production"
+      }
+    },
+    {
+      "id": 10492,
+      "external_id": "SH-10492",
+      "subject": "Patient export retry blocked by missing audit bundle",
+      "requester_id": 2002,
+      "organization_id": 9102,
+      "assignee_id": 3001,
+      "created_at": "2026-02-17T10:00:00+00:00",
+      "updated_at": "2026-02-19T16:10:00+00:00",
+      "closed_at": "2026-02-19T16:10:00+00:00",
+      "status": "closed",
+      "priority": "high",
+      "via": {
+        "channel": "web"
+      },
+      "tags": [
+        "patient_export",
+        "audit_bundle"
+      ],
+      "ticket_form": {
+        "id": "regulated_support",
+        "name": "Compliance Issue"
+      },
+      "custom_fields": {
+        "product_area": "exports",
+        "environment": "production"
+      }
+    },
+    {
+      "id": 88177,
+      "external_id": "RP-88177",
+      "subject": "Reopened barcode scanner issue after prior resolution claim",
+      "requester_id": 2001,
+      "organization_id": 9101,
+      "assignee_id": 3001,
+      "created_at": "2026-03-18T07:50:00+00:00",
+      "updated_at": "2026-03-21T14:05:00+00:00",
+      "closed_at": "2026-03-21T14:05:00+00:00",
+      "status": "solved",
+      "priority": "high",
+      "via": {
+        "channel": "chat"
+      },
+      "tags": [
+        "scanner_issue",
+        "reopened"
+      ],
+      "ticket_form": {
+        "id": "enterprise_support",
+        "name": "Technical Issue"
+      },
+      "custom_fields": {
+        "product_area": "warehouse_ops",
+        "environment": "store_floor"
+      }
+    }
+  ],
+  "comments": [
+    {
+      "comment_id": "88021-c1",
+      "ticket_id": 88021,
+      "created_at": "2026-02-03T08:17:00+00:00",
+      "author_id": 2001,
+      "public": true,
+      "body": "Operations lead included carrier account ID, failing label IDs, and the rotation timestamp.",
+      "metadata": {
+        "initial_context_quality": "complete",
+        "attachments": [
+          {
+            "file_name": "rotation-log.txt"
+          }
+        ],
+        "thread_id": "zd-thread-88021"
+      }
+    },
+    {
+      "comment_id": "88021-c2",
+      "ticket_id": 88021,
+      "created_at": "2026-02-03T09:00:00+00:00",
+      "author_id": 3001,
+      "public": true,
+      "body": "Support requested sanitized webhook logs and one failed payload sample.",
+      "metadata": {
+        "request_id": "diag-88021",
+        "requested_items": [
+          "webhook_logs",
+          "failed_payload"
+        ]
+      }
+    },
+    {
+      "comment_id": "88021-c3",
+      "ticket_id": 88021,
+      "created_at": "2026-02-04T11:25:00+00:00",
+      "author_id": 2001,
+      "public": true,
+      "body": "Customer uploaded sanitized webhook logs and a failed request payload sample.",
+      "metadata": {
+        "response_quality": "complete",
+        "fulfills_request": true,
+        "requested_item": "webhook_logs",
+        "attachment_count": 2
+      }
+    },
+    {
+      "comment_id": "10492-c1",
+      "ticket_id": 10492,
+      "created_at": "2026-02-17T10:03:00+00:00",
+      "author_id": 2002,
+      "public": true,
+      "body": "Support contact shared the export job IDs, the affected patient batch, and the certificate rotation window.",
+      "metadata": {
+        "initial_context_quality": "useful",
+        "case_reason": "export_retry_failure"
+      }
+    },
+    {
+      "comment_id": "88177-c1",
+      "ticket_id": 88177,
+      "created_at": "2026-03-18T07:52:00+00:00",
+      "author_id": 2001,
+      "public": true,
+      "body": "Customer reopened the scanner issue with a short note saying the prior fix did not hold.",
+      "metadata": {
+        "initial_context_quality": "useful",
+        "reopened_from_ticket_id": 87004
+      }
+    },
+    {
+      "comment_id": "88177-c2",
+      "ticket_id": 88177,
+      "created_at": "2026-03-19T12:10:00+00:00",
+      "author_id": 2001,
+      "public": true,
+      "body": "Customer replied that scanning was still failing but did not include the requested scanner video.",
+      "metadata": {
+        "followup_without_requested_info": true,
+        "missing_item_count": 1,
+        "missing_items": [
+          "scanner_video"
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "event_id": "88021-e1",
+      "ticket_id": 88021,
+      "created_at": "2026-02-05T14:30:00+00:00",
+      "type": "status_change",
+      "author_id": 2001,
+      "note": "Customer confirmed the labels synced normally after the credential refresh.",
+      "metadata": {
+        "raw_action_hint": "confirmed_fix",
+        "resolution_code": "fixed",
+        "status": {
+          "from": "open",
+          "to": "solved"
+        }
+      }
+    },
+    {
+      "event_id": "10492-e1",
+      "ticket_id": 10492,
+      "created_at": "2026-02-19T16:10:00+00:00",
+      "type": "sla_breach",
+      "author_id": 4001,
+      "note": "Requested audit bundle did not arrive before the follow-up window expired.",
+      "metadata": {
+        "raw_action_hint": "request_deadline_missed",
+        "missed_request_count": 1,
+        "due_at": "2026-02-19T16:00:00+00:00",
+        "request_id": "diag-10492"
+      }
+    },
+    {
+      "event_id": "88177-e1",
+      "ticket_id": 88177,
+      "created_at": "2026-03-21T13:20:00+00:00",
+      "type": "qa_review",
+      "author_id": 5001,
+      "note": "QA compared the reopen note against the earlier resolution confirmation and marked the claim as conflicting.",
+      "metadata": {
+        "raw_action_hint": "qa_marked_contradiction",
+        "severity": "high",
+        "review_id": "qa-448"
+      }
+    }
+  ]
+}

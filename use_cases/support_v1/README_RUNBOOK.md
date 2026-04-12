@@ -44,6 +44,19 @@ This mapping-based ingest prototype adds:
 - `use_cases/support_v1/helpdesk_export_sample_generic.csv`, a more realistic flat export whose column names differ from the fixed sample
 - `use_cases/support_v1/normalize_mapped_support_export.py`, a small adapter that reads the CSV plus mapping, groups rows by entity and ticket, and writes `use_cases/support_v1/artifacts/normalized_support_cases_from_mapping.json`
 
+## Zendesk-like helpdesk adapter prototype
+
+Normalize a small Zendesk-like export with nested users, tickets, comments, and audit-style events into the existing `support_v1` case schema:
+
+```powershell
+py use_cases/support_v1/helpdesk_adapter_zendesk_like.py
+```
+
+This Zendesk-like adapter adds:
+
+- `use_cases/support_v1/zendesk_like_export_sample.json`, a compact export sample with organizations, users, tickets, comments, nested ticket metadata, timestamps, statuses, priorities, and channels
+- `use_cases/support_v1/helpdesk_adapter_zendesk_like.py`, one explicit adapter that reads the sample export and writes `use_cases/support_v1/artifacts/normalized_support_cases_from_zendesk_like.json`
+
 ## Mapping-based CSV ingest labeled evaluation runner
 
 Run the end-to-end mapping-based ingest flow:
