@@ -1,0 +1,93 @@
+{
+  "label_set_name": "support_v1_sample_labels_pack_d",
+  "labels": [
+    {
+      "label_id": "support_pack_d_label_001",
+      "entity_id": "acct_brightharbor",
+      "ticket_id": "BH-1401",
+      "decision_timestamp": "2026-01-09T12:10:00+00:00",
+      "should_route": "fast_path",
+      "note": "The requester already supplied the requested assertion sample and mapping sheet inside the same ticket, so this remains a borderline but routine fast-path candidate."
+    },
+    {
+      "label_id": "support_pack_d_label_002",
+      "entity_id": "acct_brightharbor",
+      "ticket_id": "BH-1488",
+      "decision_timestamp": "2026-03-24T17:20:00+00:00",
+      "should_route": "deep_path",
+      "profile_too_stale": true,
+      "wrong_first_impression": true,
+      "note": "The new ticket opens with plausible batch context, but the prior good history is stale after a long gap and the requested trace bundle still never arrived by the deadline."
+    },
+    {
+      "label_id": "support_pack_d_label_003",
+      "entity_id": "acct_falconridge",
+      "ticket_id": "FR-2207",
+      "decision_timestamp": "2026-02-02T10:35:00+00:00",
+      "should_route": "fast_path",
+      "note": "This replay issue already has the exact payload pair and comparison sample, making it a strong test of whether calibrated handling can promote a clean recent history."
+    },
+    {
+      "label_id": "support_pack_d_label_004",
+      "entity_id": "acct_falconridge",
+      "ticket_id": "FR-2284",
+      "decision_timestamp": "2026-03-04T16:45:00+00:00",
+      "should_route": "deep_path",
+      "contradiction_present": true,
+      "wrong_first_impression": true,
+      "note": "The case first looked routine because the requester quickly supplied the audit workbook, but the reopened claim now directly conflicts with that same evidence."
+    },
+    {
+      "label_id": "support_pack_d_label_005",
+      "entity_id": "acct_meridianbay",
+      "ticket_id": "MB-3304",
+      "decision_timestamp": "2026-01-14T15:20:00+00:00",
+      "should_route": "fast_path",
+      "note": "The delimiter sample arrived quickly and the visible history is still compact and cooperative, even if it may remain slightly under-confident without calibration."
+    },
+    {
+      "label_id": "support_pack_d_label_006",
+      "entity_id": "acct_meridianbay",
+      "ticket_id": "MB-3371",
+      "decision_timestamp": "2026-02-12T17:10:00+00:00",
+      "should_route": "deep_path",
+      "wrong_first_impression": true,
+      "note": "The opening looked specific enough for routine handling at first, but by the decision point the customer is asking for a priority bump without the promised manifest sample."
+    },
+    {
+      "label_id": "support_pack_d_label_007",
+      "entity_id": "acct_northspire",
+      "ticket_id": "NS-4402",
+      "decision_timestamp": "2026-02-06T11:30:00+00:00",
+      "should_route": "fast_path",
+      "note": "The requester supplied the failing request pair and expected output within hours, so this should stay on the fast path if recent clean cooperation is calibrated correctly."
+    },
+    {
+      "label_id": "support_pack_d_label_008",
+      "entity_id": "acct_northspire",
+      "ticket_id": "NS-4490",
+      "decision_timestamp": "2026-04-12T16:30:00+00:00",
+      "should_route": "deep_path",
+      "profile_too_stale": true,
+      "note": "Older positive history is stale here, and the current eligibility dispute still lacks the requested audit rows when the customer asks for a manual fix."
+    },
+    {
+      "label_id": "support_pack_d_label_009",
+      "entity_id": "acct_oakmere",
+      "ticket_id": "OM-5108",
+      "decision_timestamp": "2026-03-01T13:10:00+00:00",
+      "should_route": "fast_path",
+      "note": "The payload sample and deduplicated comparison file are already visible at the decision point, so this is another clean fast-path borderline."
+    },
+    {
+      "label_id": "support_pack_d_label_010",
+      "entity_id": "acct_oakmere",
+      "ticket_id": "OM-5175",
+      "decision_timestamp": "2026-03-28T18:15:00+00:00",
+      "should_route": "deep_path",
+      "contradiction_present": true,
+      "wrong_first_impression": true,
+      "note": "The signed adjustment sheet initially makes the dispute look straightforward, but QA later confirms the customer's requested manual adjustment contradicts that same signed evidence."
+    }
+  ]
+}

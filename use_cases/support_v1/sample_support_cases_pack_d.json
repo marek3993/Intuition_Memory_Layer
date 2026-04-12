@@ -1,0 +1,489 @@
+{
+  "dataset_name": "support_v1_sample_pack_d",
+  "entity_type": "support_account",
+  "entities": [
+    {
+      "entity_id": "acct_brightharbor",
+      "account_name": "BrightHarbor Payments",
+      "segment": "mid_market",
+      "cases": [
+        {
+          "case_id": "BH-1401",
+          "opened_at": "2026-01-09T08:20:00+00:00",
+          "closed_at": "2026-01-10T15:35:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "SAML attribute mapping clarified after assertion sample upload",
+          "records": [
+            {
+              "record_id": "BH-1401-R1",
+              "timestamp": "2026-01-09T08:24:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_assertion_context",
+              "details": "Identity admin included the tenant ID, failing role mapping, and one decoded assertion excerpt.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "BH-1401-R2",
+              "timestamp": "2026-01-09T12:10:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "full_assertion_and_mapping_sheet_uploaded",
+              "details": "Customer uploaded the requested full assertion sample and the current attribute mapping sheet the same morning.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "BH-1401-R3",
+              "timestamp": "2026-01-10T15:35:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "saml_role_mapping_restored",
+              "details": "Customer confirmed the corrected attribute map restored the expected role assignment.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "BH-1488",
+          "opened_at": "2026-03-22T09:05:00+00:00",
+          "closed_at": "2026-03-24T17:20:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Settlement export mismatch still lacks the requested trace bundle after a long quiet period",
+          "records": [
+            {
+              "record_id": "BH-1488-R1",
+              "timestamp": "2026-03-22T09:09:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "mismatch_reported_with_batch_context",
+              "details": "Finance lead included the settlement batch ID, reconciliation window, and one screenshot of the mismatch summary.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "BH-1488-R2",
+              "timestamp": "2026-03-24T17:20:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "system_timer",
+              "actor_role": "system",
+              "raw_action": "request_deadline_missed",
+              "outcome": "trace_bundle_not_received",
+              "details": "No requested trace bundle, request IDs, or raw settlement rows arrived before the deadline.",
+              "metadata": {
+                "missed_request_count": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_falconridge",
+      "account_name": "FalconRidge Retail",
+      "segment": "enterprise",
+      "cases": [
+        {
+          "case_id": "FR-2207",
+          "opened_at": "2026-02-02T07:50:00+00:00",
+          "closed_at": "2026-02-03T13:40:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Webhook replay isolated after exact payload pair upload",
+          "records": [
+            {
+              "record_id": "FR-2207-R1",
+              "timestamp": "2026-02-02T07:55:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_payload_ids",
+              "details": "Platform engineer included the webhook IDs, endpoint version, and the deployment window when the replay mismatch started.",
+              "metadata": {
+                "initial_context_quality": "complete"
+              }
+            },
+            {
+              "record_id": "FR-2207-R2",
+              "timestamp": "2026-02-02T10:35:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "failing_and_successful_payload_pair_uploaded",
+              "details": "Customer quickly attached the failing payload pair, matching headers, and one successful comparison replay.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "FR-2207-R3",
+              "timestamp": "2026-02-03T13:40:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "completed_requested_step",
+              "outcome": "webhook_replay_validated",
+              "details": "Customer completed the requested replay test and confirmed the corrected webhook output.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "FR-2284",
+          "opened_at": "2026-03-03T08:15:00+00:00",
+          "closed_at": "2026-03-04T16:45:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Reopened loyalty ledger dispute later conflicts with the uploaded audit workbook",
+          "records": [
+            {
+              "record_id": "FR-2284-R1",
+              "timestamp": "2026-03-03T08:19:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "dispute_reported_with_ledger_context",
+              "details": "Customer opened the escalation with the ledger batch number, loyalty segment, and the date when balances diverged.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "FR-2284-R2",
+              "timestamp": "2026-03-03T13:05:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "audit_workbook_and_query_extract_uploaded",
+              "details": "Customer promptly attached the requested audit workbook, query extract, and one reconciled control sample.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "FR-2284-R3",
+              "timestamp": "2026-03-04T16:45:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "qa_review",
+              "actor_role": "qa",
+              "raw_action": "reopened_with_conflicting_claim",
+              "outcome": "reopened_dispute_conflicts_with_uploaded_audit_workbook",
+              "details": "QA confirmed the reopened claim now conflicts with the same audit workbook the customer had supplied the prior day.",
+              "metadata": {
+                "severity": "high"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_meridianbay",
+      "account_name": "MeridianBay Logistics",
+      "segment": "mid_market",
+      "cases": [
+        {
+          "case_id": "MB-3304",
+          "opened_at": "2026-01-14T10:10:00+00:00",
+          "closed_at": "2026-01-15T14:25:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Route feed parser corrected after delimiter sample upload",
+          "records": [
+            {
+              "record_id": "MB-3304-R1",
+              "timestamp": "2026-01-14T10:14:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_feed_context",
+              "details": "Operations coordinator included the feed name, parser build number, and one malformed delimiter example.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "MB-3304-R2",
+              "timestamp": "2026-01-14T15:20:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "delimiter_sample_and_clean_row_uploaded",
+              "details": "Customer uploaded the requested delimiter sample, a clean row comparison, and the affected route group list.",
+              "metadata": {
+                "response_quality": "useful",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "MB-3304-R3",
+              "timestamp": "2026-01-15T14:25:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "route_feed_parser_restored",
+              "details": "Customer confirmed the parser accepted the corrected delimiter handling on the next daily run.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "MB-3371",
+          "opened_at": "2026-02-11T09:00:00+00:00",
+          "closed_at": "2026-02-12T17:10:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Dock schedule mismatch looked routine at first but still lacks the promised manifest sample",
+          "records": [
+            {
+              "record_id": "MB-3371-R1",
+              "timestamp": "2026-02-11T09:05:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "mismatch_reported_with_route_context",
+              "details": "Customer included the dock schedule ID, route number, and the last known good publish time.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "MB-3371-R2",
+              "timestamp": "2026-02-12T17:10:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "followed_up_without_requested_info",
+              "outcome": "asked_for_priority_bump_without_manifest_sample",
+              "details": "Customer pushed for a quick priority bump but still did not attach the requested manifest sample or one affected payload.",
+              "metadata": {
+                "missing_item_count": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_northspire",
+      "account_name": "Northspire Health",
+      "segment": "enterprise",
+      "cases": [
+        {
+          "case_id": "NS-4402",
+          "opened_at": "2026-02-06T07:35:00+00:00",
+          "closed_at": "2026-02-07T12:50:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Claims export alignment restored after request pair upload",
+          "records": [
+            {
+              "record_id": "NS-4402-R1",
+              "timestamp": "2026-02-06T07:39:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_claim_request_ids",
+              "details": "Revenue operations included the export run ID, claim request IDs, and the payer where alignment started drifting.",
+              "metadata": {
+                "initial_context_quality": "complete"
+              }
+            },
+            {
+              "record_id": "NS-4402-R2",
+              "timestamp": "2026-02-06T11:30:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "failing_request_pair_and_expected_output_uploaded",
+              "details": "Customer uploaded the failing request pair, expected output sample, and one successful payer comparison before midday.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "NS-4402-R3",
+              "timestamp": "2026-02-07T12:50:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "claims_export_aligned",
+              "details": "Customer confirmed the corrected mapping aligned the claims export output again.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "NS-4490",
+          "opened_at": "2026-04-11T08:10:00+00:00",
+          "closed_at": "2026-04-12T16:30:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Eligibility sync dispute reopened after a stale gap and still lacks the requested audit rows",
+          "records": [
+            {
+              "record_id": "NS-4490-R1",
+              "timestamp": "2026-04-11T08:14:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "eligibility_mismatch_reported_with_member_ids",
+              "details": "Customer included the eligibility batch ID, member IDs, and one screenshot from the downstream eligibility portal.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "NS-4490-R2",
+              "timestamp": "2026-04-12T16:30:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "followed_up_without_requested_info",
+              "outcome": "asked_for_manual_fix_without_audit_rows",
+              "details": "Customer asked for a manual correction but still did not provide the requested audit rows or one raw eligibility payload.",
+              "metadata": {
+                "missing_item_count": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_oakmere",
+      "account_name": "Oakmere Energy",
+      "segment": "enterprise",
+      "cases": [
+        {
+          "case_id": "OM-5108",
+          "opened_at": "2026-03-01T09:45:00+00:00",
+          "closed_at": "2026-03-02T14:05:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Meter event duplication isolated after payload sample upload",
+          "records": [
+            {
+              "record_id": "OM-5108-R1",
+              "timestamp": "2026-03-01T09:49:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "duplication_reported_with_meter_group",
+              "details": "Customer included the meter group, export batch ID, and the duplicate row pattern seen after the patch window.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "OM-5108-R2",
+              "timestamp": "2026-03-01T13:10:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "payload_sample_and_deduplicated_comparison_uploaded",
+              "details": "Customer uploaded the requested payload sample and one deduplicated comparison file later the same day.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "OM-5108-R3",
+              "timestamp": "2026-03-02T14:05:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "meter_export_deduplicated",
+              "details": "Customer confirmed the corrected processing no longer duplicated meter events.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "OM-5175",
+          "opened_at": "2026-03-27T10:20:00+00:00",
+          "closed_at": "2026-03-28T18:15:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Usage settlement dispute later contradicts the customer's own signed adjustment sheet",
+          "records": [
+            {
+              "record_id": "OM-5175-R1",
+              "timestamp": "2026-03-27T10:24:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "settlement_dispute_reported_with_site_context",
+              "details": "Customer opened the escalation with site IDs, settlement run number, and the reconciliation window where totals diverged.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "OM-5175-R2",
+              "timestamp": "2026-03-27T15:35:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "signed_adjustment_sheet_and_recon_extract_uploaded",
+              "details": "Customer promptly attached the requested signed adjustment sheet and reconciliation extract during the same afternoon.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "OM-5175-R3",
+              "timestamp": "2026-03-28T18:15:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "qa_review",
+              "actor_role": "qa",
+              "raw_action": "qa_marked_contradiction",
+              "outcome": "manual_adjustment_request_conflicts_with_signed_adjustment_sheet",
+              "details": "QA confirmed the manual adjustment request conflicts with the same signed adjustment sheet the customer had uploaded one day earlier.",
+              "metadata": {
+                "severity": "medium"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
