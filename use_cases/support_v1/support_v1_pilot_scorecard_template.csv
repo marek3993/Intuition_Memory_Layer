@@ -1,0 +1,9 @@
+metric_name,metric_category,description,baseline_value,pilot_value,target_direction,review_notes
+fast_path_precision,decision_metric,Share of reviewed cases routed to fast_path that were judged correct,,,up,Primary safety and quality check for routine routing
+deep_path_recall,decision_metric,Share of cases that should route to deep_path that were correctly routed there,,,up,Primary protection against risky misses
+contradiction_fast_path_misses,decision_metric,Count or rate of contradiction_present cases incorrectly routed to fast_path,,,down_to_zero,Review every miss individually
+stale_fast_path_misses,decision_metric,Count or rate of profile_too_stale cases incorrectly routed to fast_path,,,down_to_zero,Review every miss individually
+unnecessary_deep_path_volume,diagnostic_metric,Count or share of clean routine cases sent to deep_path without a clear guardrail reason,,,down,Should fall without hurting precision or recall
+review_time_per_case,diagnostic_metric,Median or average reviewer minutes per pilot case or reviewed route decision,,,down,Use the same queue scope for baseline and pilot
+route_driven_escalation_burden,diagnostic_metric,Count or share of extra handoffs escalations or overrides caused by route uncertainty or route error,,,down,Use measured queue burden rather than estimates
+operator_route_confidence,diagnostic_metric,Average reviewer confidence that the selected route was safe and explainable for the visible history,,,up,Use a simple team scale such as 1 to 5
