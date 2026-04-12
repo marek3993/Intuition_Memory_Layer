@@ -3,3 +3,5 @@
 *.pyo
 *.pyd
 .pytest_cache/
+use_cases/support_v1/artifacts/
+artifacts/
