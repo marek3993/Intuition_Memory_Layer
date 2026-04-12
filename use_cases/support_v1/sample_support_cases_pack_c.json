@@ -1,0 +1,513 @@
+{
+  "dataset_name": "support_v1_sample_pack_c",
+  "entity_type": "support_account",
+  "entities": [
+    {
+      "entity_id": "acct_cedarbridge",
+      "account_name": "Cedarbridge Labs",
+      "segment": "enterprise",
+      "cases": [
+        {
+          "case_id": "CB-9301",
+          "opened_at": "2026-02-03T08:15:00+00:00",
+          "closed_at": "2026-02-04T12:20:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Usage export checksum mismatch resolved after sample upload",
+          "records": [
+            {
+              "record_id": "CB-9301-R1",
+              "timestamp": "2026-02-03T08:19:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_job_ids",
+              "details": "Analytics lead included the export job IDs, report window, and one checksum mismatch example.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "CB-9301-R2",
+              "timestamp": "2026-02-03T14:35:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "checksum_sample_uploaded",
+              "details": "Customer uploaded the requested checksum sample, export excerpt, and the affected workspace ID.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "CB-9301-R3",
+              "timestamp": "2026-02-04T12:20:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "export_checksum_validated",
+              "details": "Customer confirmed the regenerated export matched the expected checksum.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "CB-9388",
+          "opened_at": "2026-04-10T09:05:00+00:00",
+          "closed_at": "2026-04-11T11:50:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Connector replay validated after customer attached exact failing payload",
+          "records": [
+            {
+              "record_id": "CB-9388-R1",
+              "timestamp": "2026-04-10T09:08:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_replay_context",
+              "details": "Customer included the connector name, replay attempt ID, and the deployment window when the mismatch started.",
+              "metadata": {
+                "initial_context_quality": "complete"
+              }
+            },
+            {
+              "record_id": "CB-9388-R2",
+              "timestamp": "2026-04-10T10:40:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "failing_payload_and_headers_uploaded",
+              "details": "Customer quickly attached the failing payload, request headers, and one successful comparison sample.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "CB-9388-R3",
+              "timestamp": "2026-04-11T11:50:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "completed_requested_step",
+              "outcome": "connector_replay_validated",
+              "details": "Customer completed the requested replay test and confirmed the corrected connector output.",
+              "metadata": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_pineharbor",
+      "account_name": "PineHarbor Insurance",
+      "segment": "mid_market",
+      "cases": [
+        {
+          "case_id": "PH-5104",
+          "opened_at": "2026-01-16T10:10:00+00:00",
+          "closed_at": "2026-01-17T16:25:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Policy export mapping fixed after field sample review",
+          "records": [
+            {
+              "record_id": "PH-5104-R1",
+              "timestamp": "2026-01-16T10:14:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_policy_batch",
+              "details": "Operations manager included the policy batch number, export template, and the misaligned field names.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "PH-5104-R2",
+              "timestamp": "2026-01-16T15:05:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "field_sample_uploaded",
+              "details": "Customer sent the requested field sample, one corrected row, and the prior template version.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "PH-5104-R3",
+              "timestamp": "2026-01-17T16:25:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "policy_export_mapping_corrected",
+              "details": "Customer confirmed the corrected mapping restored the export output.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "PH-5189",
+          "opened_at": "2026-04-09T07:40:00+00:00",
+          "closed_at": "2026-04-11T18:05:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Claims attachment mismatch still lacks the requested trace bundle",
+          "records": [
+            {
+              "record_id": "PH-5189-R1",
+              "timestamp": "2026-04-09T07:43:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "mismatch_reported_with_partial_context",
+              "details": "Customer reported the mismatch with the claim batch number and one screenshot, but no trace bundle or request IDs.",
+              "metadata": {
+                "initial_context_quality": "partial"
+              }
+            },
+            {
+              "record_id": "PH-5189-R2",
+              "timestamp": "2026-04-10T09:15:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "followed_up_without_requested_info",
+              "outcome": "asked_for_retry_without_trace_bundle",
+              "details": "Customer pushed for a retry but still did not attach the requested trace bundle or affected request IDs.",
+              "metadata": {
+                "missing_item_count": 2
+              }
+            },
+            {
+              "record_id": "PH-5189-R3",
+              "timestamp": "2026-04-11T18:05:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "system_timer",
+              "actor_role": "system",
+              "raw_action": "request_deadline_missed",
+              "outcome": "trace_bundle_not_received",
+              "details": "No trace bundle or request ID list arrived before the requested deadline.",
+              "metadata": {
+                "missed_request_count": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_rivermill",
+      "account_name": "Rivermill Freight",
+      "segment": "enterprise",
+      "cases": [
+        {
+          "case_id": "RM-2201",
+          "opened_at": "2026-03-01T12:05:00+00:00",
+          "closed_at": "2026-03-02T15:30:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Rate card import corrected after delimiter sample",
+          "records": [
+            {
+              "record_id": "RM-2201-R1",
+              "timestamp": "2026-03-01T12:09:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_rate_card_context",
+              "details": "Customer included the rate card ID, import job number, and one malformed delimiter example.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "RM-2201-R2",
+              "timestamp": "2026-03-01T17:20:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "delimiter_sample_uploaded",
+              "details": "Customer uploaded the requested delimiter sample and one cleaned import row the same afternoon.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "RM-2201-R3",
+              "timestamp": "2026-03-02T15:30:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "rate_card_import_restored",
+              "details": "Customer confirmed the corrected delimiter restored the import.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "RM-2334",
+          "opened_at": "2026-04-06T11:20:00+00:00",
+          "closed_at": "2026-04-08T16:40:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Reopened shipment dispute later conflicts with the customer's own audit upload",
+          "records": [
+            {
+              "record_id": "RM-2334-R1",
+              "timestamp": "2026-04-06T11:24:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "dispute_reported_with_shipment_ids",
+              "details": "Customer opened the escalation with shipment IDs, route number, and a brief request for rollback.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "RM-2334-R2",
+              "timestamp": "2026-04-07T08:55:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "signed_audit_and_manifest_uploaded",
+              "details": "Customer promptly attached the requested signed audit, manifest excerpt, and route timestamps.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "RM-2334-R3",
+              "timestamp": "2026-04-08T16:40:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "qa_review",
+              "actor_role": "qa",
+              "raw_action": "reopened_with_conflicting_claim",
+              "outcome": "rollback_request_conflicts_with_uploaded_signed_audit",
+              "details": "QA confirmed the reopened rollback claim contradicted the same signed audit the customer uploaded one day earlier.",
+              "metadata": {
+                "severity": "high"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_stoneleaf",
+      "account_name": "Stoneleaf Commerce",
+      "segment": "mid_market",
+      "cases": [
+        {
+          "case_id": "SL-8807",
+          "opened_at": "2026-02-12T09:35:00+00:00",
+          "closed_at": "2026-02-19T17:10:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Catalog sync issue expired without requested sample feed",
+          "records": [
+            {
+              "record_id": "SL-8807-R1",
+              "timestamp": "2026-02-12T09:39:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_partial_catalog_context",
+              "details": "Customer reported the sync issue with the feed name and one screenshot, but no sample feed file.",
+              "metadata": {
+                "initial_context_quality": "partial"
+              }
+            },
+            {
+              "record_id": "SL-8807-R2",
+              "timestamp": "2026-02-19T17:10:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "system_timer",
+              "actor_role": "system",
+              "raw_action": "request_deadline_missed",
+              "outcome": "sample_feed_not_received",
+              "details": "No sample feed or transform output arrived before the requested deadline.",
+              "metadata": {
+                "missed_request_count": 1
+              }
+            }
+          ]
+        },
+        {
+          "case_id": "SL-8861",
+          "opened_at": "2026-04-11T08:00:00+00:00",
+          "closed_at": "2026-04-12T13:15:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Discount API mismatch isolated once customer attached the failing request pair",
+          "records": [
+            {
+              "record_id": "SL-8861-R1",
+              "timestamp": "2026-04-11T08:04:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_request_ids",
+              "details": "Customer included the endpoint name, failing request IDs, and the storefront where the mismatch appeared.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "SL-8861-R2",
+              "timestamp": "2026-04-11T10:25:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "failing_request_pair_uploaded",
+              "details": "Customer quickly attached the failing request pair, response bodies, and one successful comparison call.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "SL-8861-R3",
+              "timestamp": "2026-04-12T13:15:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "discount_api_response_aligned",
+              "details": "Customer confirmed the corrected request handling aligned the discount API response.",
+              "metadata": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_glenhaven",
+      "account_name": "Glenhaven Utilities",
+      "segment": "enterprise",
+      "cases": [
+        {
+          "case_id": "GH-4402",
+          "opened_at": "2026-03-10T07:55:00+00:00",
+          "closed_at": "2026-03-11T12:45:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Meter export duplication cleared after payload sample upload",
+          "records": [
+            {
+              "record_id": "GH-4402-R1",
+              "timestamp": "2026-03-10T07:59:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_export_context",
+              "details": "Customer included the export batch ID, meter group, and the duplicate row pattern.",
+              "metadata": {
+                "initial_context_quality": "complete"
+              }
+            },
+            {
+              "record_id": "GH-4402-R2",
+              "timestamp": "2026-03-10T11:30:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "payload_sample_uploaded",
+              "details": "Customer uploaded the requested payload sample, export excerpt, and one deduplicated comparison file.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "GH-4402-R3",
+              "timestamp": "2026-03-11T12:45:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "meter_export_deduplicated",
+              "details": "Customer confirmed the export no longer duplicated meter rows after the fix.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "GH-4477",
+          "opened_at": "2026-04-12T06:50:00+00:00",
+          "closed_at": "2026-04-12T18:20:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Escalated outage notice still missing the promised device capture",
+          "records": [
+            {
+              "record_id": "GH-4477-R1",
+              "timestamp": "2026-04-12T06:54:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "outage_reported_with_site_scope",
+              "details": "Customer included the affected site IDs, maintenance window, and a brief claim that devices stopped reporting after rollout.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "GH-4477-R2",
+              "timestamp": "2026-04-12T11:10:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "followed_up_without_requested_info",
+              "outcome": "asked_for_priority_bump_without_device_capture",
+              "details": "Customer requested a priority bump but still did not attach the promised device capture or one affected heartbeat log.",
+              "metadata": {
+                "missing_item_count": 2
+              }
+            },
+            {
+              "record_id": "GH-4477-R3",
+              "timestamp": "2026-04-12T18:20:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "system_timer",
+              "actor_role": "system",
+              "raw_action": "request_deadline_missed",
+              "outcome": "device_capture_not_received",
+              "details": "No device capture or heartbeat log arrived before the requested deadline.",
+              "metadata": {
+                "missed_request_count": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

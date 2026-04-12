@@ -1,0 +1,56 @@
+{
+  "label_set_name": "support_v1_sample_labels_pack_c",
+  "labels": [
+    {
+      "label_id": "support_pack_c_label_001",
+      "entity_id": "acct_cedarbridge",
+      "ticket_id": "CB-9388",
+      "decision_timestamp": "2026-04-10T10:40:00+00:00",
+      "should_route": "fast_path",
+      "note": "The current ticket already includes the failing payload and comparison sample, and the recent entity history remains concrete and cooperative."
+    },
+    {
+      "label_id": "support_pack_c_label_002",
+      "entity_id": "acct_pineharbor",
+      "ticket_id": "PH-5189",
+      "decision_timestamp": "2026-04-10T09:15:00+00:00",
+      "should_route": "deep_path",
+      "profile_too_stale": true,
+      "note": "The older good outcome is now stale, and the visible current ticket is still missing the requested trace bundle despite a push for a quick retry."
+    },
+    {
+      "label_id": "support_pack_c_label_003",
+      "entity_id": "acct_rivermill",
+      "ticket_id": "RM-2334",
+      "decision_timestamp": "2026-04-08T16:40:00+00:00",
+      "should_route": "deep_path",
+      "contradiction_present": true,
+      "wrong_first_impression": true,
+      "note": "The ticket first looked routine because the requester quickly supplied the signed audit, but the later reopened claim now directly conflicts with that same evidence."
+    },
+    {
+      "label_id": "support_pack_c_label_004",
+      "entity_id": "acct_stoneleaf",
+      "ticket_id": "SL-8861",
+      "decision_timestamp": "2026-04-11T10:25:00+00:00",
+      "should_route": "fast_path",
+      "note": "Despite the older missed-evidence case, the visible current ticket is specific and complete enough that calibrated handling should stay on the fast path."
+    },
+    {
+      "label_id": "support_pack_c_label_005",
+      "entity_id": "acct_glenhaven",
+      "ticket_id": "GH-4402",
+      "decision_timestamp": "2026-03-10T11:30:00+00:00",
+      "should_route": "fast_path",
+      "note": "The requester supplied the payload sample promptly, and the visible account history at this point is still straightforward and cooperative."
+    },
+    {
+      "label_id": "support_pack_c_label_006",
+      "entity_id": "acct_glenhaven",
+      "ticket_id": "GH-4477",
+      "decision_timestamp": "2026-04-12T11:10:00+00:00",
+      "should_route": "deep_path",
+      "note": "This current outage ticket looks detailed at first glance, but the promised device capture and heartbeat log are still missing when the customer asks for a priority bump."
+    }
+  ]
+}
