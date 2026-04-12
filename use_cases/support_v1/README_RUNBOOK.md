@@ -29,25 +29,31 @@ This flow replays each support entity end to end and writes:
 
 ## Labeled decision-point runner
 
-Run the labeled decision-point evaluation:
+Default labeled decision-point evaluation:
 
 ```powershell
 py use_cases/support_v1/run_support_label_evaluation.py
 ```
 
-Run the labeled decision-point evaluation with support_v1 calibration enabled:
+Calibrated labeled decision-point evaluation:
 
 ```powershell
 py use_cases/support_v1/run_support_label_evaluation.py --calibrated
 ```
 
-Run the labeled decision-point evaluation against pack B:
+Pack B labeled decision-point evaluation:
 
 ```powershell
 py use_cases/support_v1/run_support_label_evaluation.py --cases-path use_cases/support_v1/sample_support_cases_pack_b.json --labels-path use_cases/support_v1/sample_support_labels_pack_b.json
 ```
 
-Run the labeled decision-point evaluation against explicit files:
+Calibrated pack B labeled decision-point evaluation:
+
+```powershell
+py use_cases/support_v1/run_support_label_evaluation.py --calibrated --cases-path use_cases/support_v1/sample_support_cases_pack_b.json --labels-path use_cases/support_v1/sample_support_labels_pack_b.json
+```
+
+Labeled decision-point evaluation against explicit files:
 
 ```powershell
 py use_cases/support_v1/run_support_label_evaluation.py --cases-path C:\path\to\support_cases.json --labels-path C:\path\to\support_labels.json
@@ -81,7 +87,7 @@ The focused CSV exports speed up review of the highest-signal subsets:
 - `latest_support_label_errors.csv` keeps only rows where the active method prediction is wrong
 - `latest_support_label_route_changes.csv` keeps only rows where `--calibrated` changes the routed path versus original IML; in default mode it is still written with header only
 
-Dataset switching keeps the existing default pack A behavior when no flags are passed, while letting you point the same runner at pack B or any explicit cases/labels JSON pair without editing script constants.
+Dataset switching adds explicit `--cases-path` and `--labels-path` selection to the runner. If you omit both flags, it still uses the existing pack A defaults; if you pass them, the runner uses that cases/labels pair directly without any inline PowerShell patching.
 
 ## Quick inspection
 

@@ -651,7 +651,7 @@ def print_summary(
     print("support_v1 decision-point label evaluation")
     print(f"mode: {'calibrated' if use_calibration else 'default'}")
     print(f"calibration_enabled: {use_calibration}")
-    print(f"dataset_path: {format_dataset_path(cases_path)}")
+    print(f"cases_path: {format_dataset_path(cases_path)}")
     print(f"labels_path: {format_dataset_path(labels_path)}")
     print(
         " | ".join(
@@ -717,7 +717,7 @@ def main() -> None:
     cases_path = resolve_input_path(args.cases_path, SOURCE_PATH)
     labels_path = resolve_input_path(args.labels_path, LABELS_PATH)
 
-    print(f"dataset_path: {format_dataset_path(cases_path)}")
+    print(f"cases_path: {format_dataset_path(cases_path)}")
     print(f"labels_path: {format_dataset_path(labels_path)}")
 
     cases = load_support_cases(cases_path)
