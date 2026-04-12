@@ -44,6 +44,7 @@ py use_cases/support_v1/run_support_label_evaluation.py --calibrated
 This flow replays only the history visible at each labeled `decision_timestamp`, compares the routed path against the hand-authored label, and writes:
 
 - `use_cases/support_v1/artifacts/latest_support_label_evaluation.json`
+- `use_cases/support_v1/artifacts/latest_support_label_review.csv`
 
 The label evaluation artifact includes:
 
@@ -53,6 +54,14 @@ The label evaluation artifact includes:
 - flagged-subset breakdown for the label flags
 - per-label results, including calibration adjustments when `--calibrated` is enabled
 
+The flat CSV review export keeps one row per labeled decision and makes it easier to scan:
+
+- label identity and decision timestamp
+- active method prediction versus the original IML and baseline predictions
+- correctness flags for each method
+- label flags and visible history size
+- profile confidence, unknownness, freshness, contradiction load, and calibration adjustments
+
 ## Quick inspection
 
 Inspect the latest decision-point artifact with PowerShell:
@@ -60,4 +69,5 @@ Inspect the latest decision-point artifact with PowerShell:
 ```powershell
 Get-Content use_cases/support_v1/artifacts/latest_support_label_evaluation.json
 Get-Content use_cases/support_v1/artifacts/latest_support_label_evaluation.json | Select-String '"aggregate_summary"|"baseline_comparison"|"flag_breakdown"|"calibration"'
+Import-Csv use_cases/support_v1/artifacts/latest_support_label_review.csv | Format-Table
 ```

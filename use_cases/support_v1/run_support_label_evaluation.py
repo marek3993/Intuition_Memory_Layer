@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import sys
 from dataclasses import asdict, replace
@@ -52,6 +53,34 @@ from iml.update_engine import apply_event
 
 
 EXPORT_PATH = ARTIFACTS_DIR / "latest_support_label_evaluation.json"
+REVIEW_EXPORT_PATH = ARTIFACTS_DIR / "latest_support_label_review.csv"
+REVIEW_FIELDNAMES: tuple[str, ...] = (
+    "label_id",
+    "entity_id",
+    "ticket_id",
+    "decision_timestamp",
+    "should_route",
+    "active_method_name",
+    "active_predicted_path",
+    "active_correct",
+    "original_iml_predicted_path",
+    "original_iml_correct",
+    "naive_summary_predicted_path",
+    "naive_summary_correct",
+    "full_history_predicted_path",
+    "full_history_correct",
+    "contradiction_present",
+    "profile_too_stale",
+    "wrong_first_impression",
+    "visible_event_count",
+    "overall_confidence",
+    "unknownness",
+    "freshness",
+    "contradiction_load",
+    "calibration_applied",
+    "confidence_adjustment",
+    "unknownness_reduction",
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -342,7 +371,65 @@ def build_export_payload(
     }
 
 
-def export_results(payload: dict[str, Any]) -> Path:
+def format_review_bool(value: bool) -> str:
+    return "true" if value else "false"
+
+
+def format_review_float(value: float) -> str:
+    return f"{value:.6f}"
+
+
+def build_review_row(
+    active_result: LabelEvaluationResult,
+    original_result: LabelEvaluationResult,
+    calibration_result: SupportV1CalibrationResult | None,
+    use_calibration: bool,
+) -> dict[str, Any]:
+    active_method_name = "calibrated_iml" if use_calibration else "iml"
+    confidence_adjustment = (
+        calibration_result.confidence_adjustment if calibration_result else 0.0
+    )
+    unknownness_reduction = (
+        calibration_result.unknownness_reduction if calibration_result else 0.0
+    )
+    calibration_applied = (
+        calibration_result.applied if calibration_result is not None else False
+    )
+
+    return {
+        "label_id": active_result.label.label_id,
+        "entity_id": active_result.label.entity_id,
+        "ticket_id": active_result.label.ticket_id,
+        "decision_timestamp": active_result.label.decision_timestamp.isoformat(),
+        "should_route": active_result.label.should_route,
+        "active_method_name": active_method_name,
+        "active_predicted_path": active_result.predicted_path,
+        "active_correct": format_review_bool(active_result.correct),
+        "original_iml_predicted_path": original_result.predicted_path,
+        "original_iml_correct": format_review_bool(original_result.correct),
+        "naive_summary_predicted_path": active_result.naive_summary_predicted_path,
+        "naive_summary_correct": format_review_bool(active_result.naive_summary_correct),
+        "full_history_predicted_path": active_result.full_history_predicted_path,
+        "full_history_correct": format_review_bool(active_result.full_history_correct),
+        "contradiction_present": format_review_bool(
+            active_result.label.contradiction_present
+        ),
+        "profile_too_stale": format_review_bool(active_result.label.profile_too_stale),
+        "wrong_first_impression": format_review_bool(
+            active_result.label.wrong_first_impression
+        ),
+        "visible_event_count": active_result.visible_event_count,
+        "overall_confidence": format_review_float(active_result.overall_confidence),
+        "unknownness": format_review_float(active_result.unknownness),
+        "freshness": format_review_float(active_result.freshness),
+        "contradiction_load": format_review_float(active_result.contradiction_load),
+        "calibration_applied": format_review_bool(calibration_applied),
+        "confidence_adjustment": format_review_float(confidence_adjustment),
+        "unknownness_reduction": format_review_float(unknownness_reduction),
+    }
+
+
+def export_json_results(payload: dict[str, Any]) -> Path:
     ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
     temp_export_path = EXPORT_PATH.with_name(
         f"{EXPORT_PATH.stem}.{uuid4().hex}.tmp"
@@ -352,6 +439,19 @@ def export_results(payload: dict[str, Any]) -> Path:
         handle.write("\n")
     temp_export_path.replace(EXPORT_PATH)
     return EXPORT_PATH
+
+
+def export_review_results(review_rows: Sequence[dict[str, Any]]) -> Path:
+    ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
+    temp_export_path = REVIEW_EXPORT_PATH.with_name(
+        f"{REVIEW_EXPORT_PATH.stem}.{uuid4().hex}.tmp"
+    )
+    with temp_export_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=REVIEW_FIELDNAMES)
+        writer.writeheader()
+        writer.writerows(review_rows)
+    temp_export_path.replace(REVIEW_EXPORT_PATH)
+    return REVIEW_EXPORT_PATH
 
 
 def print_method_summary(label: str, summary: dict[str, Any]) -> None:
@@ -367,7 +467,12 @@ def print_method_summary(label: str, summary: dict[str, Any]) -> None:
     )
 
 
-def print_summary(payload: dict[str, Any], export_path: Path, use_calibration: bool) -> None:
+def print_summary(
+    payload: dict[str, Any],
+    json_export_path: Path,
+    review_export_path: Path,
+    use_calibration: bool,
+) -> None:
     aggregate_summary = payload["aggregate_summary"]
     method_summaries = aggregate_summary["methods"]
     flag_breakdown = payload["flag_breakdown"]
@@ -414,7 +519,8 @@ def print_summary(payload: dict[str, Any], export_path: Path, use_calibration: b
                 ]
             )
         )
-    print(f"artifact: {project_relative_path(export_path)}")
+    print(f"json_artifact: {project_relative_path(json_export_path)}")
+    print(f"csv_review_artifact: {project_relative_path(review_export_path)}")
 
 
 def main() -> None:
@@ -428,6 +534,7 @@ def main() -> None:
     original_results: list[LabelEvaluationResult] = []
     calibration_results: list[SupportV1CalibrationResult | None] = []
     per_label_results: list[dict[str, Any]] = []
+    review_rows: list[dict[str, Any]] = []
 
     for label in labels:
         validate_label(label, cases_by_ticket_id, entity_events)
@@ -458,6 +565,14 @@ def main() -> None:
                 use_calibration=args.calibrated,
             )
         )
+        review_rows.append(
+            build_review_row(
+                active_result=active_result,
+                original_result=original_result,
+                calibration_result=calibration_result,
+                use_calibration=args.calibrated,
+            )
+        )
 
     export_payload = build_export_payload(
         active_results=active_results,
@@ -467,10 +582,12 @@ def main() -> None:
         event_mapping_version=event_mapping_version,
         use_calibration=args.calibrated,
     )
-    export_path = export_results(export_payload)
+    json_export_path = export_json_results(export_payload)
+    review_export_path = export_review_results(review_rows)
     print_summary(
         payload=export_payload,
-        export_path=export_path,
+        json_export_path=json_export_path,
+        review_export_path=review_export_path,
         use_calibration=args.calibrated,
     )
 
