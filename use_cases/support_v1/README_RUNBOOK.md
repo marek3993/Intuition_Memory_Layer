@@ -53,6 +53,19 @@ Override the labels file if needed:
 py use_cases/support_v1/run_support_csv_ingest_label_evaluation.py --labels-path C:\path\to\support_csv_ingest_labels.json
 ```
 
+## CSV ingest pack comparison runner
+
+Run one compact comparison across CSV sample A, CSV sample B, and the in-memory combined A+B slice:
+
+```powershell
+py use_cases/support_v1/run_support_csv_ingest_pack_comparison.py
+```
+
+This flow reuses the existing CSV normalization plus labeled evaluation path, prints one compact table for `iml`, `calibrated_iml`, `naive_summary`, and `full_history`, and writes:
+
+- `use_cases/support_v1/artifacts/support_csv_ingest_pack_comparison.json`
+- `use_cases/support_v1/artifacts/support_csv_ingest_pack_comparison.md`
+
 ## Full-entity replay runner
 
 Rebuild the grouped support event artifact:
