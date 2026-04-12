@@ -1,0 +1,74 @@
+{
+  "label_set_name": "support_v1_raw_support_export_sample_b_labels",
+  "labels": [
+    {
+      "label_id": "raw_support_b_label_001",
+      "entity_id": "acct_aurora_freight",
+      "ticket_id": "AF-7144",
+      "decision_timestamp": "2026-03-31T17:10:00+00:00",
+      "should_route": "deep_path",
+      "profile_too_stale": true,
+      "note": "Aurora has older positive history, but that signal is stale after a long gap and the current ticket still lacks the requested weekend adjustment bundle at the deadline."
+    },
+    {
+      "label_id": "raw_support_b_label_002",
+      "entity_id": "acct_blueorbit",
+      "ticket_id": "BO-8103",
+      "decision_timestamp": "2026-02-09T12:15:00+00:00",
+      "should_route": "fast_path",
+      "note": "BlueOrbit already supplied the failed order pair and mapping snapshot inside a clean recent window, making this a strong fast-path candidate and a case where calibration should help if default routing stays too conservative."
+    },
+    {
+      "label_id": "raw_support_b_label_003",
+      "entity_id": "acct_blueorbit",
+      "ticket_id": "BO-8186",
+      "decision_timestamp": "2026-02-24T09:10:00+00:00",
+      "should_route": "fast_path",
+      "note": "The customer provided the requested sample payload quickly, so this should still be handled on the fast path even though the visible evidence remains compact enough that calibrated IML may only tie a baseline."
+    },
+    {
+      "label_id": "raw_support_b_label_004",
+      "entity_id": "acct_cedarbridge",
+      "ticket_id": "CB-9207",
+      "decision_timestamp": "2026-02-12T10:10:00+00:00",
+      "should_route": "fast_path",
+      "note": "Before any contradiction appears, the signed remittance sheet and claim comparison rows are already visible, so the early decision point still looks routine and well-supported."
+    },
+    {
+      "label_id": "raw_support_b_label_005",
+      "entity_id": "acct_cedarbridge",
+      "ticket_id": "CB-9207",
+      "decision_timestamp": "2026-02-14T17:35:00+00:00",
+      "should_route": "deep_path",
+      "contradiction_present": true,
+      "wrong_first_impression": true,
+      "note": "QA later marks the reopened claim as conflicting with the signed remittance evidence, so the original routine impression is no longer safe."
+    },
+    {
+      "label_id": "raw_support_b_label_006",
+      "entity_id": "acct_cedarbridge",
+      "ticket_id": "CB-9244",
+      "decision_timestamp": "2026-03-05T12:05:00+00:00",
+      "should_route": "deep_path",
+      "wrong_first_impression": true,
+      "note": "The escalation opened with plausible context, but by the decision point the requester still has not attached the promised eligibility audit rows or request ID pair."
+    },
+    {
+      "label_id": "raw_support_b_label_007",
+      "entity_id": "acct_driftcloud",
+      "ticket_id": "DC-3479",
+      "decision_timestamp": "2026-04-07T18:00:00+00:00",
+      "should_route": "deep_path",
+      "profile_too_stale": true,
+      "note": "DriftCloud also carries old positive history, but it is stale here and the current manual settlement request remains too thin once the audit CSV deadline passes."
+    },
+    {
+      "label_id": "raw_support_b_label_008",
+      "entity_id": "acct_eastline",
+      "ticket_id": "EE-4408",
+      "decision_timestamp": "2026-03-11T10:05:00+00:00",
+      "should_route": "fast_path",
+      "note": "Eastline has already supplied the requested roster row sample quickly, so this should stay on the fast path even though the history is only borderline dense and may remain difficult for calibrated IML to separate cleanly."
+    }
+  ]
+}

@@ -1,0 +1,868 @@
+{
+  "export_name": "support_raw_export_sample_b",
+  "exported_at": "2026-04-12T19:30:00+00:00",
+  "accounts": [
+    {
+      "account_ref": "acc_aurora_freight",
+      "entity_id": "acct_aurora_freight",
+      "display_name": "Aurora Freight Network",
+      "segment": "mid_market",
+      "source_system": "salesforce",
+      "external_account_id": "001RP00002811"
+    },
+    {
+      "account_ref": "acc_blueorbit",
+      "entity_id": "acct_blueorbit",
+      "display_name": "BlueOrbit Commerce",
+      "segment": "smb",
+      "source_system": "hubspot",
+      "external_account_id": "001RP00002812"
+    },
+    {
+      "account_ref": "acc_cedarbridge",
+      "entity_id": "acct_cedarbridge",
+      "display_name": "CedarBridge Health",
+      "segment": "enterprise",
+      "source_system": "salesforce",
+      "external_account_id": "001RP00002813"
+    },
+    {
+      "account_ref": "acc_driftcloud",
+      "entity_id": "acct_driftcloud",
+      "display_name": "DriftCloud Finance Ops",
+      "segment": "enterprise",
+      "source_system": "salesforce",
+      "external_account_id": "001RP00002814"
+    },
+    {
+      "account_ref": "acc_eastline",
+      "entity_id": "acct_eastline",
+      "display_name": "Eastline Education Services",
+      "segment": "mid_market",
+      "source_system": "salesforce",
+      "external_account_id": "001RP00002815"
+    }
+  ],
+  "tickets": [
+    {
+      "ticket_ref": "zd_7001",
+      "case_id": "AF-7001",
+      "account_ref": "acc_aurora_freight",
+      "opened_at": "2026-01-05T08:10:00+00:00",
+      "closed_at": "2026-01-06T15:45:00+00:00",
+      "channel": "email",
+      "priority": "normal",
+      "subject": "Manifest webhook replay succeeded after warehouse key refresh",
+      "origin_system": "zendesk",
+      "status": "solved"
+    },
+    {
+      "ticket_ref": "sf_7144",
+      "case_id": "AF-7144",
+      "account_ref": "acc_aurora_freight",
+      "opened_at": "2026-03-28T09:00:00+00:00",
+      "closed_at": "2026-03-31T17:20:00+00:00",
+      "channel": "web",
+      "priority": "high",
+      "subject": "Rate-sheet reconciliation still missing weekend adjustment bundle",
+      "origin_system": "salesforce_service_cloud",
+      "status": "closed"
+    },
+    {
+      "ticket_ref": "ic_8103",
+      "case_id": "BO-8103",
+      "account_ref": "acc_blueorbit",
+      "opened_at": "2026-02-09T11:00:00+00:00",
+      "closed_at": "2026-02-10T13:30:00+00:00",
+      "channel": "chat",
+      "priority": "normal",
+      "subject": "Order export resumed after variant mapping resync",
+      "origin_system": "intercom",
+      "status": "closed"
+    },
+    {
+      "ticket_ref": "zd_8186",
+      "case_id": "BO-8186",
+      "account_ref": "acc_blueorbit",
+      "opened_at": "2026-02-23T14:05:00+00:00",
+      "closed_at": "2026-02-25T10:40:00+00:00",
+      "channel": "email",
+      "priority": "normal",
+      "subject": "Tax code backfill completed after one sample payload review",
+      "origin_system": "zendesk",
+      "status": "solved"
+    },
+    {
+      "ticket_ref": "sf_9207",
+      "case_id": "CB-9207",
+      "account_ref": "acc_cedarbridge",
+      "opened_at": "2026-02-12T08:40:00+00:00",
+      "closed_at": "2026-02-14T18:00:00+00:00",
+      "channel": "web",
+      "priority": "high",
+      "subject": "Claim reversal reopened after signed remittance sheet looked correct",
+      "origin_system": "salesforce_service_cloud",
+      "status": "closed"
+    },
+    {
+      "ticket_ref": "jsm_9244",
+      "case_id": "CB-9244",
+      "account_ref": "acc_cedarbridge",
+      "opened_at": "2026-03-03T15:10:00+00:00",
+      "closed_at": "2026-03-05T12:20:00+00:00",
+      "channel": "web",
+      "priority": "normal",
+      "subject": "Eligibility audit rows promised but never attached to escalation",
+      "origin_system": "jira_service_management",
+      "status": "done"
+    },
+    {
+      "ticket_ref": "sf_3301",
+      "case_id": "DC-3301",
+      "account_ref": "acc_driftcloud",
+      "opened_at": "2026-01-18T07:30:00+00:00",
+      "closed_at": "2026-01-19T16:20:00+00:00",
+      "channel": "web",
+      "priority": "normal",
+      "subject": "Ledger export retry cleared after customer sent failing batch pair",
+      "origin_system": "salesforce_service_cloud",
+      "status": "closed"
+    },
+    {
+      "ticket_ref": "zd_3479",
+      "case_id": "DC-3479",
+      "account_ref": "acc_driftcloud",
+      "opened_at": "2026-04-04T10:25:00+00:00",
+      "closed_at": "2026-04-07T18:10:00+00:00",
+      "channel": "email",
+      "priority": "high",
+      "subject": "Manual settlement request still lacks audit CSV after prior clean history",
+      "origin_system": "zendesk",
+      "status": "solved"
+    },
+    {
+      "ticket_ref": "hs_4408",
+      "case_id": "EE-4408",
+      "account_ref": "acc_eastline",
+      "opened_at": "2026-03-11T09:15:00+00:00",
+      "closed_at": "2026-03-12T17:40:00+00:00",
+      "channel": "web",
+      "priority": "normal",
+      "subject": "Roster sync mismatch narrowed to two sample rows",
+      "origin_system": "hubspot_service",
+      "status": "closed"
+    },
+    {
+      "ticket_ref": "sf_4470",
+      "case_id": "EE-4470",
+      "account_ref": "acc_eastline",
+      "opened_at": "2026-03-29T13:30:00+00:00",
+      "closed_at": "2026-04-01T11:00:00+00:00",
+      "channel": "web",
+      "priority": "high",
+      "subject": "Reopened enrollment cap dispute contradicts prior manual override proof",
+      "origin_system": "salesforce_service_cloud",
+      "status": "closed"
+    }
+  ],
+  "records": [
+    {
+      "event_ref": "evt_7001_01",
+      "ticket_ref": "zd_7001",
+      "occurred_at": "2026-01-05T08:12:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_510",
+        "display_name": "Elena Park"
+      },
+      "event_name": "ticket_created",
+      "body": "Warehouse ops included the manifest IDs, the failing webhook timestamps, and the key rotation time in the opening note.",
+      "data": {
+        "initial_context_quality": "complete",
+        "attachments": [
+          "manifest-ids.csv"
+        ],
+        "thread_id": "zd-thread-7001"
+      }
+    },
+    {
+      "event_ref": "evt_7001_02",
+      "ticket_ref": "zd_7001",
+      "occurred_at": "2026-01-05T08:40:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_11",
+        "display_name": "Jordan Lee"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support asked for a webhook log slice and one failed manifest payload.",
+      "data": {
+        "request_id": "diag-7001",
+        "requested_items": [
+          "webhook_logs",
+          "failed_manifest_payload"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_7001_03",
+      "ticket_ref": "zd_7001",
+      "occurred_at": "2026-01-05T10:05:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_510",
+        "display_name": "Elena Park"
+      },
+      "event_name": "customer_supplied_artifacts",
+      "body": "The customer uploaded the requested log slice and a redacted failed manifest payload within the same morning.",
+      "data": {
+        "response_quality": "complete",
+        "fulfills_request": true,
+        "requested_item": "webhook_logs",
+        "attachment_count": 2
+      }
+    },
+    {
+      "event_ref": "evt_7001_04",
+      "ticket_ref": "zd_7001",
+      "occurred_at": "2026-01-06T15:45:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "ticket_status",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_510",
+        "display_name": "Elena Park"
+      },
+      "event_name": "customer_confirmed_resolution",
+      "body": "The manifest replay succeeded after the key refresh and queue drain.",
+      "data": {
+        "resolution_code": "fixed"
+      }
+    },
+    {
+      "event_ref": "evt_7144_01",
+      "ticket_ref": "sf_7144",
+      "occurred_at": "2026-03-28T09:04:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_188",
+        "display_name": "Marta Solis"
+      },
+      "event_name": "ticket_created",
+      "body": "Finance ops shared the affected settlement run and weekend adjustment window, but not the actual bundle requested by the escalation template.",
+      "data": {
+        "initial_context_quality": "useful",
+        "case_reason": "reconciliation_gap"
+      }
+    },
+    {
+      "event_ref": "evt_7144_02",
+      "ticket_ref": "sf_7144",
+      "occurred_at": "2026-03-28T09:25:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_34",
+        "display_name": "Nina Costa"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support requested the weekend adjustment bundle and one before and after invoice pair.",
+      "data": {
+        "request_id": "diag-7144",
+        "requested_items": [
+          "weekend_adjustment_bundle",
+          "invoice_before_after_pair"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_7144_03",
+      "ticket_ref": "sf_7144",
+      "occurred_at": "2026-03-31T17:10:00+00:00",
+      "source_system": "workflow_orchestrator",
+      "source_type": "workflow_timer",
+      "actor": {
+        "role": "automation",
+        "actor_id": "timer_31",
+        "display_name": "Follow-up SLA Timer"
+      },
+      "event_name": "requester_deadline_elapsed",
+      "body": "The requested reconciliation bundle still had not arrived by the follow-up deadline.",
+      "data": {
+        "missed_request_count": 1,
+        "due_at": "2026-03-31T17:00:00+00:00",
+        "request_id": "diag-7144"
+      }
+    },
+    {
+      "event_ref": "evt_8103_01",
+      "ticket_ref": "ic_8103",
+      "occurred_at": "2026-02-09T11:02:00+00:00",
+      "source_system": "intercom",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_611",
+        "display_name": "Hugo Weber"
+      },
+      "event_name": "ticket_created",
+      "body": "The ecommerce lead opened with the failing order IDs, the variant mapping revision, and the exact export job that stalled.",
+      "data": {
+        "initial_context_quality": "complete",
+        "attachments": [
+          "order-ids.csv"
+        ],
+        "thread_id": "ic-thread-8103"
+      }
+    },
+    {
+      "event_ref": "evt_8103_02",
+      "ticket_ref": "ic_8103",
+      "occurred_at": "2026-02-09T11:20:00+00:00",
+      "source_system": "intercom",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_22",
+        "display_name": "Sam Ortiz"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support asked for one failed order export pair and the current mapping snapshot.",
+      "data": {
+        "request_id": "diag-8103",
+        "requested_items": [
+          "failed_order_pair",
+          "mapping_snapshot"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_8103_03",
+      "ticket_ref": "ic_8103",
+      "occurred_at": "2026-02-09T12:15:00+00:00",
+      "source_system": "intercom",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_611",
+        "display_name": "Hugo Weber"
+      },
+      "event_name": "customer_supplied_artifacts",
+      "body": "The customer attached the requested failed pair and mapping snapshot less than an hour later.",
+      "data": {
+        "response_quality": "complete",
+        "fulfills_request": true,
+        "requested_item": "mapping_snapshot",
+        "attachment_count": 2
+      }
+    },
+    {
+      "event_ref": "evt_8103_04",
+      "ticket_ref": "ic_8103",
+      "occurred_at": "2026-02-10T13:30:00+00:00",
+      "source_system": "intercom",
+      "source_type": "ticket_status",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_611",
+        "display_name": "Hugo Weber"
+      },
+      "event_name": "customer_confirmed_resolution",
+      "body": "The export resumed normally once the mapping cache was resynced.",
+      "data": {
+        "resolution_code": "fixed"
+      }
+    },
+    {
+      "event_ref": "evt_8186_01",
+      "ticket_ref": "zd_8186",
+      "occurred_at": "2026-02-23T14:07:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_611",
+        "display_name": "Hugo Weber"
+      },
+      "event_name": "ticket_created",
+      "body": "The merchant opened with one failing jurisdiction example and the tax backfill batch ID.",
+      "data": {
+        "initial_context_quality": "useful",
+        "thread_id": "zd-thread-8186"
+      }
+    },
+    {
+      "event_ref": "evt_8186_02",
+      "ticket_ref": "zd_8186",
+      "occurred_at": "2026-02-23T14:50:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_22",
+        "display_name": "Sam Ortiz"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support requested a sample payload from one affected order.",
+      "data": {
+        "request_id": "diag-8186",
+        "requested_items": [
+          "sample_payload"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_8186_03",
+      "ticket_ref": "zd_8186",
+      "occurred_at": "2026-02-24T09:10:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_611",
+        "display_name": "Hugo Weber"
+      },
+      "event_name": "customer_supplied_artifacts",
+      "body": "The customer sent the requested sample payload, but only one example row instead of the fuller comparison bundle.",
+      "data": {
+        "response_quality": "useful",
+        "fulfills_request": true,
+        "requested_item": "sample_payload",
+        "attachment_count": 1
+      }
+    },
+    {
+      "event_ref": "evt_9207_01",
+      "ticket_ref": "sf_9207",
+      "occurred_at": "2026-02-12T08:44:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_702",
+        "display_name": "Asha Patel"
+      },
+      "event_name": "ticket_created",
+      "body": "Revenue cycle support opened with the remittance run, the two impacted claims, and the reversal timestamp.",
+      "data": {
+        "initial_context_quality": "useful",
+        "case_reason": "claim_reversal_dispute"
+      }
+    },
+    {
+      "event_ref": "evt_9207_02",
+      "ticket_ref": "sf_9207",
+      "occurred_at": "2026-02-12T09:05:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_40",
+        "display_name": "Priya Nair"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support requested the signed remittance sheet and one before and after claim row pair.",
+      "data": {
+        "request_id": "diag-9207",
+        "requested_items": [
+          "signed_remittance_sheet",
+          "before_after_claim_rows"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_9207_03",
+      "ticket_ref": "sf_9207",
+      "occurred_at": "2026-02-12T10:10:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_702",
+        "display_name": "Asha Patel"
+      },
+      "event_name": "customer_supplied_artifacts",
+      "body": "The requester uploaded the signed remittance sheet and the requested claim row comparison quickly.",
+      "data": {
+        "response_quality": "complete",
+        "fulfills_request": true,
+        "requested_item": "signed_remittance_sheet",
+        "attachment_count": 2
+      }
+    },
+    {
+      "event_ref": "evt_9207_04",
+      "ticket_ref": "sf_9207",
+      "occurred_at": "2026-02-14T17:35:00+00:00",
+      "source_system": "qa_console",
+      "source_type": "audit_entry",
+      "actor": {
+        "role": "qa_analyst",
+        "actor_id": "qa_12",
+        "display_name": "Nadia Chen"
+      },
+      "event_name": "qa_flagged_conflict",
+      "body": "QA found that the reopened reversal claim conflicted with the signed remittance evidence already supplied in the same ticket.",
+      "data": {
+        "severity": "high",
+        "review_id": "qa-9207"
+      }
+    },
+    {
+      "event_ref": "evt_9244_01",
+      "ticket_ref": "jsm_9244",
+      "occurred_at": "2026-03-03T15:12:00+00:00",
+      "source_system": "jira_service_management",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_702",
+        "display_name": "Asha Patel"
+      },
+      "event_name": "ticket_created",
+      "body": "The escalation note named the affected eligibility run and claimed audit rows were ready to attach.",
+      "data": {
+        "initial_context_quality": "useful",
+        "thread_id": "jsm-thread-9244"
+      }
+    },
+    {
+      "event_ref": "evt_9244_02",
+      "ticket_ref": "jsm_9244",
+      "occurred_at": "2026-03-03T15:40:00+00:00",
+      "source_system": "jira_service_management",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_41",
+        "display_name": "Lena Schultz"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support asked for the eligibility audit rows and one request ID pair.",
+      "data": {
+        "request_id": "diag-9244",
+        "requested_items": [
+          "eligibility_audit_rows",
+          "request_id_pair"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_9244_03",
+      "ticket_ref": "jsm_9244",
+      "occurred_at": "2026-03-05T12:05:00+00:00",
+      "source_system": "jira_service_management",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_702",
+        "display_name": "Asha Patel"
+      },
+      "event_name": "customer_replied_without_artifacts",
+      "body": "The customer asked for a status update but still did not include the promised eligibility rows.",
+      "data": {
+        "missing_item_count": 2,
+        "missing_items": [
+          "eligibility_audit_rows",
+          "request_id_pair"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_3301_01",
+      "ticket_ref": "sf_3301",
+      "occurred_at": "2026-01-18T07:33:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_901",
+        "display_name": "Theo Martins"
+      },
+      "event_name": "ticket_created",
+      "body": "The finance contact opened with the batch pair, retry ID, and exact ledger window that failed.",
+      "data": {
+        "initial_context_quality": "complete",
+        "case_reason": "ledger_retry_failure"
+      }
+    },
+    {
+      "event_ref": "evt_3301_02",
+      "ticket_ref": "sf_3301",
+      "occurred_at": "2026-01-18T08:00:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_52",
+        "display_name": "Marco Silva"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support requested one failing batch pair and the raw retry payload.",
+      "data": {
+        "request_id": "diag-3301",
+        "requested_items": [
+          "failing_batch_pair",
+          "retry_payload"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_3301_03",
+      "ticket_ref": "sf_3301",
+      "occurred_at": "2026-01-18T09:10:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_901",
+        "display_name": "Theo Martins"
+      },
+      "event_name": "customer_supplied_artifacts",
+      "body": "The customer attached the failing batch pair and retry payload shortly after the request.",
+      "data": {
+        "response_quality": "complete",
+        "fulfills_request": true,
+        "requested_item": "failing_batch_pair",
+        "attachment_count": 2
+      }
+    },
+    {
+      "event_ref": "evt_3301_04",
+      "ticket_ref": "sf_3301",
+      "occurred_at": "2026-01-19T16:20:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "ticket_status",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_901",
+        "display_name": "Theo Martins"
+      },
+      "event_name": "customer_confirmed_resolution",
+      "body": "The ledger export retried cleanly once the stuck batch was replayed.",
+      "data": {
+        "resolution_code": "fixed"
+      }
+    },
+    {
+      "event_ref": "evt_3479_01",
+      "ticket_ref": "zd_3479",
+      "occurred_at": "2026-04-04T10:28:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_903",
+        "display_name": "Theo Martins"
+      },
+      "event_name": "ticket_created",
+      "body": "The settlement request named the affected payout run, but the actual audit CSV and examples were still missing.",
+      "data": {
+        "initial_context_quality": "useful",
+        "thread_id": "zd-thread-3479"
+      }
+    },
+    {
+      "event_ref": "evt_3479_02",
+      "ticket_ref": "zd_3479",
+      "occurred_at": "2026-04-04T10:50:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_09",
+        "display_name": "Mila Tran"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support requested the audit CSV and two settlement examples before any manual adjustment.",
+      "data": {
+        "request_id": "diag-3479",
+        "requested_items": [
+          "audit_csv",
+          "settlement_examples"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_3479_03",
+      "ticket_ref": "zd_3479",
+      "occurred_at": "2026-04-07T18:00:00+00:00",
+      "source_system": "workflow_orchestrator",
+      "source_type": "workflow_timer",
+      "actor": {
+        "role": "automation",
+        "actor_id": "timer_44",
+        "display_name": "Follow-up SLA Timer"
+      },
+      "event_name": "requester_deadline_elapsed",
+      "body": "The requested audit CSV still had not arrived by the escalation follow-up deadline.",
+      "data": {
+        "missed_request_count": 1,
+        "due_at": "2026-04-07T17:45:00+00:00",
+        "request_id": "diag-3479"
+      }
+    },
+    {
+      "event_ref": "evt_4408_01",
+      "ticket_ref": "hs_4408",
+      "occurred_at": "2026-03-11T09:18:00+00:00",
+      "source_system": "hubspot_service",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_110",
+        "display_name": "Paula Novak"
+      },
+      "event_name": "ticket_created",
+      "body": "The district IT lead opened with the roster job, the bad section pair, and the sync timestamp.",
+      "data": {
+        "initial_context_quality": "useful",
+        "case_reason": "roster_sync_mismatch"
+      }
+    },
+    {
+      "event_ref": "evt_4408_02",
+      "ticket_ref": "hs_4408",
+      "occurred_at": "2026-03-11T09:35:00+00:00",
+      "source_system": "hubspot_service",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_61",
+        "display_name": "Rowan Kim"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support requested two sample roster rows and the expected output for comparison.",
+      "data": {
+        "request_id": "diag-4408",
+        "requested_items": [
+          "sample_roster_rows",
+          "expected_output"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_4408_03",
+      "ticket_ref": "hs_4408",
+      "occurred_at": "2026-03-11T10:05:00+00:00",
+      "source_system": "hubspot_service",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_110",
+        "display_name": "Paula Novak"
+      },
+      "event_name": "customer_supplied_artifacts",
+      "body": "The customer supplied one clean roster row pair quickly, but not the fuller bundle that would make the case completely routine.",
+      "data": {
+        "response_quality": "partial",
+        "fulfills_request": true,
+        "requested_item": "sample_roster_rows",
+        "attachment_count": 1
+      }
+    },
+    {
+      "event_ref": "evt_4408_04",
+      "ticket_ref": "hs_4408",
+      "occurred_at": "2026-03-12T17:40:00+00:00",
+      "source_system": "hubspot_service",
+      "source_type": "ticket_status",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_110",
+        "display_name": "Paula Novak"
+      },
+      "event_name": "customer_confirmed_resolution",
+      "body": "The roster sync matched once the bad section mapping was corrected.",
+      "data": {
+        "resolution_code": "fixed"
+      }
+    },
+    {
+      "event_ref": "evt_4470_01",
+      "ticket_ref": "sf_4470",
+      "occurred_at": "2026-03-29T13:34:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_110",
+        "display_name": "Paula Novak"
+      },
+      "event_name": "ticket_created",
+      "body": "The customer reopened the enrollment cap dispute with the override ID and a short note claiming the prior manual fix did not hold.",
+      "data": {
+        "initial_context_quality": "useful",
+        "reopened_from_ticket_ref": "sf_4319"
+      }
+    },
+    {
+      "event_ref": "evt_4470_02",
+      "ticket_ref": "sf_4470",
+      "occurred_at": "2026-03-29T14:20:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_61",
+        "display_name": "Rowan Kim"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support requested the override approval PDF and a student count extract before applying another manual change.",
+      "data": {
+        "request_id": "diag-4470",
+        "requested_items": [
+          "override_approval_pdf",
+          "student_count_extract"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_4470_03",
+      "ticket_ref": "sf_4470",
+      "occurred_at": "2026-03-29T15:05:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_110",
+        "display_name": "Paula Novak"
+      },
+      "event_name": "customer_supplied_artifacts",
+      "body": "The customer attached the prior override approval PDF but not the current student count extract.",
+      "data": {
+        "response_quality": "useful",
+        "fulfills_request": true,
+        "requested_item": "override_approval_pdf",
+        "attachment_count": 1
+      }
+    },
+    {
+      "event_ref": "evt_4470_04",
+      "ticket_ref": "sf_4470",
+      "occurred_at": "2026-04-01T10:45:00+00:00",
+      "source_system": "qa_console",
+      "source_type": "audit_entry",
+      "actor": {
+        "role": "qa_analyst",
+        "actor_id": "qa_18",
+        "display_name": "Omar Hayes"
+      },
+      "event_name": "qa_flagged_conflict",
+      "body": "QA found that the reopened dispute contradicted the already approved override evidence from the earlier ticket.",
+      "data": {
+        "severity": "medium",
+        "review_id": "qa-4470"
+      }
+    }
+  ]
+}
