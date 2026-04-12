@@ -57,6 +57,29 @@ This Zendesk-like adapter adds:
 - `use_cases/support_v1/zendesk_like_export_sample.json`, a compact export sample with organizations, users, tickets, comments, nested ticket metadata, timestamps, statuses, priorities, and channels
 - `use_cases/support_v1/helpdesk_adapter_zendesk_like.py`, one explicit adapter that reads the sample export and writes `use_cases/support_v1/artifacts/normalized_support_cases_from_zendesk_like.json`
 
+## Zendesk-like labeled evaluation runner
+
+Run the end-to-end Zendesk-like ingest flow:
+
+```powershell
+py use_cases/support_v1/run_support_zendesk_like_label_evaluation.py
+```
+
+This runner adds one explicit Zendesk-like-export-to-label-eval path that:
+
+- reads `use_cases/support_v1/zendesk_like_export_sample.json`
+- reads the matching label pack `use_cases/support_v1/zendesk_like_export_sample_labels.json`
+- normalizes the Zendesk-like export into the existing support case schema
+- runs the existing labeled decision-point evaluation on that normalized output
+- writes `use_cases/support_v1/artifacts/latest_support_zendesk_like_label_evaluation.json`
+- writes `use_cases/support_v1/artifacts/latest_support_zendesk_like_label_review.csv`
+
+Override the export or labels files if needed:
+
+```powershell
+py use_cases/support_v1/run_support_zendesk_like_label_evaluation.py --export-path C:\path\to\zendesk_like_export.json --labels-path C:\path\to\support_zendesk_like_labels.json
+```
+
 ## Mapping-based CSV ingest labeled evaluation runner
 
 Run the end-to-end mapping-based ingest flow:

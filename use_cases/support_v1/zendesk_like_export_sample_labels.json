@@ -1,0 +1,49 @@
+{
+  "label_set_name": "support_v1_zendesk_like_export_sample_labels",
+  "labels": [
+    {
+      "label_id": "zendesk_like_label_001",
+      "entity_id": "acct_riverpath",
+      "ticket_id": "RP-88021",
+      "decision_timestamp": "2026-02-04T11:25:00+00:00",
+      "should_route": "fast_path",
+      "note": "RiverPath supplied the requested webhook logs and failed payload promptly, so the visible history remains recent, complete, and safe for routine handling."
+    },
+    {
+      "label_id": "zendesk_like_label_002",
+      "entity_id": "acct_riverpath",
+      "ticket_id": "RP-88021",
+      "decision_timestamp": "2026-02-05T14:30:00+00:00",
+      "should_route": "fast_path",
+      "note": "The same ticket closes with a requester-confirmed fix after cooperative follow-through, so the route should stay on the fast path."
+    },
+    {
+      "label_id": "zendesk_like_label_003",
+      "entity_id": "acct_skyline",
+      "ticket_id": "SH-10492",
+      "decision_timestamp": "2026-02-19T16:10:00+00:00",
+      "should_route": "deep_path",
+      "profile_too_stale": true,
+      "note": "Skyline never delivered the requested audit bundle and the visible evidence is still too thin to justify a light-touch route."
+    },
+    {
+      "label_id": "zendesk_like_label_004",
+      "entity_id": "acct_riverpath",
+      "ticket_id": "RP-88177",
+      "decision_timestamp": "2026-03-19T12:10:00+00:00",
+      "should_route": "deep_path",
+      "wrong_first_impression": true,
+      "note": "The reopened scanner issue can look routine at first, but the follow-up still omits the requested scanner video, so the first fast-path impression is unsafe."
+    },
+    {
+      "label_id": "zendesk_like_label_005",
+      "entity_id": "acct_riverpath",
+      "ticket_id": "RP-88177",
+      "decision_timestamp": "2026-03-21T13:20:00+00:00",
+      "should_route": "deep_path",
+      "contradiction_present": true,
+      "wrong_first_impression": true,
+      "note": "QA has now marked the reopen claim as conflicting with the earlier resolution confirmation, which requires deeper review."
+    }
+  ]
+}
