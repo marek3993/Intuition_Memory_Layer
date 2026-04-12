@@ -60,10 +60,10 @@ class LabelEvaluationResult:
     predicted_reason: str
     correct: bool
     naive_summary_predicted_path: str
-    naive_summary_predicted_reason: str
+    naive_summary_decision_reason: str
     naive_summary_correct: bool
     full_history_predicted_path: str
-    full_history_predicted_reason: str
+    full_history_decision_reason: str
     full_history_correct: bool
     visible_case_ids: tuple[str, ...]
     visible_event_count: int
@@ -266,10 +266,10 @@ def evaluate_label(
         predicted_reason=decision_result.reason,
         correct=decision_result.selected_path == label.should_route,
         naive_summary_predicted_path=str(naive_summary_result["selected_path"]),
-        naive_summary_predicted_reason=str(naive_summary_result["decision_reason"]),
+        naive_summary_decision_reason=str(naive_summary_result["decision_reason"]),
         naive_summary_correct=str(naive_summary_result["selected_path"]) == label.should_route,
         full_history_predicted_path=str(full_history_result["selected_path"]),
-        full_history_predicted_reason=str(full_history_result["decision_reason"]),
+        full_history_decision_reason=str(full_history_result["decision_reason"]),
         full_history_correct=str(full_history_result["selected_path"]) == label.should_route,
         visible_case_ids=visible_case_ids,
         visible_event_count=len(visible_events),
@@ -315,10 +315,10 @@ def build_result_payload(result: LabelEvaluationResult) -> dict[str, Any]:
             "predicted_reason": result.predicted_reason,
             "correct": result.correct,
             "naive_summary_predicted_path": result.naive_summary_predicted_path,
-            "naive_summary_predicted_reason": result.naive_summary_predicted_reason,
+            "naive_summary_decision_reason": result.naive_summary_decision_reason,
             "naive_summary_correct": result.naive_summary_correct,
             "full_history_predicted_path": result.full_history_predicted_path,
-            "full_history_predicted_reason": result.full_history_predicted_reason,
+            "full_history_decision_reason": result.full_history_decision_reason,
             "full_history_correct": result.full_history_correct,
         },
         "visible_history": {
@@ -429,8 +429,12 @@ def print_label_summary(result: LabelEvaluationResult) -> None:
                 f"label={result.label.label_id}",
                 f"ticket={result.label.ticket_id}",
                 f"labeled={result.label.should_route}",
-                f"predicted={result.predicted_path}",
-                f"correct={result.correct}",
+                f"iml={result.predicted_path}",
+                f"iml_correct={result.correct}",
+                f"naive_summary={result.naive_summary_predicted_path}",
+                f"naive_correct={result.naive_summary_correct}",
+                f"full_history={result.full_history_predicted_path}",
+                f"full_history_correct={result.full_history_correct}",
                 f"visible_events={result.visible_event_count}",
                 f"confidence={format_float(result.overall_confidence)}",
                 f"freshness={format_float(result.freshness)}",
@@ -442,14 +446,21 @@ def print_label_summary(result: LabelEvaluationResult) -> None:
 
 
 def print_aggregate_summary(summary: dict[str, Any], export_path: Path) -> None:
+    method_summaries = summary["methods"]
     print()
     print(
         " | ".join(
             [
                 f"total_labels={summary['total_labels']}",
-                f"correct_predictions={summary['correct_predictions']}",
-                f"incorrect_predictions={summary['incorrect_predictions']}",
-                f"accuracy={format_percent(float(summary['accuracy']))}",
+                f"iml_accuracy={format_percent(float(method_summaries['iml']['accuracy']))}",
+                f"iml_correct={method_summaries['iml']['correct_predictions']}",
+                f"iml_incorrect={method_summaries['iml']['incorrect_predictions']}",
+                f"naive_summary_accuracy={format_percent(float(method_summaries['naive_summary']['accuracy']))}",
+                f"naive_summary_correct={method_summaries['naive_summary']['correct_predictions']}",
+                f"naive_summary_incorrect={method_summaries['naive_summary']['incorrect_predictions']}",
+                f"full_history_accuracy={format_percent(float(method_summaries['full_history']['accuracy']))}",
+                f"full_history_correct={method_summaries['full_history']['correct_predictions']}",
+                f"full_history_incorrect={method_summaries['full_history']['incorrect_predictions']}",
             ]
         )
     )
