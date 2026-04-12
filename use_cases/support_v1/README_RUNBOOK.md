@@ -41,6 +41,18 @@ Run the labeled decision-point evaluation with support_v1 calibration enabled:
 py use_cases/support_v1/run_support_label_evaluation.py --calibrated
 ```
 
+Run the labeled decision-point evaluation against pack B:
+
+```powershell
+py use_cases/support_v1/run_support_label_evaluation.py --cases-path use_cases/support_v1/sample_support_cases_pack_b.json --labels-path use_cases/support_v1/sample_support_labels_pack_b.json
+```
+
+Run the labeled decision-point evaluation against explicit files:
+
+```powershell
+py use_cases/support_v1/run_support_label_evaluation.py --cases-path C:\path\to\support_cases.json --labels-path C:\path\to\support_labels.json
+```
+
 This flow replays only the history visible at each labeled `decision_timestamp`, compares the routed path against the hand-authored label, and writes:
 
 - `use_cases/support_v1/artifacts/latest_support_label_evaluation.json`
@@ -68,6 +80,8 @@ The focused CSV exports speed up review of the highest-signal subsets:
 
 - `latest_support_label_errors.csv` keeps only rows where the active method prediction is wrong
 - `latest_support_label_route_changes.csv` keeps only rows where `--calibrated` changes the routed path versus original IML; in default mode it is still written with header only
+
+Dataset switching keeps the existing default pack A behavior when no flags are passed, while letting you point the same runner at pack B or any explicit cases/labels JSON pair without editing script constants.
 
 ## Quick inspection
 

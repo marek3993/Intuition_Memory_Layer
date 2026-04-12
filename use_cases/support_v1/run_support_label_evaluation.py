@@ -100,7 +100,35 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Apply support_v1 calibration before routing each labeled decision point.",
     )
+    parser.add_argument(
+        "--cases-path",
+        type=Path,
+        help=(
+            "Override the support cases dataset path. Defaults to the current "
+            "support_v1 sample pack."
+        ),
+    )
+    parser.add_argument(
+        "--labels-path",
+        type=Path,
+        help=(
+            "Override the support label dataset path. Defaults to the current "
+            "support_v1 label pack."
+        ),
+    )
     return parser.parse_args()
+
+
+def resolve_input_path(path: Path | None, default_path: Path) -> Path:
+    candidate = default_path if path is None else path
+    return candidate.expanduser().resolve()
+
+
+def format_dataset_path(path: Path) -> str:
+    try:
+        return project_relative_path(path)
+    except ValueError:
+        return str(path)
 
 
 def replay_visible_history(
@@ -427,6 +455,8 @@ def build_export_payload(
     per_label_results: list[dict[str, Any]],
     event_mapping_version: str,
     use_calibration: bool,
+    cases_path: Path,
+    labels_path: Path,
 ) -> dict[str, Any]:
     aggregate_summary = build_aggregate_summary(
         active_results=active_results,
@@ -446,8 +476,8 @@ def build_export_payload(
             "evaluation_name": "support_v1_label_evaluation",
             "generated_at": datetime.now().astimezone().isoformat(),
             "runner_path": project_relative_path(Path(__file__).resolve()),
-            "dataset_path": project_relative_path(SOURCE_PATH),
-            "labels_path": project_relative_path(LABELS_PATH),
+            "dataset_path": format_dataset_path(cases_path),
+            "labels_path": format_dataset_path(labels_path),
             "export_path": project_relative_path(EXPORT_PATH),
             "event_mapping_version": event_mapping_version,
             "mode": "calibrated" if use_calibration else "default",
@@ -610,6 +640,8 @@ def print_summary(
     errors_export_path: Path,
     route_changes_export_path: Path,
     use_calibration: bool,
+    cases_path: Path,
+    labels_path: Path,
 ) -> None:
     aggregate_summary = payload["aggregate_summary"]
     method_summaries = aggregate_summary["methods"]
@@ -619,6 +651,8 @@ def print_summary(
     print("support_v1 decision-point label evaluation")
     print(f"mode: {'calibrated' if use_calibration else 'default'}")
     print(f"calibration_enabled: {use_calibration}")
+    print(f"dataset_path: {format_dataset_path(cases_path)}")
+    print(f"labels_path: {format_dataset_path(labels_path)}")
     print(
         " | ".join(
             [
@@ -680,8 +714,14 @@ def print_summary(
 
 def main() -> None:
     args = parse_args()
-    cases = load_support_cases(SOURCE_PATH)
-    labels = load_support_labels(LABELS_PATH)
+    cases_path = resolve_input_path(args.cases_path, SOURCE_PATH)
+    labels_path = resolve_input_path(args.labels_path, LABELS_PATH)
+
+    print(f"dataset_path: {format_dataset_path(cases_path)}")
+    print(f"labels_path: {format_dataset_path(labels_path)}")
+
+    cases = load_support_cases(cases_path)
+    labels = load_support_labels(labels_path)
     entity_events, event_mapping_version = build_entity_events(cases)
     cases_by_ticket_id = {case.case_id: case for case in cases}
 
@@ -744,6 +784,8 @@ def main() -> None:
         per_label_results=per_label_results,
         event_mapping_version=event_mapping_version,
         use_calibration=args.calibrated,
+        cases_path=cases_path,
+        labels_path=labels_path,
     )
     json_export_path = export_json_results(export_payload)
     review_export_path = export_review_results(REVIEW_EXPORT_PATH, review_rows)
@@ -759,6 +801,8 @@ def main() -> None:
         errors_export_path=errors_export_path,
         route_changes_export_path=route_changes_export_path,
         use_calibration=args.calibrated,
+        cases_path=cases_path,
+        labels_path=labels_path,
     )
 
 
