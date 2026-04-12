@@ -1,0 +1,67 @@
+{
+  "dataset_name": "support_v1_mapped_csv_ingest_prototype",
+  "entity_type": "support_account",
+  "columns": {
+    "entity_id": "customer_account_key",
+    "account_name": "customer_name",
+    "segment": "customer_tier",
+    "ticket_ref": "helpdesk_ticket_ref",
+    "case_id": "case_code",
+    "opened_at": "case_opened_ts",
+    "closed_at": "case_closed_ts",
+    "channel": "intake_channel",
+    "priority": "case_priority",
+    "summary": "case_subject",
+    "record_id": "activity_id",
+    "record_timestamp": "event_occurred_ts",
+    "source_system": "platform_name",
+    "source_type": "activity_kind",
+    "actor_role": "performed_by_role",
+    "raw_action": "normalized_action",
+    "outcome": "normalized_outcome",
+    "details": "activity_detail"
+  },
+  "metadata_columns": {
+    "initial_context_quality": {
+      "column": "context_rating",
+      "type": "string"
+    },
+    "response_quality": {
+      "column": "response_rating",
+      "type": "string"
+    },
+    "fulfills_request": {
+      "column": "request_fulfilled",
+      "type": "bool"
+    },
+    "request_id": {
+      "column": "diagnostic_request_id",
+      "type": "string"
+    },
+    "missed_request_count": {
+      "column": "miss_count",
+      "type": "int"
+    },
+    "missing_item_count": {
+      "column": "missing_item_total",
+      "type": "int"
+    },
+    "severity": {
+      "column": "qa_severity",
+      "type": "string"
+    },
+    "due_at": {
+      "column": "response_due_ts",
+      "type": "string"
+    },
+    "missing_items": {
+      "column": "missing_artifacts",
+      "type": "pipe_list"
+    },
+    "attachments": {
+      "column": "attachment_list",
+      "type": "pipe_list"
+    }
+  },
+  "list_delimiter": "|"
+}

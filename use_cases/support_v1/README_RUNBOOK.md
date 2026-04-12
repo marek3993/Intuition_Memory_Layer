@@ -30,6 +30,20 @@ This prototype adds a CSV ingest path that:
 - reconstructs ordered records in the existing support case schema
 - writes `use_cases/support_v1/artifacts/normalized_support_cases_from_csv.json`
 
+## Mapping-based CSV ingest prototype
+
+Normalize a realistic flat helpdesk export through an explicit column-mapping file into the existing `support_v1` case schema:
+
+```powershell
+py use_cases/support_v1/normalize_mapped_support_export.py
+```
+
+This mapping-based ingest prototype adds:
+
+- `use_cases/support_v1/helpdesk_export_mapping_template.json`, an explicit column map from external export fields into the current `support_v1` raw case schema
+- `use_cases/support_v1/helpdesk_export_sample_generic.csv`, a more realistic flat export whose column names differ from the fixed sample
+- `use_cases/support_v1/normalize_mapped_support_export.py`, a small adapter that reads the CSV plus mapping, groups rows by entity and ticket, and writes `use_cases/support_v1/artifacts/normalized_support_cases_from_mapping.json`
+
 ## CSV ingest labeled evaluation runner
 
 Run the end-to-end CSV ingest flow:
