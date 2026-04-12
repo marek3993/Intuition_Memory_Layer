@@ -1,0 +1,234 @@
+{
+  "export_name": "support_raw_export_sample",
+  "exported_at": "2026-04-12T18:00:00+00:00",
+  "accounts": [
+    {
+      "account_ref": "acc_riverpath",
+      "entity_id": "acct_riverpath",
+      "display_name": "RiverPath Logistics",
+      "segment": "mid_market",
+      "source_system": "salesforce",
+      "external_account_id": "001RP00001882"
+    },
+    {
+      "account_ref": "acc_skyline",
+      "entity_id": "acct_skyline",
+      "display_name": "Skyline Health Ops",
+      "segment": "enterprise",
+      "source_system": "salesforce",
+      "external_account_id": "001RP00001883"
+    }
+  ],
+  "tickets": [
+    {
+      "ticket_ref": "zd_88021",
+      "case_id": "RP-88021",
+      "account_ref": "acc_riverpath",
+      "opened_at": "2026-02-03T08:15:00+00:00",
+      "closed_at": "2026-02-05T14:30:00+00:00",
+      "channel": "email",
+      "priority": "normal",
+      "subject": "Carrier label sync stalled after credentials rotation",
+      "origin_system": "zendesk",
+      "status": "solved"
+    },
+    {
+      "ticket_ref": "sf_10492",
+      "case_id": "SH-10492",
+      "account_ref": "acc_skyline",
+      "opened_at": "2026-02-17T10:00:00+00:00",
+      "closed_at": "2026-02-19T16:10:00+00:00",
+      "channel": "web",
+      "priority": "high",
+      "subject": "Patient export retry blocked by missing audit bundle",
+      "origin_system": "salesforce_service_cloud",
+      "status": "closed"
+    },
+    {
+      "ticket_ref": "zd_88177",
+      "case_id": "RP-88177",
+      "account_ref": "acc_riverpath",
+      "opened_at": "2026-03-18T07:50:00+00:00",
+      "closed_at": "2026-03-21T14:05:00+00:00",
+      "channel": "chat",
+      "priority": "high",
+      "subject": "Reopened barcode scanner issue after prior resolution claim",
+      "origin_system": "zendesk",
+      "status": "solved"
+    }
+  ],
+  "records": [
+    {
+      "event_ref": "evt_88021_01",
+      "ticket_ref": "zd_88021",
+      "occurred_at": "2026-02-03T08:17:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_402",
+        "display_name": "Mila Tran"
+      },
+      "event_name": "ticket_created",
+      "body": "Operations lead included carrier account ID, failing label IDs, and the rotation timestamp.",
+      "data": {
+        "initial_context_quality": "complete",
+        "attachments": [
+          "rotation-log.txt"
+        ],
+        "thread_id": "zd-thread-88021"
+      }
+    },
+    {
+      "event_ref": "evt_88021_02",
+      "ticket_ref": "zd_88021",
+      "occurred_at": "2026-02-03T09:00:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_19",
+        "display_name": "Jordan Lee"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support requested sanitized webhook logs and one failed payload sample.",
+      "data": {
+        "request_id": "diag-88021",
+        "requested_items": [
+          "webhook_logs",
+          "failed_payload"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_88021_03",
+      "ticket_ref": "zd_88021",
+      "occurred_at": "2026-02-04T11:25:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_402",
+        "display_name": "Mila Tran"
+      },
+      "event_name": "customer_supplied_artifacts",
+      "body": "Customer uploaded sanitized webhook logs and a failed request payload sample.",
+      "data": {
+        "response_quality": "complete",
+        "fulfills_request": true,
+        "requested_item": "webhook_logs",
+        "attachment_count": 2
+      }
+    },
+    {
+      "event_ref": "evt_88021_04",
+      "ticket_ref": "zd_88021",
+      "occurred_at": "2026-02-05T14:30:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "ticket_status",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_402",
+        "display_name": "Mila Tran"
+      },
+      "event_name": "customer_confirmed_resolution",
+      "body": "Customer confirmed the labels synced normally after the credential refresh.",
+      "data": {
+        "resolution_code": "fixed"
+      }
+    },
+    {
+      "event_ref": "evt_10492_01",
+      "ticket_ref": "sf_10492",
+      "occurred_at": "2026-02-17T10:03:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_710",
+        "display_name": "Priya Nair"
+      },
+      "event_name": "ticket_created",
+      "body": "Support contact shared the export job IDs, the affected patient batch, and the certificate rotation window.",
+      "data": {
+        "initial_context_quality": "useful",
+        "case_reason": "export_retry_failure"
+      }
+    },
+    {
+      "event_ref": "evt_10492_02",
+      "ticket_ref": "sf_10492",
+      "occurred_at": "2026-02-19T16:10:00+00:00",
+      "source_system": "workflow_orchestrator",
+      "source_type": "workflow_timer",
+      "actor": {
+        "role": "automation",
+        "actor_id": "timer_12",
+        "display_name": "Follow-up SLA Timer"
+      },
+      "event_name": "requester_deadline_elapsed",
+      "body": "Requested audit bundle did not arrive before the follow-up window expired.",
+      "data": {
+        "missed_request_count": 1,
+        "due_at": "2026-02-19T16:00:00+00:00",
+        "request_id": "diag-10492"
+      }
+    },
+    {
+      "event_ref": "evt_88177_01",
+      "ticket_ref": "zd_88177",
+      "occurred_at": "2026-03-18T07:52:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_402",
+        "display_name": "Mila Tran"
+      },
+      "event_name": "ticket_created",
+      "body": "Customer reopened the scanner issue with a short note saying the prior fix did not hold.",
+      "data": {
+        "initial_context_quality": "useful",
+        "reopened_from_ticket_ref": "zd_87004"
+      }
+    },
+    {
+      "event_ref": "evt_88177_02",
+      "ticket_ref": "zd_88177",
+      "occurred_at": "2026-03-19T12:10:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_402",
+        "display_name": "Mila Tran"
+      },
+      "event_name": "customer_replied_without_artifacts",
+      "body": "Customer replied that scanning was still failing but did not include the requested scanner video.",
+      "data": {
+        "missing_item_count": 1,
+        "missing_items": [
+          "scanner_video"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_88177_03",
+      "ticket_ref": "zd_88177",
+      "occurred_at": "2026-03-21T13:20:00+00:00",
+      "source_system": "qa_console",
+      "source_type": "audit_entry",
+      "actor": {
+        "role": "qa_analyst",
+        "actor_id": "qa_07",
+        "display_name": "Nadia Chen"
+      },
+      "event_name": "qa_flagged_conflict",
+      "body": "QA compared the reopen note against the earlier resolution confirmation and marked the claim as conflicting.",
+      "data": {
+        "severity": "high",
+        "review_id": "qa-448"
+      }
+    }
+  ]
+}

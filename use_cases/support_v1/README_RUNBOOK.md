@@ -2,6 +2,19 @@
 
 Run commands from the repository root.
 
+## Raw-ingest prototype
+
+Normalize the upstream-style raw support export into the existing `support_v1` case schema:
+
+```powershell
+py use_cases/support_v1/normalize_raw_support_export.py
+```
+
+This prototype adds one explicit ingest step before the current converter and evaluation flow:
+
+- `use_cases/support_v1/raw_support_export_sample.json` models a more realistic upstream export with separate accounts, tickets, and records.
+- `use_cases/support_v1/normalize_raw_support_export.py` maps that export into the existing support case schema and writes `use_cases/support_v1/artifacts/normalized_support_cases.json`.
+
 ## Full-entity replay runner
 
 Rebuild the grouped support event artifact:
