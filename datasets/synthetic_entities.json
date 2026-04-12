@@ -1,0 +1,801 @@
+{
+  "entities": [
+    {
+      "entity_id": "entity_stable_good_01",
+      "scenario": "stable_good_actor",
+      "events": [
+        {
+          "event_id": "sg_001",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-01-03T09:00:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.96,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Delivered kickoff notes before the agreed deadline."
+          }
+        },
+        {
+          "event_id": "sg_002",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-01-06T10:15:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.95,
+          "polarity": 1.0,
+          "intensity": 0.95,
+          "metadata": {
+            "note": "Sent the first draft without requiring follow-up."
+          }
+        },
+        {
+          "event_id": "sg_003",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-01-09T08:40:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "team_lead_review",
+          "reliability": 0.94,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Closed the open action items from the weekly sync."
+          }
+        },
+        {
+          "event_id": "sg_004",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-01-12T11:20:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.97,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Completed a promised integration task on schedule."
+          }
+        },
+        {
+          "event_id": "sg_005",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-01-15T09:35:00Z",
+          "event_type": "cooperative_response",
+          "source": "support_thread",
+          "reliability": 0.93,
+          "polarity": 1.0,
+          "intensity": 0.90,
+          "metadata": {
+            "note": "Responded constructively to a clarification request."
+          }
+        },
+        {
+          "event_id": "sg_006",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-01-18T09:10:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.95,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Delivered the revised asset bundle in the agreed format."
+          }
+        },
+        {
+          "event_id": "sg_007",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-01-21T10:50:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.96,
+          "polarity": 1.0,
+          "intensity": 0.95,
+          "metadata": {
+            "note": "Followed through on a dependency handoff without reminders."
+          }
+        },
+        {
+          "event_id": "sg_008",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-01-24T08:55:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "peer_feedback",
+          "reliability": 0.94,
+          "polarity": 1.0,
+          "intensity": 0.95,
+          "metadata": {
+            "note": "Shared status proactively before the checkpoint meeting."
+          }
+        },
+        {
+          "event_id": "sg_009",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-01-27T09:45:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.96,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Resolved QA comments within the same workday."
+          }
+        },
+        {
+          "event_id": "sg_010",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-01-30T12:05:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "ops_review",
+          "reliability": 0.95,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Finished the handoff checklist cleanly and on time."
+          }
+        },
+        {
+          "event_id": "sg_011",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-02-02T09:20:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.97,
+          "polarity": 1.0,
+          "intensity": 0.95,
+          "metadata": {
+            "note": "Met the milestone that had been confirmed the prior week."
+          }
+        },
+        {
+          "event_id": "sg_012",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-02-05T10:30:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "peer_feedback",
+          "reliability": 0.94,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Handled a shared deliverable without creating drift."
+          }
+        },
+        {
+          "event_id": "sg_013",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-02-08T09:00:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.96,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Confirmed and completed a late-added task within scope."
+          }
+        },
+        {
+          "event_id": "sg_014",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-02-11T08:50:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.95,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Delivered polished final materials ahead of review."
+          }
+        },
+        {
+          "event_id": "sg_015",
+          "entity_id": "entity_stable_good_01",
+          "timestamp": "2026-02-14T09:05:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "final_review",
+          "reliability": 0.97,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Final delivery matched scope and timing commitments."
+          }
+        }
+      ]
+    },
+    {
+      "entity_id": "entity_false_positive_01",
+      "scenario": "false_positive_first_impression",
+      "events": [
+        {
+          "event_id": "fp_001",
+          "entity_id": "entity_false_positive_01",
+          "timestamp": "2026-01-05T09:10:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "sales_followup",
+          "reliability": 0.95,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Opened with a polished and punctual initial deliverable."
+          }
+        },
+        {
+          "event_id": "fp_002",
+          "entity_id": "entity_false_positive_01",
+          "timestamp": "2026-01-07T14:20:00Z",
+          "event_type": "cooperative_response",
+          "source": "email_thread",
+          "reliability": 0.90,
+          "polarity": 1.0,
+          "intensity": 0.90,
+          "metadata": {
+            "note": "Answered follow-up questions quickly and pleasantly."
+          }
+        },
+        {
+          "event_id": "fp_003",
+          "entity_id": "entity_false_positive_01",
+          "timestamp": "2026-01-09T10:00:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "sales_followup",
+          "reliability": 0.92,
+          "polarity": 1.0,
+          "intensity": 0.95,
+          "metadata": {
+            "note": "Made a second good impression by meeting a short deadline."
+          }
+        },
+        {
+          "event_id": "fp_004",
+          "entity_id": "entity_false_positive_01",
+          "timestamp": "2026-01-12T16:30:00Z",
+          "event_type": "contradiction_detected",
+          "source": "ops_audit",
+          "reliability": 0.89,
+          "polarity": -1.0,
+          "intensity": 1.3,
+          "metadata": {
+            "note": "Operational details conflicted with earlier claims."
+          }
+        },
+        {
+          "event_id": "fp_005",
+          "entity_id": "entity_false_positive_01",
+          "timestamp": "2026-01-14T11:25:00Z",
+          "event_type": "ignored_request",
+          "source": "client_success",
+          "reliability": 0.86,
+          "polarity": -1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Did not respond to a direct request for missing details."
+          }
+        },
+        {
+          "event_id": "fp_006",
+          "entity_id": "entity_false_positive_01",
+          "timestamp": "2026-01-18T09:40:00Z",
+          "event_type": "contradiction_detected",
+          "source": "peer_reference",
+          "reliability": 0.91,
+          "polarity": -1.0,
+          "intensity": 1.3,
+          "metadata": {
+            "note": "A reference check contradicted the delivery narrative."
+          }
+        },
+        {
+          "event_id": "fp_007",
+          "entity_id": "entity_false_positive_01",
+          "timestamp": "2026-01-20T13:00:00Z",
+          "event_type": "ignored_request",
+          "source": "client_success",
+          "reliability": 0.88,
+          "polarity": -1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Missed another explicit follow-up and left issues unresolved."
+          }
+        },
+        {
+          "event_id": "fp_008",
+          "entity_id": "entity_false_positive_01",
+          "timestamp": "2026-01-23T15:10:00Z",
+          "event_type": "ignored_request",
+          "source": "billing_review",
+          "reliability": 0.90,
+          "polarity": -1.0,
+          "intensity": 1.2,
+          "metadata": {
+            "note": "Ignored the request to reconcile invoices with claimed work history."
+          }
+        },
+        {
+          "event_id": "fp_009",
+          "entity_id": "entity_false_positive_01",
+          "timestamp": "2026-01-25T10:45:00Z",
+          "event_type": "ignored_request",
+          "source": "account_manager",
+          "reliability": 0.87,
+          "polarity": -1.0,
+          "intensity": 1.1,
+          "metadata": {
+            "note": "Failed to provide promised corrective actions."
+          }
+        },
+        {
+          "event_id": "fp_010",
+          "entity_id": "entity_false_positive_01",
+          "timestamp": "2026-01-28T09:50:00Z",
+          "event_type": "ignored_request",
+          "source": "account_manager",
+          "reliability": 0.90,
+          "polarity": -1.0,
+          "intensity": 1.5,
+          "metadata": {
+            "note": "Stopped engaging once accountability requests increased."
+          }
+        }
+      ]
+    },
+    {
+      "entity_id": "entity_false_negative_01",
+      "scenario": "false_negative_first_impression",
+      "events": [
+        {
+          "event_id": "fn_001",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-01-02T08:30:00Z",
+          "event_type": "ignored_request",
+          "source": "intake_queue",
+          "reliability": 0.90,
+          "polarity": -1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Missed the first intake follow-up during an onboarding mix-up."
+          }
+        },
+        {
+          "event_id": "fn_002",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-01-05T09:15:00Z",
+          "event_type": "ignored_request",
+          "source": "intake_queue",
+          "reliability": 0.89,
+          "polarity": -1.0,
+          "intensity": 0.95,
+          "metadata": {
+            "note": "A second intake request was missed while the handoff was still confused."
+          }
+        },
+        {
+          "event_id": "fn_003",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-01-08T09:20:00Z",
+          "event_type": "ignored_request",
+          "source": "team_lead_review",
+          "reliability": 0.91,
+          "polarity": -1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "The early impression worsened when a promised clarification did not arrive."
+          }
+        },
+        {
+          "event_id": "fn_004",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-01-11T10:00:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.96,
+          "polarity": 1.0,
+          "intensity": 0.95,
+          "metadata": {
+            "note": "Recovered by delivering the delayed onboarding task cleanly."
+          }
+        },
+        {
+          "event_id": "fn_005",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-01-14T09:10:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.97,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Handled a dependency handoff cleanly and on schedule."
+          }
+        },
+        {
+          "event_id": "fn_006",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-01-17T08:55:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "peer_feedback",
+          "reliability": 0.95,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Proactively shared completion evidence before being asked."
+          }
+        },
+        {
+          "event_id": "fn_007",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-01-20T09:40:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.96,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Completed the next milestone with no drift."
+          }
+        },
+        {
+          "event_id": "fn_008",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-01-23T09:00:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.95,
+          "polarity": 1.0,
+          "intensity": 0.95,
+          "metadata": {
+            "note": "Delivered documentation updates before the checkpoint."
+          }
+        },
+        {
+          "event_id": "fn_009",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-01-26T10:25:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "ops_review",
+          "reliability": 0.96,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Resolved review comments within the promised window."
+          }
+        },
+        {
+          "event_id": "fn_010",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-01-29T09:05:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.97,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Completed a stretch task without sacrificing quality."
+          }
+        },
+        {
+          "event_id": "fn_011",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-02-01T09:35:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "peer_feedback",
+          "reliability": 0.96,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Repeated dependable behavior across another work cycle."
+          }
+        },
+        {
+          "event_id": "fn_012",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-02-04T08:50:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.95,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Delivered a requested revision exactly as promised."
+          }
+        },
+        {
+          "event_id": "fn_013",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-02-07T09:45:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.96,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Maintained pace and quality across another deadline."
+          }
+        },
+        {
+          "event_id": "fn_014",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-02-10T10:00:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "team_lead_review",
+          "reliability": 0.97,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Hit the penultimate milestone with no escalation needed."
+          }
+        },
+        {
+          "event_id": "fn_015",
+          "entity_id": "entity_false_negative_01",
+          "timestamp": "2026-02-13T09:10:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "final_review",
+          "reliability": 0.97,
+          "polarity": 1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Finished the engagement with a strong final delivery."
+          }
+        }
+      ]
+    },
+    {
+      "entity_id": "entity_high_contradiction_01",
+      "scenario": "high_contradiction_actor",
+      "events": [
+        {
+          "event_id": "hc_001",
+          "entity_id": "entity_high_contradiction_01",
+          "timestamp": "2026-01-04T09:00:00Z",
+          "event_type": "cooperative_response",
+          "source": "initial_call",
+          "reliability": 0.87,
+          "polarity": 1.0,
+          "intensity": 0.90,
+          "metadata": {
+            "note": "Opened with a cooperative discussion and clear next steps."
+          }
+        },
+        {
+          "event_id": "hc_002",
+          "entity_id": "entity_high_contradiction_01",
+          "timestamp": "2026-01-06T12:15:00Z",
+          "event_type": "contradiction_detected",
+          "source": "ops_audit",
+          "reliability": 0.91,
+          "polarity": -1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Documentation conflicted with what had just been stated."
+          }
+        },
+        {
+          "event_id": "hc_003",
+          "entity_id": "entity_high_contradiction_01",
+          "timestamp": "2026-01-09T09:30:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.89,
+          "polarity": 1.0,
+          "intensity": 0.90,
+          "metadata": {
+            "note": "Delivered one task, briefly restoring confidence."
+          }
+        },
+        {
+          "event_id": "hc_004",
+          "entity_id": "entity_high_contradiction_01",
+          "timestamp": "2026-01-12T15:00:00Z",
+          "event_type": "contradiction_detected",
+          "source": "billing_review",
+          "reliability": 0.93,
+          "polarity": -1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Billing records did not match the claimed work pattern."
+          }
+        },
+        {
+          "event_id": "hc_005",
+          "entity_id": "entity_high_contradiction_01",
+          "timestamp": "2026-01-14T10:20:00Z",
+          "event_type": "ignored_request",
+          "source": "account_manager",
+          "reliability": 0.85,
+          "polarity": -1.0,
+          "intensity": 0.95,
+          "metadata": {
+            "note": "Did not answer the questions raised by the discrepancy."
+          }
+        },
+        {
+          "event_id": "hc_006",
+          "entity_id": "entity_high_contradiction_01",
+          "timestamp": "2026-01-17T09:40:00Z",
+          "event_type": "cooperative_response",
+          "source": "repair_call",
+          "reliability": 0.82,
+          "polarity": 1.0,
+          "intensity": 0.85,
+          "metadata": {
+            "note": "Made a convincing effort to repair the interaction."
+          }
+        },
+        {
+          "event_id": "hc_007",
+          "entity_id": "entity_high_contradiction_01",
+          "timestamp": "2026-01-20T13:35:00Z",
+          "event_type": "contradiction_detected",
+          "source": "peer_reference",
+          "reliability": 0.92,
+          "polarity": -1.0,
+          "intensity": 0.95,
+          "metadata": {
+            "note": "A peer report contradicted both the repair call and the original story."
+          }
+        },
+        {
+          "event_id": "hc_008",
+          "entity_id": "entity_high_contradiction_01",
+          "timestamp": "2026-01-23T09:05:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "project_tracker",
+          "reliability": 0.88,
+          "polarity": 1.0,
+          "intensity": 0.90,
+          "metadata": {
+            "note": "Completed another concrete task despite the inconsistency."
+          }
+        },
+        {
+          "event_id": "hc_009",
+          "entity_id": "entity_high_contradiction_01",
+          "timestamp": "2026-01-25T11:50:00Z",
+          "event_type": "contradiction_detected",
+          "source": "security_review",
+          "reliability": 0.94,
+          "polarity": -1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "A fourth inconsistency surfaced during a routine review."
+          }
+        },
+        {
+          "event_id": "hc_010",
+          "entity_id": "entity_high_contradiction_01",
+          "timestamp": "2026-01-27T09:25:00Z",
+          "event_type": "ignored_request",
+          "source": "account_manager",
+          "reliability": 0.88,
+          "polarity": -1.0,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Avoided a direct request to reconcile the new mismatch."
+          }
+        },
+        {
+          "event_id": "hc_011",
+          "entity_id": "entity_high_contradiction_01",
+          "timestamp": "2026-01-30T14:10:00Z",
+          "event_type": "cooperative_response",
+          "source": "final_sync",
+          "reliability": 0.80,
+          "polarity": 1.0,
+          "intensity": 0.80,
+          "metadata": {
+            "note": "Ended with a polite conversation that still lacked consistency."
+          }
+        }
+      ]
+    },
+    {
+      "entity_id": "entity_sparse_data_01",
+      "scenario": "sparse_data_actor",
+      "events": [
+        {
+          "event_id": "sd_001",
+          "entity_id": "entity_sparse_data_01",
+          "timestamp": "2026-01-03T09:00:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "intro_project",
+          "reliability": 0.90,
+          "polarity": 1.0,
+          "intensity": 0.90,
+          "metadata": {
+            "note": "Started with one solid delivery."
+          }
+        },
+        {
+          "event_id": "sd_002",
+          "entity_id": "entity_sparse_data_01",
+          "timestamp": "2026-01-28T09:00:00Z",
+          "event_type": "long_inactivity",
+          "source": "activity_monitor",
+          "reliability": 0.88,
+          "polarity": -0.4,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "No useful signal arrived for several weeks."
+          }
+        },
+        {
+          "event_id": "sd_003",
+          "entity_id": "entity_sparse_data_01",
+          "timestamp": "2026-02-20T10:10:00Z",
+          "event_type": "cooperative_response",
+          "source": "email_thread",
+          "reliability": 0.84,
+          "polarity": 1.0,
+          "intensity": 0.85,
+          "metadata": {
+            "note": "Briefly re-engaged with a helpful reply."
+          }
+        },
+        {
+          "event_id": "sd_004",
+          "entity_id": "entity_sparse_data_01",
+          "timestamp": "2026-03-18T09:30:00Z",
+          "event_type": "long_inactivity",
+          "source": "activity_monitor",
+          "reliability": 0.90,
+          "polarity": -0.4,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Another long silent period reduced confidence in recency."
+          }
+        },
+        {
+          "event_id": "sd_005",
+          "entity_id": "entity_sparse_data_01",
+          "timestamp": "2026-04-12T11:45:00Z",
+          "event_type": "ignored_request",
+          "source": "account_manager",
+          "reliability": 0.83,
+          "polarity": -1.0,
+          "intensity": 0.90,
+          "metadata": {
+            "note": "Did not respond when a status update was requested."
+          }
+        },
+        {
+          "event_id": "sd_006",
+          "entity_id": "entity_sparse_data_01",
+          "timestamp": "2026-05-07T09:15:00Z",
+          "event_type": "long_inactivity",
+          "source": "activity_monitor",
+          "reliability": 0.91,
+          "polarity": -0.4,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "Silence persisted into the next monthly checkpoint."
+          }
+        },
+        {
+          "event_id": "sd_007",
+          "entity_id": "entity_sparse_data_01",
+          "timestamp": "2026-05-31T08:55:00Z",
+          "event_type": "fulfilled_commitment",
+          "source": "late_update",
+          "reliability": 0.86,
+          "polarity": 1.0,
+          "intensity": 0.85,
+          "metadata": {
+            "note": "Eventually completed one pending item after a long gap."
+          }
+        },
+        {
+          "event_id": "sd_008",
+          "entity_id": "entity_sparse_data_01",
+          "timestamp": "2026-06-26T09:05:00Z",
+          "event_type": "long_inactivity",
+          "source": "activity_monitor",
+          "reliability": 0.92,
+          "polarity": -0.4,
+          "intensity": 1.0,
+          "metadata": {
+            "note": "The timeline ended with another extended absence of signal."
+          }
+        }
+      ]
+    }
+  ]
+}
