@@ -57,6 +57,21 @@ This Zendesk-like adapter adds:
 - `use_cases/support_v1/zendesk_like_export_sample.json`, a compact export sample with organizations, users, tickets, comments, nested ticket metadata, timestamps, statuses, priorities, and channels
 - `use_cases/support_v1/helpdesk_adapter_zendesk_like.py`, one explicit adapter that reads the sample export and writes `use_cases/support_v1/artifacts/normalized_support_cases_from_zendesk_like.json`
 
+## Helpdesk export contract validator
+
+Validate that a candidate helpdesk export satisfies the minimum external contract required by the current `support_v1` ingest adapters before normalization:
+
+```powershell
+py use_cases/support_v1/validate_helpdesk_export_contract.py
+```
+
+This validator adds one explicit contract gate that:
+
+- reads the current raw JSON, Zendesk-like JSON, and generic CSV sample exports
+- checks required ids, timestamps, join fields, record-order fields, actor-role coverage, and action/outcome/detail coverage against `use_cases/support_v1/helpdesk_export_contract.md`
+- prints one compact pass/fail line per input with warning and error counts
+- writes `use_cases/support_v1/artifacts/helpdesk_export_contract_validation.json`
+
 ## Zendesk-like labeled evaluation runner
 
 Run the end-to-end Zendesk-like ingest flow:
