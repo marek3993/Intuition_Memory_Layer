@@ -15,7 +15,6 @@ for candidate in (PROJECT_ROOT, SCRIPT_DIR):
         sys.path.insert(0, str(candidate))
 
 from evaluate_support_labels import (
-    LABELS_PATH,
     LabelEvaluationResult,
     build_entity_events,
     evaluate_label,
@@ -45,6 +44,7 @@ from convert_support_cases_to_events import load_support_cases
 
 
 ARTIFACTS_DIR = SCRIPT_DIR / "artifacts"
+RAW_SAMPLE_LABELS_PATH = SCRIPT_DIR / "raw_support_export_sample_labels.json"
 RAW_INGEST_EVALUATION_PATH = (
     ARTIFACTS_DIR / "latest_support_raw_ingest_label_evaluation.json"
 )
@@ -67,9 +67,8 @@ def parse_args() -> argparse.Namespace:
         "--labels-path",
         type=Path,
         help=(
-            "Override the support label dataset path. The default support_v1 sample "
-            "labels target a different case pack, so pass a raw-export-matching label set "
-            "for an end-to-end run."
+            "Override the support label dataset path. Defaults to the native label "
+            "set for the raw support export sample."
         ),
     )
     parser.add_argument(
@@ -123,7 +122,6 @@ def load_and_validate_label_set(
         raise ValueError(
             "Label set does not align with the normalized raw export. "
             f"labels_path={format_dataset_path(labels_path)}. "
-            "Pass --labels-path with a label file authored for the raw export sample. "
             f"Validation error: {exc}"
         ) from exc
 
@@ -149,7 +147,7 @@ def main() -> None:
         args.normalized_output_path,
         DEFAULT_NORMALIZED_OUTPUT_PATH,
     )
-    labels_path = resolve_input_path(args.labels_path, LABELS_PATH)
+    labels_path = resolve_input_path(args.labels_path, RAW_SAMPLE_LABELS_PATH)
     evaluation_output_path = resolve_output_path(
         args.evaluation_output_path,
         RAW_INGEST_EVALUATION_PATH,
@@ -243,12 +241,12 @@ def main() -> None:
 
     print("support_v1 raw-ingest label evaluation")
     print(f"mode: {'calibrated' if args.calibrated else 'default'}")
-    print(f"labels_path: {format_dataset_path(labels_path)}")
-    print(summarize_correctness(active_results))
-    print(f"review_output_path: {format_dataset_path(review_export_path)}")
     print(f"raw source path: {format_dataset_path(raw_path)}")
+    print(f"labels_path: {format_dataset_path(labels_path)}")
     print(f"normalized output path: {format_dataset_path(normalized_output_path)}")
     print(f"evaluation output path: {format_dataset_path(json_export_path)}")
+    print(summarize_correctness(active_results))
+    print(f"review_output_path: {format_dataset_path(review_export_path)}")
 
 
 if __name__ == "__main__":

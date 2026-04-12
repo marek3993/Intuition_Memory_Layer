@@ -45,18 +45,25 @@ This flow replays each support entity end to end and writes:
 Raw-export normalization plus labeled decision-point evaluation:
 
 ```powershell
-py use_cases/support_v1/run_support_raw_ingest_label_evaluation.py --labels-path C:\path\to\support_raw_ingest_labels.json
+py use_cases/support_v1/run_support_raw_ingest_label_evaluation.py
 ```
 
 This flow:
 
 - reads `use_cases/support_v1/raw_support_export_sample.json`
+- reads the native label pack `use_cases/support_v1/raw_support_export_sample_labels.json`
 - normalizes it into the existing support case schema
 - runs the existing labeled decision-point evaluation on that normalized output
 - writes `use_cases/support_v1/artifacts/latest_support_raw_ingest_label_evaluation.json`
 - writes `use_cases/support_v1/artifacts/latest_support_raw_ingest_label_review.csv`
 
-The raw-export sample does not currently ship with a matching label pack in this folder, so pass `--labels-path` with a label JSON file authored for the normalized raw-export cases.
+The native raw-sample label set adds five hand-authored decision points across the three raw-export tickets, with a small mix of `fast_path` and `deep_path` outcomes plus targeted `contradiction_present`, `profile_too_stale`, and `wrong_first_impression` flags.
+
+Override the labels file if needed:
+
+```powershell
+py use_cases/support_v1/run_support_raw_ingest_label_evaluation.py --labels-path C:\path\to\support_raw_ingest_labels.json
+```
 
 Default labeled decision-point evaluation:
 
