@@ -54,6 +54,10 @@ from iml.update_engine import apply_event
 
 EXPORT_PATH = ARTIFACTS_DIR / "latest_support_label_evaluation.json"
 REVIEW_EXPORT_PATH = ARTIFACTS_DIR / "latest_support_label_review.csv"
+ERRORS_EXPORT_PATH = ARTIFACTS_DIR / "latest_support_label_errors.csv"
+ROUTE_CHANGES_EXPORT_PATH = (
+    ARTIFACTS_DIR / "latest_support_label_route_changes.csv"
+)
 REVIEW_FIELDNAMES: tuple[str, ...] = (
     "label_id",
     "entity_id",
@@ -441,17 +445,18 @@ def export_json_results(payload: dict[str, Any]) -> Path:
     return EXPORT_PATH
 
 
-def export_review_results(review_rows: Sequence[dict[str, Any]]) -> Path:
+def export_review_results(
+    export_path: Path,
+    review_rows: Sequence[dict[str, Any]],
+) -> Path:
     ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
-    temp_export_path = REVIEW_EXPORT_PATH.with_name(
-        f"{REVIEW_EXPORT_PATH.stem}.{uuid4().hex}.tmp"
-    )
+    temp_export_path = export_path.with_name(f"{export_path.stem}.{uuid4().hex}.tmp")
     with temp_export_path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=REVIEW_FIELDNAMES)
         writer.writeheader()
         writer.writerows(review_rows)
-    temp_export_path.replace(REVIEW_EXPORT_PATH)
-    return REVIEW_EXPORT_PATH
+    temp_export_path.replace(export_path)
+    return export_path
 
 
 def print_method_summary(label: str, summary: dict[str, Any]) -> None:
@@ -471,6 +476,8 @@ def print_summary(
     payload: dict[str, Any],
     json_export_path: Path,
     review_export_path: Path,
+    errors_export_path: Path,
+    route_changes_export_path: Path,
     use_calibration: bool,
 ) -> None:
     aggregate_summary = payload["aggregate_summary"]
@@ -521,6 +528,11 @@ def print_summary(
         )
     print(f"json_artifact: {project_relative_path(json_export_path)}")
     print(f"csv_review_artifact: {project_relative_path(review_export_path)}")
+    print(f"csv_errors_artifact: {project_relative_path(errors_export_path)}")
+    print(
+        "csv_route_changes_artifact: "
+        f"{project_relative_path(route_changes_export_path)}"
+    )
 
 
 def main() -> None:
@@ -535,6 +547,8 @@ def main() -> None:
     calibration_results: list[SupportV1CalibrationResult | None] = []
     per_label_results: list[dict[str, Any]] = []
     review_rows: list[dict[str, Any]] = []
+    error_review_rows: list[dict[str, Any]] = []
+    route_change_review_rows: list[dict[str, Any]] = []
 
     for label in labels:
         validate_label(label, cases_by_ticket_id, entity_events)
@@ -565,14 +579,20 @@ def main() -> None:
                 use_calibration=args.calibrated,
             )
         )
-        review_rows.append(
-            build_review_row(
-                active_result=active_result,
-                original_result=original_result,
-                calibration_result=calibration_result,
-                use_calibration=args.calibrated,
-            )
+        review_row = build_review_row(
+            active_result=active_result,
+            original_result=original_result,
+            calibration_result=calibration_result,
+            use_calibration=args.calibrated,
         )
+        review_rows.append(review_row)
+        if not active_result.correct:
+            error_review_rows.append(review_row)
+        if (
+            args.calibrated
+            and active_result.predicted_path != original_result.predicted_path
+        ):
+            route_change_review_rows.append(review_row)
 
     export_payload = build_export_payload(
         active_results=active_results,
@@ -583,11 +603,18 @@ def main() -> None:
         use_calibration=args.calibrated,
     )
     json_export_path = export_json_results(export_payload)
-    review_export_path = export_review_results(review_rows)
+    review_export_path = export_review_results(REVIEW_EXPORT_PATH, review_rows)
+    errors_export_path = export_review_results(ERRORS_EXPORT_PATH, error_review_rows)
+    route_changes_export_path = export_review_results(
+        ROUTE_CHANGES_EXPORT_PATH,
+        route_change_review_rows,
+    )
     print_summary(
         payload=export_payload,
         json_export_path=json_export_path,
         review_export_path=review_export_path,
+        errors_export_path=errors_export_path,
+        route_changes_export_path=route_changes_export_path,
         use_calibration=args.calibrated,
     )
 
