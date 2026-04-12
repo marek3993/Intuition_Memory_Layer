@@ -30,6 +30,29 @@ This prototype adds a CSV ingest path that:
 - reconstructs ordered records in the existing support case schema
 - writes `use_cases/support_v1/artifacts/normalized_support_cases_from_csv.json`
 
+## CSV ingest labeled evaluation runner
+
+Run the end-to-end CSV ingest flow:
+
+```powershell
+py use_cases/support_v1/run_support_csv_ingest_label_evaluation.py
+```
+
+This runner adds one explicit CSV-ingest-to-label-eval path that:
+
+- reads `use_cases/support_v1/raw_support_export_sample.csv`
+- reads the CSV-compatible label pack `use_cases/support_v1/raw_support_export_sample_labels.json`
+- normalizes the CSV export into the existing support case schema
+- runs the existing labeled decision-point evaluation on that normalized output
+- writes `use_cases/support_v1/artifacts/latest_support_csv_ingest_label_evaluation.json`
+- writes `use_cases/support_v1/artifacts/latest_support_csv_ingest_label_review.csv`
+
+Override the labels file if needed:
+
+```powershell
+py use_cases/support_v1/run_support_csv_ingest_label_evaluation.py --labels-path C:\path\to\support_csv_ingest_labels.json
+```
+
 ## Full-entity replay runner
 
 Rebuild the grouped support event artifact:
