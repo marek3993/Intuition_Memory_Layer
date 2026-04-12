@@ -8,6 +8,8 @@ Use these fill-in templates before the first real helpdesk export onboarding:
 
 - `use_cases/support_v1/real_export_intake_template.md`
 - `use_cases/support_v1/real_export_field_inventory_template.csv`
+- `use_cases/support_v1/pilot_handoff_summary.md`
+- `use_cases/support_v1/pilot_handoff_email_template.md`
 
 They keep the first real slice aligned with the current export contract, normalization assumptions, and labeled evaluation workflow before any runner is executed.
 
