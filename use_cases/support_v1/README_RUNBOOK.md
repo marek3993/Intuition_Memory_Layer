@@ -1,42 +1,63 @@
 # Support V1 Runbook
 
-Run from the repository root:
+Run commands from the repository root.
+
+## Full-entity replay runner
+
+Rebuild the grouped support event artifact:
 
 ```powershell
 py use_cases/support_v1/convert_support_cases_to_events.py
 ```
 
-This converts `use_cases/support_v1/sample_support_cases.json` into:
-
-- `use_cases/support_v1/artifacts/support_events.json`
-
-Run the end-to-end support evaluation:
+Run the full-entity replay evaluation:
 
 ```powershell
 py use_cases/support_v1/run_support_evaluation.py
 ```
 
-Run the support evaluation with the support-only calibration candidate enabled:
+Run the full-entity replay evaluation with support-only calibration enabled:
 
 ```powershell
 py use_cases/support_v1/run_support_evaluation.py --calibrated
 ```
 
-This rebuilds the support event artifact, replays each support entity through the generic IML pipeline, and writes:
+This flow replays each support entity end to end and writes:
 
+- `use_cases/support_v1/artifacts/support_events.json`
 - `use_cases/support_v1/artifacts/latest_support_evaluation.json`
 
-Generated artifacts:
+## Labeled decision-point runner
 
-- `support_events.json`: grouped derived generic events per support entity
-- `latest_support_evaluation.json`: run metadata, aggregate summary, and per-entity evaluation results, including calibration mode and per-entity calibration adjustments
-
-Inspect outputs with PowerShell:
+Run the labeled decision-point evaluation:
 
 ```powershell
-Get-Content use_cases/support_v1/artifacts/support_events.json
-Get-Content use_cases/support_v1/artifacts/latest_support_evaluation.json
-Get-Content use_cases/support_v1/artifacts/latest_support_evaluation.json | Select-String '"calibration"|"aggregate_summary"|"selected_path"|"decision_reason"|"calibration_applied"'
+py use_cases/support_v1/run_support_label_evaluation.py
 ```
 
-Current next step after this sample run: build a labeled per-decision-point support slice and replay only the history visible at each ticket decision timestamp, then measure route accuracy before changing the engine.
+Run the labeled decision-point evaluation with support_v1 calibration enabled:
+
+```powershell
+py use_cases/support_v1/run_support_label_evaluation.py --calibrated
+```
+
+This flow replays only the history visible at each labeled `decision_timestamp`, compares the routed path against the hand-authored label, and writes:
+
+- `use_cases/support_v1/artifacts/latest_support_label_evaluation.json`
+
+The label evaluation artifact includes:
+
+- run metadata and calibration mode
+- aggregate label accuracy summary
+- baseline comparison against `naive_summary` and `full_history`
+- flagged-subset breakdown for the label flags
+- per-label results, including calibration adjustments when `--calibrated` is enabled
+
+## Quick inspection
+
+Inspect the latest decision-point artifact with PowerShell:
+
+```powershell
+Get-Content use_cases/support_v1/artifacts/latest_support_label_evaluation.json
+Get-Content use_cases/support_v1/artifacts/latest_support_label_evaluation.json | Select-String '"aggregate_summary"|"baseline_comparison"|"flag_breakdown"|"calibration"'
+```
