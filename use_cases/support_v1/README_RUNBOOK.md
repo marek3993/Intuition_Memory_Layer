@@ -89,6 +89,16 @@ The focused CSV exports speed up review of the highest-signal subsets:
 
 Dataset switching adds explicit `--cases-path` and `--labels-path` selection to the runner. If you omit both flags, it still uses the existing pack A defaults; if you pass them, the runner uses that cases/labels pair directly without any inline PowerShell patching.
 
+## Label pack comparison runner
+
+Run one compact comparison across pack A, pack B, and the in-memory combined A+B slice:
+
+```powershell
+py use_cases/support_v1/run_support_label_pack_comparison.py
+```
+
+This flow reuses the labeled decision-point evaluation logic, writes `use_cases/support_v1/artifacts/support_label_pack_comparison.json`, and prints a compact accuracy table for `iml`, `calibrated_iml`, `naive_summary`, and `full_history`.
+
 ## Quick inspection
 
 Inspect the latest decision-point artifact with PowerShell:
