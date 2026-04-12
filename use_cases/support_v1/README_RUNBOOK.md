@@ -280,6 +280,19 @@ It also writes:
 - `use_cases/support_v1/artifacts/support_label_pack_comparison.md`, a compact human-readable summary that calls out the winner on `pack_a`, `pack_b`, `pack_c`, `pack_d`, `combined_ab`, `combined_abc`, and `combined_abcd`, along with the key accuracy deltas, route-quality metrics, diagnostics, and one overall takeaway
 - `use_cases/support_v1/artifacts/support_label_pack_decision_memo.md`, a concise engineering recommendation memo that turns the comparison into an explicit winner summary, calibration readout, baseline position, main risks, and one recommended next step
 
+## Readiness memo builder
+
+Build one compact top-level readiness memo from the support_v1 artifacts already written in the repo:
+
+```powershell
+py use_cases/support_v1/build_support_v1_readiness_memo.py
+```
+
+This builder adds:
+
+- `use_cases/support_v1/artifacts/support_v1_readiness_memo.md`, a compact readiness memo that summarizes the current support_v1 position across ingest, validation, and evaluation without rerunning the underlying evaluations
+- console output listing the source artifact paths actually used plus the output memo path
+
 ## Quick inspection
 
 Inspect the latest decision-point artifact with PowerShell:
