@@ -1,5 +1,5 @@
 {
-  "label_set_name": "support_v1_raw_support_export_sample_b_labels",
+  "label_set_name": "support_v1_raw_support_export_sample_b_csv_labels",
   "labels": [
     {
       "label_id": "raw_support_b_label_001",
