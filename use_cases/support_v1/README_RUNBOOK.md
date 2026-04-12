@@ -2,6 +2,15 @@
 
 Run commands from the repository root.
 
+## Real export intake pack
+
+Use these fill-in templates before the first real helpdesk export onboarding:
+
+- `use_cases/support_v1/real_export_intake_template.md`
+- `use_cases/support_v1/real_export_field_inventory_template.csv`
+
+They keep the first real slice aligned with the current export contract, normalization assumptions, and labeled evaluation workflow before any runner is executed.
+
 ## Raw-ingest prototype
 
 Normalize the upstream-style raw support export into the existing `support_v1` case schema:

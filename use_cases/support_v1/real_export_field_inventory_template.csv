@@ -1,0 +1,25 @@
+source_table_or_file,field_name,example_value,required_for_support_v1,intended_mapping_target,privacy_risk,notes
+accounts_or_organizations,entity_id_or_account_field,,yes,entity_id,low,Stable entity/account identifier for the chosen scope.
+accounts_or_organizations,account_name_field,,yes,account_name,medium,Use redacted display name if needed.
+accounts_or_organizations,segment_or_tier_field,,conditional,segment,low,Required for raw JSON and mapped/fixed CSV; Zendesk-like can fall back to unknown.
+tickets,ticket_id_field,,yes,ticket_ref_or_ticket_id,low,Stable ticket key used for joins.
+tickets,case_code_or_external_id_field,,yes,case_id,low,External case code/id visible to operators.
+tickets,ticket_to_entity_join_field,,yes,account_ref_or_organization_id,low,Must join every ticket to exactly one entity in the slice.
+tickets,opened_timestamp_field,,yes,opened_at,low,ISO-8601 with timezone.
+tickets,closed_timestamp_field,,yes,closed_at,low,ISO-8601 with timezone.
+tickets,channel_field,,conditional,channel,low,Required for raw JSON and CSV ingest paths.
+tickets,priority_field,,conditional,priority,low,Required for raw JSON and CSV ingest paths.
+tickets,subject_or_summary_field,,yes,summary,medium,Prefer short redacted summary.
+comments_or_records,record_id_field,,yes,record_id,low,Stable per-record identifier within ticket history.
+comments_or_records,record_to_ticket_join_field,,yes,ticket_ref_or_ticket_id,low,Required for record linkage.
+comments_or_records,record_timestamp_field,,yes,record_timestamp,low,Used for deterministic ordering.
+comments_or_records,source_system_field,,yes,source_system,low,Export platform or subsystem name.
+comments_or_records,source_type_field,,yes,source_type,low,Should map to current adapter assumptions.
+comments_or_records,actor_role_field,,yes,actor_role,low,Should map to requester/agent/system/qa.
+comments_or_records,raw_action_candidate_field,,yes,raw_action,low,Direct field or deterministic inference input.
+comments_or_records,outcome_candidate_field,,yes,outcome,low,Direct field or deterministic inference input.
+comments_or_records,detail_body_note_field,,yes,details,high,Redact or summarize free text before repo intake.
+comments_or_records,request_id_or_follow_through_field,,optional,metadata.request_id_or_fulfills_request,medium,Useful for support-specific mapping and auditability.
+comments_or_records,severity_or_miss_count_field,,optional,metadata.severity_or_missed_request_count,low,Useful for contradiction and ignored-request normalization.
+users_or_actors,user_id_field,,conditional,actor_join_key,medium,Needed when actor data is stored separately.
+users_or_actors,user_role_field,,conditional,actor_role_source,low,Confirm full raw role coverage before ingest.
