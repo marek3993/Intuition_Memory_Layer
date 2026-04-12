@@ -1,0 +1,47 @@
+{
+  "label_set_name": "support_v1_helpdesk_export_sample_generic_labels",
+  "labels": [
+    {
+      "label_id": "mapped_support_label_001",
+      "entity_id": "acct_harborspan",
+      "ticket_id": "HS-99031",
+      "decision_timestamp": "2026-03-04T11:05:00+00:00",
+      "should_route": "fast_path",
+      "note": "HarborSpan supplied the requested payload sample and warehouse code table promptly, so the visible history still supports a routine fast-path decision."
+    },
+    {
+      "label_id": "mapped_support_label_002",
+      "entity_id": "acct_harborspan",
+      "ticket_id": "HS-99031",
+      "decision_timestamp": "2026-03-05T16:20:00+00:00",
+      "should_route": "fast_path",
+      "note": "The same HarborSpan ticket ends with a customer-confirmed fix after cooperative follow-through, so it should remain on the fast path."
+    },
+    {
+      "label_id": "mapped_support_label_003",
+      "entity_id": "acct_harborspan",
+      "ticket_id": "HS-99308",
+      "decision_timestamp": "2026-03-23T12:10:00+00:00",
+      "should_route": "deep_path",
+      "wrong_first_impression": true,
+      "note": "The reopened barcode issue initially looks workable, but the visible follow-up still lacks the requested scanner video, so the route should already move to deep handling."
+    },
+    {
+      "label_id": "mapped_support_label_004",
+      "entity_id": "acct_horizonmed",
+      "ticket_id": "HM-55104",
+      "decision_timestamp": "2026-04-03T18:20:00+00:00",
+      "should_route": "deep_path",
+      "note": "HorizonMed still has not delivered the signed audit bundle by the follow-up deadline, leaving too much missing evidence for a light-touch route."
+    },
+    {
+      "label_id": "mapped_support_label_005",
+      "entity_id": "acct_lakeforge",
+      "ticket_id": "LF-77112",
+      "decision_timestamp": "2026-02-17T10:40:00+00:00",
+      "should_route": "deep_path",
+      "contradiction_present": true,
+      "note": "QA has already marked the reopened tax dispute as conflicting with prior resolution evidence, which requires deeper review."
+    }
+  ]
+}

@@ -44,6 +44,30 @@ This mapping-based ingest prototype adds:
 - `use_cases/support_v1/helpdesk_export_sample_generic.csv`, a more realistic flat export whose column names differ from the fixed sample
 - `use_cases/support_v1/normalize_mapped_support_export.py`, a small adapter that reads the CSV plus mapping, groups rows by entity and ticket, and writes `use_cases/support_v1/artifacts/normalized_support_cases_from_mapping.json`
 
+## Mapping-based CSV ingest labeled evaluation runner
+
+Run the end-to-end mapping-based ingest flow:
+
+```powershell
+py use_cases/support_v1/run_support_mapped_ingest_label_evaluation.py
+```
+
+This runner adds one explicit mapped-CSV-to-label-eval path that:
+
+- reads `use_cases/support_v1/helpdesk_export_sample_generic.csv`
+- reads `use_cases/support_v1/helpdesk_export_mapping_template.json`
+- reads the matching label pack `use_cases/support_v1/helpdesk_export_sample_generic_labels.json`
+- normalizes the mapped external CSV into the existing support case schema
+- runs the existing labeled decision-point evaluation on that normalized output
+- writes `use_cases/support_v1/artifacts/latest_support_mapped_ingest_label_evaluation.json`
+- writes `use_cases/support_v1/artifacts/latest_support_mapped_ingest_label_review.csv`
+
+Override the CSV, mapping, or labels files if needed:
+
+```powershell
+py use_cases/support_v1/run_support_mapped_ingest_label_evaluation.py --csv-path C:\path\to\helpdesk_export.csv --mapping-path C:\path\to\helpdesk_mapping.json --labels-path C:\path\to\support_mapped_ingest_labels.json
+```
+
 ## CSV ingest labeled evaluation runner
 
 Run the end-to-end CSV ingest flow:
