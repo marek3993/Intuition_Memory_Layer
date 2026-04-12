@@ -43,11 +43,18 @@ PACK_A_LABELS_PATH = LABELS_PATH
 PACK_B_CASES_PATH = SCRIPT_DIR / "sample_support_cases_pack_b.json"
 PACK_B_LABELS_PATH = SCRIPT_DIR / "sample_support_labels_pack_b.json"
 EXPORT_PATH = ARTIFACTS_DIR / "support_label_pack_comparison.json"
+MARKDOWN_EXPORT_PATH = ARTIFACTS_DIR / "support_label_pack_comparison.md"
 ROUTE_QUALITY_FIELDS: tuple[str, ...] = (
     "fast_path_precision",
     "fast_path_recall",
     "deep_path_precision",
     "deep_path_recall",
+)
+METHOD_NAMES: tuple[str, ...] = (
+    "iml",
+    "calibrated_iml",
+    "naive_summary",
+    "full_history",
 )
 
 
@@ -221,6 +228,227 @@ def build_summary_rows(slices: Sequence[dict[str, Any]]) -> list[dict[str, Any]]
     ]
 
 
+def format_optional_percent(value: float | None) -> str:
+    if value is None:
+        return "n/a"
+    return format_percent(value)
+
+
+def format_delta(value: float) -> str:
+    percent_text = format_percent(abs(value))
+    if value > 0:
+        return f"+{percent_text}"
+    if value < 0:
+        return f"-{percent_text}"
+    return format_percent(0.0)
+
+
+def get_slice_winners(slice_result: dict[str, Any]) -> list[str]:
+    accuracies = slice_result["accuracies"]
+    highest_accuracy = max(float(accuracies[method_name]) for method_name in METHOD_NAMES)
+    return [
+        method_name
+        for method_name in METHOD_NAMES
+        if float(accuracies[method_name]) == highest_accuracy
+    ]
+
+
+def format_winner_text(winners: Sequence[str]) -> str:
+    if len(winners) == 1:
+        return winners[0]
+    return f"Tie: {', '.join(winners)}"
+
+
+def build_win_stats(
+    slice_results: Sequence[dict[str, Any]],
+) -> tuple[dict[str, int], int]:
+    outright_wins = {method_name: 0 for method_name in METHOD_NAMES}
+    tied_slices = 0
+
+    for slice_result in slice_results:
+        winners = get_slice_winners(slice_result)
+        if len(winners) == 1:
+            outright_wins[winners[0]] += 1
+        else:
+            tied_slices += 1
+
+    return outright_wins, tied_slices
+
+
+def build_route_quality_lines(slice_result: dict[str, Any]) -> list[str]:
+    lines = ["Route-quality metrics:"]
+    route_quality = slice_result.get("route_quality")
+
+    if not route_quality:
+        lines.append("- Not available")
+        return lines
+
+    for method_name in METHOD_NAMES:
+        summary = route_quality.get(method_name)
+        if summary is None:
+            continue
+        lines.append(
+            (
+                f"- `{method_name}`: "
+                f"fast_path_precision={format_optional_percent(summary['fast_path_precision'])}, "
+                f"fast_path_recall={format_optional_percent(summary['fast_path_recall'])}, "
+                f"deep_path_precision={format_optional_percent(summary['deep_path_precision'])}, "
+                f"deep_path_recall={format_optional_percent(summary['deep_path_recall'])}"
+            )
+        )
+
+    return lines
+
+
+def build_diagnostic_lines(slice_result: dict[str, Any]) -> list[str]:
+    lines = ["Comparison diagnostics:"]
+    comparison_diagnostics = slice_result.get("comparison_diagnostics")
+
+    if not comparison_diagnostics:
+        lines.append("- Not available")
+        return lines
+
+    for mode_name in ("default", "calibrated"):
+        diagnostics = comparison_diagnostics.get(mode_name)
+        if diagnostics is None:
+            continue
+        lines.append(
+            (
+                f"- `{mode_name}`: "
+                f"iml_only_correct_vs_baselines={diagnostics['iml_only_correct_vs_baselines']}, "
+                f"baselines_only_correct_vs_iml={diagnostics['baselines_only_correct_vs_iml']}, "
+                f"all_methods_correct={diagnostics['all_methods_correct']}, "
+                f"all_methods_wrong={diagnostics['all_methods_wrong']}"
+            )
+        )
+
+    return lines
+
+
+def build_slice_markdown(slice_result: dict[str, Any]) -> list[str]:
+    calibrated_comparison = slice_result["baseline_comparison"]["calibrated"]
+    winners = get_slice_winners(slice_result)
+
+    lines = [
+        f"## {slice_result['slice_name']}",
+        "",
+        f"- Label count: {slice_result['total_labels']}",
+        f"- IML accuracy: {format_percent(float(slice_result['accuracies']['iml']))}",
+        (
+            "- Calibrated IML accuracy: "
+            f"{format_percent(float(slice_result['accuracies']['calibrated_iml']))}"
+        ),
+        (
+            "- naive_summary accuracy: "
+            f"{format_percent(float(slice_result['accuracies']['naive_summary']))}"
+        ),
+        (
+            "- full_history accuracy: "
+            f"{format_percent(float(slice_result['accuracies']['full_history']))}"
+        ),
+        f"- Winner: {format_winner_text(winners)}",
+        (
+            f"- Accuracy delta vs default IML for calibrated_iml: "
+            f"{format_delta(float(calibrated_comparison['accuracy_delta_vs_original_iml']))}"
+        ),
+        (
+            f"- Accuracy delta vs default IML for naive_summary: "
+            f"{format_delta(float(slice_result['accuracies']['naive_summary']) - float(slice_result['accuracies']['iml']))}"
+        ),
+        (
+            f"- Accuracy delta vs default IML for full_history: "
+            f"{format_delta(float(slice_result['accuracies']['full_history']) - float(slice_result['accuracies']['iml']))}"
+        ),
+        f"- Calibration applied count: {slice_result['calibration_applied_count']}",
+        "",
+    ]
+    lines.extend(build_route_quality_lines(slice_result))
+    lines.append("")
+    lines.extend(build_diagnostic_lines(slice_result))
+    lines.append("")
+    return lines
+
+
+def build_takeaway(slice_results: Sequence[dict[str, Any]]) -> str:
+    outright_wins, _ = build_win_stats(slice_results)
+    calibrated_beats_iml_all = all(
+        float(slice_result["accuracies"]["calibrated_iml"])
+        > float(slice_result["accuracies"]["iml"])
+        for slice_result in slice_results
+    )
+    calibrated_beats_baselines_all = all(
+        float(slice_result["accuracies"]["calibrated_iml"])
+        > float(slice_result["accuracies"]["naive_summary"])
+        and float(slice_result["accuracies"]["calibrated_iml"])
+        > float(slice_result["accuracies"]["full_history"])
+        for slice_result in slice_results
+    )
+    calibrated_wins_most = outright_wins["calibrated_iml"] == max(outright_wins.values())
+
+    if calibrated_beats_baselines_all:
+        return "Calibrated IML is the clear winner across every slice in this run."
+    if calibrated_wins_most and not calibrated_beats_iml_all:
+        return "Calibrated IML leads overall, but its gains are concentrated in pack A and the combined slice."
+    if calibrated_wins_most:
+        return "Calibrated IML improves on default IML consistently and leads the overall comparison."
+    return "No single method dominates every slice; the results stay slice-dependent."
+
+
+def build_markdown_report(slice_results: Sequence[dict[str, Any]]) -> str:
+    outright_wins, tied_slices = build_win_stats(slice_results)
+    max_wins = max(outright_wins.values())
+    overall_winners = [
+        method_name
+        for method_name, win_count in outright_wins.items()
+        if win_count == max_wins
+    ]
+    calibrated_beats_iml_all = all(
+        float(slice_result["accuracies"]["calibrated_iml"])
+        > float(slice_result["accuracies"]["iml"])
+        for slice_result in slice_results
+    )
+    calibrated_beats_baselines_all = all(
+        float(slice_result["accuracies"]["calibrated_iml"])
+        > float(slice_result["accuracies"]["naive_summary"])
+        and float(slice_result["accuracies"]["calibrated_iml"])
+        > float(slice_result["accuracies"]["full_history"])
+        for slice_result in slice_results
+    )
+
+    lines = [
+        "# Support Label Pack Comparison Summary",
+        "",
+        "Compact human-readable comparison for `pack_a`, `pack_b`, and `combined`.",
+        "",
+    ]
+    for slice_result in slice_results:
+        lines.extend(build_slice_markdown(slice_result))
+
+    lines.extend(
+        [
+            "## Overall Takeaway",
+            "",
+            (
+                "- Method winning most slices: "
+                f"{format_winner_text(overall_winners)} "
+                f"({max_wins} outright wins, {tied_slices} tied "
+                f"{'slice' if tied_slices == 1 else 'slices'})"
+            ),
+            (
+                "- Calibrated IML beats default IML on all slices: "
+                f"{'yes' if calibrated_beats_iml_all else 'no'}"
+            ),
+            (
+                "- Calibrated IML beats both baselines on all slices: "
+                f"{'yes' if calibrated_beats_baselines_all else 'no'}"
+            ),
+            f"- Takeaway: {build_takeaway(slice_results)}",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
 def build_export_payload(slice_results: Sequence[dict[str, Any]]) -> dict[str, Any]:
     return {
         "run_metadata": {
@@ -228,6 +456,7 @@ def build_export_payload(slice_results: Sequence[dict[str, Any]]) -> dict[str, A
             "generated_at": datetime.now().astimezone().isoformat(),
             "runner_path": project_relative_path(Path(__file__).resolve()),
             "export_path": project_relative_path(EXPORT_PATH),
+            "markdown_export_path": project_relative_path(MARKDOWN_EXPORT_PATH),
             "slice_names": [slice_result["slice_name"] for slice_result in slice_results],
             "calibration": {
                 "name": CALIBRATION_NAME,
@@ -255,6 +484,19 @@ def export_results(payload: dict[str, Any]) -> Path:
         handle.write("\n")
     temp_export_path.replace(EXPORT_PATH)
     return EXPORT_PATH
+
+
+def export_markdown_report(markdown_report: str) -> Path:
+    ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
+    temp_export_path = MARKDOWN_EXPORT_PATH.with_name(
+        f"{MARKDOWN_EXPORT_PATH.stem}.{uuid4().hex}.tmp"
+    )
+    with temp_export_path.open("w", encoding="utf-8") as handle:
+        handle.write(markdown_report)
+        if not markdown_report.endswith("\n"):
+            handle.write("\n")
+    temp_export_path.replace(MARKDOWN_EXPORT_PATH)
+    return MARKDOWN_EXPORT_PATH
 
 
 def print_summary_table(slice_results: Sequence[dict[str, Any]]) -> None:
@@ -293,6 +535,7 @@ def print_summary_table(slice_results: Sequence[dict[str, Any]]) -> None:
     for row in rows:
         print(format_row(row))
     print(f"json_artifact: {project_relative_path(EXPORT_PATH)}")
+    print(f"markdown_artifact: {project_relative_path(MARKDOWN_EXPORT_PATH)}")
 
 
 def main() -> None:
@@ -314,7 +557,9 @@ def main() -> None:
         ),
     ]
     export_payload = build_export_payload(slice_results)
+    markdown_report = build_markdown_report(slice_results)
     export_results(export_payload)
+    export_markdown_report(markdown_report)
     print_summary_table(slice_results)
 
 
