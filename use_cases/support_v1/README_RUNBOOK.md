@@ -91,15 +91,15 @@ Dataset switching adds explicit `--cases-path` and `--labels-path` selection to 
 
 ## Label pack comparison runner
 
-Run one compact comparison across pack A, pack B, and the in-memory combined A+B slice:
+Run one compact comparison across pack A, pack B, pack C, and the in-memory combined A+B / A+B+C slices:
 
 ```powershell
 py use_cases/support_v1/run_support_label_pack_comparison.py
 ```
 
-This flow reuses the labeled decision-point evaluation logic, writes `use_cases/support_v1/artifacts/support_label_pack_comparison.json`, and prints a compact accuracy table for `iml`, `calibrated_iml`, `naive_summary`, and `full_history`.
+This flow reuses the labeled decision-point evaluation logic, writes `use_cases/support_v1/artifacts/support_label_pack_comparison.json`, and prints one compact accuracy table for `iml`, `calibrated_iml`, `naive_summary`, and `full_history` across every slice.
 
-It also writes `use_cases/support_v1/artifacts/support_label_pack_comparison.md`, a compact human-readable summary that calls out the winner on `pack_a`, `pack_b`, and `combined`, along with the key accuracy deltas, route-quality metrics, diagnostics, and one overall takeaway.
+It also writes `use_cases/support_v1/artifacts/support_label_pack_comparison.md`, a compact human-readable summary that calls out the winner on `pack_a`, `pack_b`, `pack_c`, `combined_ab`, and `combined_abc`, along with the key accuracy deltas, route-quality metrics, diagnostics, and one overall takeaway.
 
 ## Quick inspection
 

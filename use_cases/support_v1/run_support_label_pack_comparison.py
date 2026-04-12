@@ -42,6 +42,8 @@ PACK_A_CASES_PATH = SCRIPT_DIR / "sample_support_cases.json"
 PACK_A_LABELS_PATH = LABELS_PATH
 PACK_B_CASES_PATH = SCRIPT_DIR / "sample_support_cases_pack_b.json"
 PACK_B_LABELS_PATH = SCRIPT_DIR / "sample_support_labels_pack_b.json"
+PACK_C_CASES_PATH = SCRIPT_DIR / "sample_support_cases_pack_c.json"
+PACK_C_LABELS_PATH = SCRIPT_DIR / "sample_support_labels_pack_c.json"
 EXPORT_PATH = ARTIFACTS_DIR / "support_label_pack_comparison.json"
 MARKDOWN_EXPORT_PATH = ARTIFACTS_DIR / "support_label_pack_comparison.md"
 ROUTE_QUALITY_FIELDS: tuple[str, ...] = (
@@ -388,7 +390,7 @@ def build_takeaway(slice_results: Sequence[dict[str, Any]]) -> str:
     if calibrated_beats_baselines_all:
         return "Calibrated IML is the clear winner across every slice in this run."
     if calibrated_wins_most and not calibrated_beats_iml_all:
-        return "Calibrated IML leads overall, but its gains are concentrated in pack A and the combined slice."
+        return "Calibrated IML leads overall, but its gains are concentrated in only part of the slice set."
     if calibrated_wins_most:
         return "Calibrated IML improves on default IML consistently and leads the overall comparison."
     return "No single method dominates every slice; the results stay slice-dependent."
@@ -418,7 +420,7 @@ def build_markdown_report(slice_results: Sequence[dict[str, Any]]) -> str:
     lines = [
         "# Support Label Pack Comparison Summary",
         "",
-        "Compact human-readable comparison for `pack_a`, `pack_b`, and `combined`.",
+        "Compact human-readable comparison for `pack_a`, `pack_b`, `pack_c`, `combined_ab`, and `combined_abc`.",
         "",
     ]
     for slice_result in slice_results:
@@ -551,9 +553,19 @@ def main() -> None:
             labels_paths=(PACK_B_LABELS_PATH,),
         ),
         evaluate_slice(
-            "combined",
+            "pack_c",
+            cases_paths=(PACK_C_CASES_PATH,),
+            labels_paths=(PACK_C_LABELS_PATH,),
+        ),
+        evaluate_slice(
+            "combined_ab",
             cases_paths=(PACK_A_CASES_PATH, PACK_B_CASES_PATH),
             labels_paths=(PACK_A_LABELS_PATH, PACK_B_LABELS_PATH),
+        ),
+        evaluate_slice(
+            "combined_abc",
+            cases_paths=(PACK_A_CASES_PATH, PACK_B_CASES_PATH, PACK_C_CASES_PATH),
+            labels_paths=(PACK_A_LABELS_PATH, PACK_B_LABELS_PATH, PACK_C_LABELS_PATH),
         ),
     ]
     export_payload = build_export_payload(slice_results)
