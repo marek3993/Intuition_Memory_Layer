@@ -1,0 +1,21 @@
+variable_name,description,example_value,unit,notes
+cases_per_month,Monthly support cases in scope for routing,1200,cases/month,Use only the queue or slice being evaluated
+pilot_months,Pilot duration used for value estimate,3,months,Keep the first pass short and measurable
+pilot_setup_cost,One-time pilot cost for onboarding labeling and review,15000,currency,Use internal or vendor cost basis
+frontline_hourly_cost,Fully loaded hourly cost for frontline support handling,35,currency/hour,Use local loaded labor cost
+senior_hourly_cost,Fully loaded hourly cost for senior or specialist reviewers,65,currency/hour,Use local loaded labor cost
+blended_hourly_cost,Blended hourly cost for escalation or rework work,45,currency/hour,Can be a simple weighted average
+clean_routine_share,Share of monthly cases that are clean routine candidates for faster routing,0.45,ratio,Use a conservative estimate if no measured sample exists
+deep_path_share,Share of monthly cases currently sent to deep review,0.30,ratio,Needed for senior-load estimate
+unnecessary_deep_review_rate,Share of clean routine cases that currently receive unnecessary deep review,0.25,ratio,Measure from spot review if possible
+avoidable_deep_review_reduction,Expected reduction in unnecessary deep review from better routing,0.20,ratio,Keep conservative because current evidence is still small-sample
+deep_review_minutes_saved_per_case,Frontline minutes saved when an unnecessary deep review is avoided,12,minutes/case,Count only time actually removed from workflow
+fast_path_minutes_saved_per_case,Minutes saved on clean routine cases from faster handling,4,minutes/case,Use zero if fast-path speed is not yet measurable
+senior_review_share,Share of deep-path cases that consume senior reviewer time,0.50,ratio,Needed only if senior review is a real bottleneck
+senior_review_reduction,Expected reduction in senior-reviewed cases from better routing,0.15,ratio,Separate from deep-review avoidance to avoid double counting
+senior_review_minutes_saved_per_case,Senior reviewer minutes saved per avoided or shortened review,10,minutes/case,Use observed queue data if available
+escalation_or_rework_rate,Share of monthly cases that escalate reopen or require avoidable rework,0.08,ratio,Use measured reopen or escalation rate when possible
+escalation_or_rework_reduction,Expected reduction in escalation reopen or rework from cleaner routing,0.10,ratio,Set to zero if no credible estimate exists
+rework_minutes_saved_per_case,Minutes saved when one escalation or rework loop is avoided,20,minutes/case,Include only labor time in the first model
+observed_calibrated_vs_default_signal,Short note on current evidence boundary,18 improved / 1 tied / 0 regressed,text,Reference only as directional support and not as a direct ROI multiplier
+strongest_current_slice,Short note on strongest current comparison,92.31% vs 69.23% on raw combined_ab,text,Keep sample-size caution attached in buyer conversations
