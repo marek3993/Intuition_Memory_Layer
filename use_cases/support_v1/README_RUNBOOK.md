@@ -16,6 +16,12 @@ Run the end-to-end support evaluation:
 py use_cases/support_v1/run_support_evaluation.py
 ```
 
+Run the support evaluation with the support-only calibration candidate enabled:
+
+```powershell
+py use_cases/support_v1/run_support_evaluation.py --calibrated
+```
+
 This rebuilds the support event artifact, replays each support entity through the generic IML pipeline, and writes:
 
 - `use_cases/support_v1/artifacts/latest_support_evaluation.json`
@@ -23,14 +29,14 @@ This rebuilds the support event artifact, replays each support entity through th
 Generated artifacts:
 
 - `support_events.json`: grouped derived generic events per support entity
-- `latest_support_evaluation.json`: run metadata, aggregate summary, and per-entity evaluation results
+- `latest_support_evaluation.json`: run metadata, aggregate summary, and per-entity evaluation results, including calibration mode and per-entity calibration adjustments
 
 Inspect outputs with PowerShell:
 
 ```powershell
 Get-Content use_cases/support_v1/artifacts/support_events.json
 Get-Content use_cases/support_v1/artifacts/latest_support_evaluation.json
-Get-Content use_cases/support_v1/artifacts/latest_support_evaluation.json | Select-String '"aggregate_summary"|"selected_path"|"reason"'
+Get-Content use_cases/support_v1/artifacts/latest_support_evaluation.json | Select-String '"calibration"|"aggregate_summary"|"selected_path"|"decision_reason"|"calibration_applied"'
 ```
 
 Current next step after this sample run: build a labeled per-decision-point support slice and replay only the history visible at each ticket decision timestamp, then measure route accuracy before changing the engine.
