@@ -118,7 +118,7 @@ py -m unittest discover -s tests -v
 py run_evaluation.py
 ```
 
-The evaluation runner replays the synthetic dataset, applies decay across long gaps, triggers revalidation heuristics at the final decision point when needed, and reports both per-entity and aggregate metrics.
+The evaluation runner replays the synthetic dataset, applies decay across long gaps, triggers revalidation heuristics at the final decision point when needed, and reports both per-entity and aggregate metrics. Evaluation output includes a console summary and a machine-readable JSON artifact; the current artifact structure is documented in `docs/evaluation_artifact_format.md`.
 
 ## Current Evaluation Scenarios
 
@@ -166,7 +166,7 @@ One practical implication of the current thresholds is that the synthetic evalua
 
 The current roadmap focuses on making the prototype more decision-useful before making it more complex:
 
-- add simple baselines, especially a naive summary baseline and a full-history scorer
+- deepen baseline evaluation beyond the current naive-summary and full-history scorers
 - strengthen recovery metrics beyond the current midpoint-crossing proxy
 - expand synthetic scenarios to cover ambiguity, mixed reliability, and concept drift
 - refine profile semantics where evaluation interpretation is currently awkward
@@ -177,4 +177,4 @@ The current roadmap focuses on making the prototype more decision-useful before 
 
 - `EVALUATION_NOTES.md`: scenario semantics, metric definitions, and limits of the current synthetic runner
 - `ROADMAP.md`: staged plan for baselines, metrics, scenario coverage, and evaluation improvements
-- `INVENTION_MEMO.md`: project memo placeholder in the current repository state
+- `INVENTION_MEMO.md`: invention memo describing the current framing, scope, and implementation boundaries

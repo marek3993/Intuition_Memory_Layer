@@ -40,6 +40,8 @@ An actor with only a few concrete interactions separated by long inactivity peri
 
 The current lightweight synthetic runner is `run_evaluation.py`.
 
+It prints console summaries and writes a machine-readable export to `artifacts/latest_evaluation.json`.
+
 For each entity, it currently measures or reports:
 
 - event count
@@ -63,7 +65,7 @@ At the aggregate level, it reports:
 - average `unknownness`
 - `false_first_impression_recovery_proxy`
 
-This means the current evaluation is primarily a final-state harness. It checks what profile state and routing decision the system ends up with after replaying the scenario trace.
+This means the current evaluation remains primarily a final-state harness. It checks what profile state and routing decision the system ends up with after replaying the scenario trace, while also exporting baseline comparisons and a limited set of trajectory metrics.
 
 ## False First Impression Recovery Proxy
 
@@ -88,19 +90,20 @@ In the current runner, first-impression trust is taken after the first-impressio
 ## What The Current Evaluation Does Not Yet Measure Well
 
 - Recovery speed. The current proxy only checks whether trust crosses the midpoint by the end, not how long the profile stayed wrong.
-- Intermediate trajectory quality. It does not score the trust curve, contradiction curve, or routing state over time.
+- Intermediate trajectory quality. Trajectory metrics v1 now capture a small amount of path information, but they remain limited to simple summaries such as recovery event index, trust span, and contradiction peak rather than a richer trajectory-quality score.
 - Calibration. There is no comparison between confidence/unknownness values and any ground-truth correctness target.
 - Scenario-level expectations beyond routing and trust flip. For example, there is no explicit assertion that `high_contradiction_actor` should keep contradiction load above a target range.
 - Revalidation quality. The runner reports whether revalidation triggered at the final decision point, but it does not score whether that revalidation was useful, timely, or spurious.
-- Relative performance. There is no baseline against a naive summary or simple full-history scorer.
+- Relative performance. Baseline comparison now exists for naive-summary and full-history scorers, but it is still limited to a small set of aggregate metrics.
 
 ## Current Limitations Of The Synthetic Evaluation
 
+- The runner now emits a machine-readable JSON artifact at `artifacts/latest_evaluation.json`, but the export is still intentionally small and tied to the current synthetic evaluation harness.
 - The dataset is tiny and hand-authored. It is good for inspection, but weak for coverage.
 - Event semantics are narrow. Only a small set of event types map into profile updates.
 - The traces are clean and mostly unambiguous. They do not capture noisy sources, missing metadata, or competing evidence reliability regimes.
 - Ground truth is implicit in scenario design rather than encoded as explicit per-step labels.
 - The runner evaluates only low-stakes routing.
-- Current metrics are final-state heavy and do not produce machine-readable reporting for deeper analysis.
+- Current metrics are still final-state heavy even though the runner now exports machine-readable summaries, baseline comparison, trajectories, and limited trajectory metrics.
 - `last_revalidated_at` is initialized before replay starts, which is operationally convenient but blurs the distinction between "never revalidated" and "recently revalidated."
 - Because the evaluation is synthetic and deterministic, good results here should be treated as a sanity check for the explicit MVP, not as evidence of real-world generalization.
