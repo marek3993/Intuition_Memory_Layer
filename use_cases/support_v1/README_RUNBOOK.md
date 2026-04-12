@@ -15,6 +15,21 @@ This prototype adds one explicit ingest step before the current converter and ev
 - `use_cases/support_v1/raw_support_export_sample.json` models a more realistic upstream export with separate accounts, tickets, and records.
 - `use_cases/support_v1/normalize_raw_support_export.py` maps that export into the existing support case schema and writes `use_cases/support_v1/artifacts/normalized_support_cases.json`.
 
+## CSV raw-ingest prototype
+
+Normalize a flat helpdesk-style CSV export into the existing `support_v1` case schema:
+
+```powershell
+py use_cases/support_v1/normalize_raw_support_export_csv.py
+```
+
+This prototype adds a CSV ingest path that:
+
+- reads `use_cases/support_v1/raw_support_export_sample.csv`
+- groups flat export rows by entity and ticket
+- reconstructs ordered records in the existing support case schema
+- writes `use_cases/support_v1/artifacts/normalized_support_cases_from_csv.json`
+
 ## Full-entity replay runner
 
 Rebuild the grouped support event artifact:
