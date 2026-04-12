@@ -26,11 +26,18 @@ from convert_support_cases_to_events import (
     convert_cases_to_entity_event_payload,
     load_support_cases,
 )
+from iml.baselines import run_full_history_baseline, run_naive_summary_baseline
 from iml.decay import apply_decay
 from iml.decision import DecisionContext, route_decision
 from iml.models import Event, IntuitionProfile
 from iml.revalidate import revalidate_profile
 from iml.update_engine import apply_event
+
+FLAG_FIELDS: tuple[str, ...] = (
+    "contradiction_present",
+    "profile_too_stale",
+    "wrong_first_impression",
+)
 
 
 @dataclass(frozen=True)
@@ -52,6 +59,12 @@ class LabelEvaluationResult:
     predicted_path: str
     predicted_reason: str
     correct: bool
+    naive_summary_predicted_path: str
+    naive_summary_predicted_reason: str
+    naive_summary_correct: bool
+    full_history_predicted_path: str
+    full_history_predicted_reason: str
+    full_history_correct: bool
     visible_case_ids: tuple[str, ...]
     visible_event_count: int
     visible_event_type_counts: dict[str, int]
@@ -234,6 +247,8 @@ def evaluate_label(
     apply_decay(profile, now=label.decision_timestamp)
     revalidation_result = revalidate_profile(profile, now=label.decision_timestamp)
     decision_result = route_decision(profile, DecisionContext(stakes=EVALUATION_STAKES))
+    naive_summary_result = run_naive_summary_baseline(visible_events)
+    full_history_result = run_full_history_baseline(visible_events)
 
     visible_case_ids = tuple(
         sorted(
@@ -250,6 +265,12 @@ def evaluate_label(
         predicted_path=decision_result.selected_path,
         predicted_reason=decision_result.reason,
         correct=decision_result.selected_path == label.should_route,
+        naive_summary_predicted_path=str(naive_summary_result["selected_path"]),
+        naive_summary_predicted_reason=str(naive_summary_result["decision_reason"]),
+        naive_summary_correct=str(naive_summary_result["selected_path"]) == label.should_route,
+        full_history_predicted_path=str(full_history_result["selected_path"]),
+        full_history_predicted_reason=str(full_history_result["decision_reason"]),
+        full_history_correct=str(full_history_result["selected_path"]) == label.should_route,
         visible_case_ids=visible_case_ids,
         visible_event_count=len(visible_events),
         visible_event_type_counts=dict(sorted(event_type_counts.items())),
@@ -293,6 +314,12 @@ def build_result_payload(result: LabelEvaluationResult) -> dict[str, Any]:
             "predicted_path": result.predicted_path,
             "predicted_reason": result.predicted_reason,
             "correct": result.correct,
+            "naive_summary_predicted_path": result.naive_summary_predicted_path,
+            "naive_summary_predicted_reason": result.naive_summary_predicted_reason,
+            "naive_summary_correct": result.naive_summary_correct,
+            "full_history_predicted_path": result.full_history_predicted_path,
+            "full_history_predicted_reason": result.full_history_predicted_reason,
+            "full_history_correct": result.full_history_correct,
         },
         "visible_history": {
             "case_ids": list(result.visible_case_ids),
@@ -318,16 +345,52 @@ def build_result_payload(result: LabelEvaluationResult) -> dict[str, Any]:
     }
 
 
+def build_flag_breakdown(results: list[LabelEvaluationResult]) -> dict[str, Any]:
+    breakdown: dict[str, Any] = {}
+
+    for flag_name in FLAG_FIELDS:
+        flagged_results = [
+            result for result in results if bool(getattr(result.label, flag_name))
+        ]
+        total_flagged = len(flagged_results)
+        correct_predictions = sum(1 for result in flagged_results if result.correct)
+
+        breakdown[flag_name] = {
+            "flagged_labels": total_flagged,
+            "correct_predictions": correct_predictions,
+            "incorrect_predictions": total_flagged - correct_predictions,
+            "accuracy": (
+                (correct_predictions / total_flagged) if total_flagged else None
+            ),
+        }
+
+    return breakdown
+
+
 def build_aggregate_summary(results: list[LabelEvaluationResult]) -> dict[str, Any]:
     total_labels = len(results)
-    correct_predictions = sum(1 for result in results if result.correct)
-    incorrect_predictions = total_labels - correct_predictions
+
+    def summarize_method(correct_results: list[bool]) -> dict[str, Any]:
+        correct_predictions = sum(1 for is_correct in correct_results if is_correct)
+        incorrect_predictions = total_labels - correct_predictions
+        return {
+            "correct_predictions": correct_predictions,
+            "incorrect_predictions": incorrect_predictions,
+            "accuracy": (correct_predictions / total_labels) if total_labels else 0.0,
+        }
 
     return {
         "total_labels": total_labels,
-        "correct_predictions": correct_predictions,
-        "incorrect_predictions": incorrect_predictions,
-        "accuracy": (correct_predictions / total_labels) if total_labels else 0.0,
+        "methods": {
+            "iml": summarize_method([result.correct for result in results]),
+            "naive_summary": summarize_method(
+                [result.naive_summary_correct for result in results]
+            ),
+            "full_history": summarize_method(
+                [result.full_history_correct for result in results]
+            ),
+        },
+        "iml_flag_breakdown": build_flag_breakdown(results),
     }
 
 
@@ -390,6 +453,22 @@ def print_aggregate_summary(summary: dict[str, Any], export_path: Path) -> None:
             ]
         )
     )
+    print("iml_flag_breakdown:")
+    for flag_name in FLAG_FIELDS:
+        flag_summary = summary["iml_flag_breakdown"][flag_name]
+        accuracy = flag_summary["accuracy"]
+        accuracy_text = format_percent(accuracy) if accuracy is not None else "n/a"
+        print(
+            " | ".join(
+                [
+                    f"{flag_name}=true",
+                    f"labels={flag_summary['flagged_labels']}",
+                    f"correct={flag_summary['correct_predictions']}",
+                    f"incorrect={flag_summary['incorrect_predictions']}",
+                    f"accuracy={accuracy_text}",
+                ]
+            )
+        )
     print(f"evaluation_export: {project_relative_path(export_path)}")
 
 
