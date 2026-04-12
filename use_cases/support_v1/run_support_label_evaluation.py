@@ -85,6 +85,7 @@ REVIEW_FIELDNAMES: tuple[str, ...] = (
     "confidence_adjustment",
     "unknownness_reduction",
 )
+ROUTE_PATHS: tuple[str, ...] = ("fast_path", "deep_path")
 
 
 def parse_args() -> argparse.Namespace:
@@ -159,27 +160,89 @@ def summarize_correctness(correct_values: Sequence[bool]) -> dict[str, Any]:
     }
 
 
+def safe_ratio(numerator: int, denominator: int) -> float | None:
+    if denominator == 0:
+        return None
+    return numerator / denominator
+
+
+def summarize_route_quality(
+    labeled_paths: Sequence[str],
+    predicted_paths: Sequence[str],
+) -> dict[str, Any]:
+    metrics: dict[str, Any] = {}
+
+    for route_path in ROUTE_PATHS:
+        correct_predictions = sum(
+            1
+            for labeled_path, predicted_path in zip(labeled_paths, predicted_paths)
+            if labeled_path == route_path and predicted_path == route_path
+        )
+        predicted_count = sum(
+            1 for predicted_path in predicted_paths if predicted_path == route_path
+        )
+        labeled_count = sum(1 for labeled_path in labeled_paths if labeled_path == route_path)
+        metrics[f"{route_path}_precision"] = safe_ratio(
+            correct_predictions,
+            predicted_count,
+        )
+        metrics[f"{route_path}_recall"] = safe_ratio(
+            correct_predictions,
+            labeled_count,
+        )
+
+    return metrics
+
+
+def summarize_method_predictions(
+    labeled_paths: Sequence[str],
+    predicted_paths: Sequence[str],
+) -> dict[str, Any]:
+    correctness_summary = summarize_correctness(
+        [
+            predicted_path == labeled_path
+            for labeled_path, predicted_path in zip(labeled_paths, predicted_paths)
+        ]
+    )
+    correctness_summary.update(
+        summarize_route_quality(
+            labeled_paths=labeled_paths,
+            predicted_paths=predicted_paths,
+        )
+    )
+    return correctness_summary
+
+
 def build_method_summaries(
     active_results: list[LabelEvaluationResult],
     original_results: list[LabelEvaluationResult],
     use_calibration: bool,
 ) -> dict[str, Any]:
     active_method_name = "calibrated_iml" if use_calibration else "iml"
+    labeled_paths = [result.label.should_route for result in active_results]
     method_summaries = {
-        active_method_name: summarize_correctness(
-            [result.correct for result in active_results]
+        active_method_name: summarize_method_predictions(
+            labeled_paths=labeled_paths,
+            predicted_paths=[result.predicted_path for result in active_results],
         ),
-        "naive_summary": summarize_correctness(
-            [result.naive_summary_correct for result in active_results]
+        "naive_summary": summarize_method_predictions(
+            labeled_paths=labeled_paths,
+            predicted_paths=[
+                result.naive_summary_predicted_path for result in active_results
+            ],
         ),
-        "full_history": summarize_correctness(
-            [result.full_history_correct for result in active_results]
+        "full_history": summarize_method_predictions(
+            labeled_paths=labeled_paths,
+            predicted_paths=[
+                result.full_history_predicted_path for result in active_results
+            ],
         ),
     }
 
     if use_calibration:
-        method_summaries["original_iml"] = summarize_correctness(
-            [result.correct for result in original_results]
+        method_summaries["original_iml"] = summarize_method_predictions(
+            labeled_paths=labeled_paths,
+            predicted_paths=[result.predicted_path for result in original_results],
         )
 
     return method_summaries
@@ -472,6 +535,38 @@ def print_method_summary(label: str, summary: dict[str, Any]) -> None:
     )
 
 
+def format_optional_percent(value: float | None) -> str:
+    if value is None:
+        return "n/a"
+    return format_percent(value)
+
+
+def print_route_quality_summary(label: str, summary: dict[str, Any]) -> None:
+    print(
+        " | ".join(
+            [
+                f"method={label}",
+                (
+                    "fast_path_precision="
+                    f"{format_optional_percent(summary['fast_path_precision'])}"
+                ),
+                (
+                    "fast_path_recall="
+                    f"{format_optional_percent(summary['fast_path_recall'])}"
+                ),
+                (
+                    "deep_path_precision="
+                    f"{format_optional_percent(summary['deep_path_precision'])}"
+                ),
+                (
+                    "deep_path_recall="
+                    f"{format_optional_percent(summary['deep_path_recall'])}"
+                ),
+            ]
+        )
+    )
+
+
 def print_summary(
     payload: dict[str, Any],
     json_export_path: Path,
@@ -510,6 +605,15 @@ def print_summary(
     print_method_summary("full_history", method_summaries["full_history"])
     if use_calibration:
         print_method_summary("original_iml", method_summaries["original_iml"])
+    print("route_quality:")
+    print_route_quality_summary(
+        aggregate_summary["active_method_name"],
+        method_summaries[aggregate_summary["active_method_name"]],
+    )
+    print_route_quality_summary("naive_summary", method_summaries["naive_summary"])
+    print_route_quality_summary("full_history", method_summaries["full_history"])
+    if use_calibration:
+        print_route_quality_summary("original_iml", method_summaries["original_iml"])
     print("flag_breakdown:")
     for flag_name in FLAG_FIELDS:
         flag_summary = flag_breakdown[flag_name]
