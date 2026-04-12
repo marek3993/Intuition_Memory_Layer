@@ -1,0 +1,75 @@
+{
+  "label_set_name": "support_v1_sample_labels",
+  "labels": [
+    {
+      "label_id": "support_label_001",
+      "entity_id": "acct_northwind",
+      "ticket_id": "NW-1001",
+      "decision_timestamp": "2026-01-05T10:05:00+00:00",
+      "should_route": "fast_path",
+      "note": "The requester supplied the missing VAT certificate quickly, so the visible history supports a routine low-stakes fast path."
+    },
+    {
+      "label_id": "support_label_002",
+      "entity_id": "acct_blueorbit",
+      "ticket_id": "BO-2004",
+      "decision_timestamp": "2026-01-10T09:25:00+00:00",
+      "should_route": "fast_path",
+      "note": "The requester followed through with the HAR file and screenshot bundle, leaving a cooperative and consistent history at this point."
+    },
+    {
+      "label_id": "support_label_003",
+      "entity_id": "acct_lumina_ops",
+      "ticket_id": "LO-5075",
+      "decision_timestamp": "2026-02-03T14:00:00+00:00",
+      "should_route": "fast_path",
+      "note": "The customer quickly provided the requested payload sample, so the next step still looks safe for standard handling."
+    },
+    {
+      "label_id": "support_label_004",
+      "entity_id": "acct_harbor_health",
+      "ticket_id": "HH-3003",
+      "decision_timestamp": "2026-01-24T10:00:00+00:00",
+      "should_route": "deep_path",
+      "profile_too_stale": true,
+      "note": "The visible history is still sparse and the requested SAML metadata never arrived, so this should not stay on a light-touch route."
+    },
+    {
+      "label_id": "support_label_005",
+      "entity_id": "acct_blueorbit",
+      "ticket_id": "BO-2071",
+      "decision_timestamp": "2026-02-27T15:10:00+00:00",
+      "should_route": "deep_path",
+      "profile_too_stale": true,
+      "note": "Prior positive history is already stale here, and the requested DNS screenshot still has not arrived by the deadline."
+    },
+    {
+      "label_id": "support_label_006",
+      "entity_id": "acct_redgrove",
+      "ticket_id": "RG-4010",
+      "decision_timestamp": "2026-01-18T13:45:00+00:00",
+      "should_route": "deep_path",
+      "contradiction_present": true,
+      "note": "QA has already identified a contradiction against the audit trail, which is enough to require deeper handling."
+    },
+    {
+      "label_id": "support_label_007",
+      "entity_id": "acct_blueorbit",
+      "ticket_id": "BO-2148",
+      "decision_timestamp": "2026-03-21T14:05:00+00:00",
+      "should_route": "deep_path",
+      "contradiction_present": true,
+      "wrong_first_impression": true,
+      "note": "The reopened claim now visibly conflicts with the earlier confirmation trail, so the initial routine impression is no longer safe."
+    },
+    {
+      "label_id": "support_label_008",
+      "entity_id": "acct_redgrove",
+      "ticket_id": "RG-4139",
+      "decision_timestamp": "2026-03-20T09:15:00+00:00",
+      "should_route": "deep_path",
+      "contradiction_present": true,
+      "note": "The request already conflicts with prior policy acknowledgement, so careful review is warranted before any exception handling."
+    }
+  ]
+}

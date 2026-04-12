@@ -3,290 +3,139 @@
   "entity_type": "support_account",
   "entities": [
     {
-      "entity_id": "acct_northwind",
-      "account_name": "Northwind Solar",
-      "segment": "mid_market",
-      "cases": [
-        {
-          "case_id": "NW-1001",
-          "opened_at": "2026-01-06T08:15:00+00:00",
-          "closed_at": "2026-01-06T15:40:00+00:00",
-          "channel": "email",
-          "priority": "normal",
-          "summary": "API timeout after key rotation",
-          "records": [
-            {
-              "record_id": "NW-1001-R1",
-              "timestamp": "2026-01-06T08:15:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "requester",
-              "raw_action": "ticket_opened",
-              "outcome": "useful_initial_context",
-              "details": "Included request IDs, failing endpoint, and exact error window.",
-              "metadata": {
-                "initial_context_quality": "complete"
-              }
-            },
-            {
-              "record_id": "NW-1001-R2",
-              "timestamp": "2026-01-06T09:05:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "agent",
-              "raw_action": "requested_diagnostics",
-              "outcome": "awaiting_requester",
-              "details": "Asked for sanitized gateway logs and curl output.",
-              "metadata": {
-                "request_id": "diag-1"
-              }
-            },
-            {
-              "record_id": "NW-1001-R3",
-              "timestamp": "2026-01-06T10:02:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "requester",
-              "raw_action": "provided_requested_info",
-              "outcome": "complete_context_provided",
-              "details": "Uploaded sanitized logs and curl output.",
-              "metadata": {
-                "request_id": "diag-1",
-                "response_quality": "complete",
-                "fulfills_request": true
-              }
-            },
-            {
-              "record_id": "NW-1001-R4",
-              "timestamp": "2026-01-06T12:15:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "agent",
-              "raw_action": "requested_verification",
-              "outcome": "awaiting_requester_confirmation",
-              "details": "Asked the admin to verify the rotated key on a fresh request.",
-              "metadata": {
-                "request_id": "verify-1"
-              }
-            },
-            {
-              "record_id": "NW-1001-R5",
-              "timestamp": "2026-01-06T15:12:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "requester",
-              "raw_action": "confirmed_fix",
-              "outcome": "issue_resolved",
-              "details": "Confirmed the timeout cleared after the key rotation cleanup.",
-              "metadata": {
-                "request_id": "verify-1"
-              }
-            }
-          ]
-        },
-        {
-          "case_id": "NW-1044",
-          "opened_at": "2026-03-04T09:20:00+00:00",
-          "closed_at": "2026-03-04T17:05:00+00:00",
-          "channel": "chat",
-          "priority": "normal",
-          "summary": "Import preview missing two columns",
-          "records": [
-            {
-              "record_id": "NW-1044-R1",
-              "timestamp": "2026-03-04T09:20:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "requester",
-              "raw_action": "ticket_opened",
-              "outcome": "useful_initial_context",
-              "details": "Shared the CSV template version and a screenshot of the missing columns.",
-              "metadata": {
-                "initial_context_quality": "useful"
-              }
-            },
-            {
-              "record_id": "NW-1044-R2",
-              "timestamp": "2026-03-04T10:00:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "agent",
-              "raw_action": "requested_sample_file",
-              "outcome": "awaiting_requester",
-              "details": "Asked for a redacted CSV sample to confirm header parsing.",
-              "metadata": {
-                "request_id": "csv-1"
-              }
-            },
-            {
-              "record_id": "NW-1044-R3",
-              "timestamp": "2026-03-04T10:38:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "requester",
-              "raw_action": "provided_requested_info",
-              "outcome": "partial_context_provided",
-              "details": "Attached a redacted sample file with the missing columns.",
-              "metadata": {
-                "request_id": "csv-1",
-                "response_quality": "partial",
-                "fulfills_request": true
-              }
-            },
-            {
-              "record_id": "NW-1044-R4",
-              "timestamp": "2026-03-04T14:45:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "requester",
-              "raw_action": "completed_requested_step",
-              "outcome": "retry_completed",
-              "details": "Re-ran the import after the parser flag was adjusted.",
-              "metadata": {
-                "step_name": "rerun_import"
-              }
-            },
-            {
-              "record_id": "NW-1044-R5",
-              "timestamp": "2026-03-04T17:05:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "requester",
-              "raw_action": "confirmed_fix",
-              "outcome": "issue_resolved",
-              "details": "Confirmed the preview now includes the missing columns.",
-              "metadata": {}
-            }
-          ]
-        }
-      ]
-    },
-    {
       "entity_id": "acct_blueorbit",
       "account_name": "BlueOrbit Retail",
       "segment": "mid_market",
       "cases": [
         {
           "case_id": "BO-2004",
-          "opened_at": "2026-01-11T13:00:00+00:00",
-          "closed_at": "2026-01-11T18:20:00+00:00",
+          "opened_at": "2026-01-09T13:00:00+00:00",
+          "closed_at": "2026-01-11T16:20:00+00:00",
           "channel": "email",
           "priority": "normal",
-          "summary": "Checkout banner not dismissing on Safari",
+          "summary": "Checkout banner defect after browser update",
           "records": [
             {
               "record_id": "BO-2004-R1",
-              "timestamp": "2026-01-11T13:00:00+00:00",
+              "timestamp": "2026-01-09T13:04:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
               "actor_role": "requester",
               "raw_action": "ticket_opened",
-              "outcome": "useful_initial_context",
-              "details": "Included browser version, store URL, and a screen capture.",
+              "outcome": "initial_context_shared",
+              "details": "Store manager included the failing page, browser version, and reproduction steps.",
               "metadata": {
-                "initial_context_quality": "complete"
+                "initial_context_quality": "useful"
               }
             },
             {
               "record_id": "BO-2004-R2",
-              "timestamp": "2026-01-11T14:10:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "agent",
-              "raw_action": "requested_har_file",
-              "outcome": "awaiting_requester",
-              "details": "Asked for a HAR file from the failing checkout session.",
-              "metadata": {
-                "request_id": "har-1"
-              }
-            },
-            {
-              "record_id": "BO-2004-R3",
-              "timestamp": "2026-01-11T15:25:00+00:00",
+              "timestamp": "2026-01-10T09:25:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
               "actor_role": "requester",
               "raw_action": "provided_requested_info",
-              "outcome": "complete_context_provided",
-              "details": "Uploaded the HAR file and exact browser build.",
+              "outcome": "har_file_uploaded",
+              "details": "Customer uploaded the requested HAR file and screenshot bundle.",
               "metadata": {
-                "request_id": "har-1",
                 "response_quality": "complete",
                 "fulfills_request": true
               }
             },
             {
-              "record_id": "BO-2004-R4",
-              "timestamp": "2026-01-11T18:20:00+00:00",
+              "record_id": "BO-2004-R3",
+              "timestamp": "2026-01-11T16:20:00+00:00",
               "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
+              "source_type": "status_change",
               "actor_role": "requester",
               "raw_action": "confirmed_fix",
-              "outcome": "issue_resolved",
-              "details": "Confirmed the banner stopped reappearing after the cache fix.",
+              "outcome": "banner_rendering_confirmed",
+              "details": "Customer confirmed the checkout banner rendered correctly after the fix.",
               "metadata": {}
             }
           ]
         },
         {
-          "case_id": "BO-2148",
-          "opened_at": "2026-03-20T09:00:00+00:00",
-          "closed_at": "2026-03-22T16:40:00+00:00",
+          "case_id": "BO-2071",
+          "opened_at": "2026-02-19T09:25:00+00:00",
+          "closed_at": "2026-02-27T15:10:00+00:00",
           "channel": "email",
-          "priority": "high",
-          "summary": "Patch reported as missing on one store after earlier confirmation",
+          "priority": "normal",
+          "summary": "DNS screenshot requested for custom-domain issue",
           "records": [
             {
-              "record_id": "BO-2148-R1",
-              "timestamp": "2026-03-20T09:00:00+00:00",
+              "record_id": "BO-2071-R1",
+              "timestamp": "2026-02-19T09:25:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
               "actor_role": "requester",
               "raw_action": "ticket_opened",
-              "outcome": "useful_initial_context",
-              "details": "Referenced the original case and the store where the patch appeared missing.",
+              "outcome": "issue_reported",
+              "details": "Customer reported a custom-domain mismatch and included the affected hostname.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "BO-2071-R2",
+              "timestamp": "2026-02-27T15:10:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "system_timer",
+              "actor_role": "system",
+              "raw_action": "request_deadline_missed",
+              "outcome": "auto_closed_no_dns_screenshot",
+              "details": "No updated DNS screenshot arrived before the requested deadline.",
+              "metadata": {
+                "missed_request_count": 1
+              }
+            }
+          ]
+        },
+        {
+          "case_id": "BO-2148",
+          "opened_at": "2026-03-18T07:50:00+00:00",
+          "closed_at": "2026-03-21T14:05:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Reopened payment-widget issue with conflicting claim",
+          "records": [
+            {
+              "record_id": "BO-2148-R1",
+              "timestamp": "2026-03-18T07:52:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reopened",
+              "details": "Customer reopened the widget issue with a short status update.",
               "metadata": {
                 "initial_context_quality": "useful"
               }
             },
             {
               "record_id": "BO-2148-R2",
-              "timestamp": "2026-03-20T10:25:00+00:00",
+              "timestamp": "2026-03-19T12:10:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
-              "actor_role": "agent",
-              "raw_action": "requested_store_evidence",
-              "outcome": "awaiting_requester",
-              "details": "Asked for the store ID and a fresh screenshot.",
+              "actor_role": "requester",
+              "raw_action": "followed_up_without_requested_info",
+              "outcome": "asked_for_update_without_dns_screenshot",
+              "details": "Customer asked for a faster answer but still did not attach the requested evidence.",
               "metadata": {
-                "request_id": "store-1"
+                "missing_item_count": 1
               }
             },
             {
               "record_id": "BO-2148-R3",
-              "timestamp": "2026-03-21T13:20:00+00:00",
+              "timestamp": "2026-03-21T14:05:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "qa_review",
               "actor_role": "qa",
-              "raw_action": "qa_marked_contradiction",
+              "raw_action": "reopened_with_conflicting_claim",
               "outcome": "claim_conflicts_with_prior_confirmation",
-              "details": "QA flagged that the requester's statement conflicts with the prior fix confirmation and rollout logs.",
+              "details": "QA confirmed the customer now denied the earlier confirmation trail.",
               "metadata": {
                 "severity": "high"
-              }
-            },
-            {
-              "record_id": "BO-2148-R4",
-              "timestamp": "2026-03-22T16:40:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "system_timer",
-              "actor_role": "system",
-              "raw_action": "request_deadline_missed",
-              "outcome": "closed_pending_customer",
-              "details": "The case auto-closed after the requester did not supply the requested evidence.",
-              "metadata": {
-                "request_id": "store-1",
-                "missed_request_count": 2
               }
             }
           ]
@@ -295,223 +144,125 @@
     },
     {
       "entity_id": "acct_harbor_health",
-      "account_name": "Harbor Health Group",
+      "account_name": "Harbor Health",
       "segment": "enterprise",
       "cases": [
         {
           "case_id": "HH-3003",
-          "opened_at": "2026-01-18T08:40:00+00:00",
-          "closed_at": "2026-01-31T10:00:00+00:00",
+          "opened_at": "2026-01-12T08:40:00+00:00",
+          "closed_at": "2026-01-24T10:00:00+00:00",
           "channel": "email",
-          "priority": "high",
-          "summary": "SAML login failing for one clinic",
+          "priority": "normal",
+          "summary": "SAML metadata needed for first-pass SSO troubleshooting",
           "records": [
             {
               "record_id": "HH-3003-R1",
-              "timestamp": "2026-01-18T08:40:00+00:00",
+              "timestamp": "2026-01-12T08:44:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
               "actor_role": "requester",
               "raw_action": "ticket_opened",
-              "outcome": "limited_initial_context",
-              "details": "Reported the failure window but did not include the IdP metadata.",
+              "outcome": "issue_reported",
+              "details": "Practice administrator reported the SSO failure but only attached a brief description.",
               "metadata": {
-                "initial_context_quality": "limited"
+                "initial_context_quality": "partial"
               }
             },
             {
               "record_id": "HH-3003-R2",
-              "timestamp": "2026-01-18T09:20:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "agent",
-              "raw_action": "requested_idp_metadata",
-              "outcome": "awaiting_requester",
-              "details": "Asked for the current identity-provider metadata and ACS URL.",
-              "metadata": {
-                "request_id": "saml-1"
-              }
-            },
-            {
-              "record_id": "HH-3003-R3",
-              "timestamp": "2026-01-31T10:00:00+00:00",
+              "timestamp": "2026-01-24T10:00:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "system_timer",
               "actor_role": "system",
               "raw_action": "request_deadline_missed",
-              "outcome": "closed_pending_customer",
-              "details": "The case was closed after repeated reminders went unanswered.",
+              "outcome": "metadata_not_received",
+              "details": "Requested SAML metadata did not arrive before the follow-up deadline.",
               "metadata": {
-                "request_id": "saml-1",
                 "missed_request_count": 1
               }
             }
           ]
         },
         {
-          "case_id": "HH-3112",
-          "opened_at": "2026-03-19T09:05:00+00:00",
-          "closed_at": "2026-03-22T18:00:00+00:00",
+          "case_id": "HH-3068",
+          "opened_at": "2026-02-26T11:10:00+00:00",
+          "closed_at": "2026-03-12T17:20:00+00:00",
           "channel": "email",
           "priority": "high",
-          "summary": "Clinic login fixed after delayed metadata handoff",
+          "summary": "Identity-provider metadata corrected after long response gap",
           "records": [
             {
-              "record_id": "HH-3112-R1",
-              "timestamp": "2026-03-19T09:05:00+00:00",
+              "record_id": "HH-3068-R1",
+              "timestamp": "2026-02-26T11:12:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
               "actor_role": "requester",
               "raw_action": "ticket_opened",
-              "outcome": "useful_initial_context",
-              "details": "Linked the previous ticket and listed the affected tenant IDs.",
+              "outcome": "issue_reported",
+              "details": "Customer opened a new SSO ticket and included tenant details.",
               "metadata": {
                 "initial_context_quality": "useful"
               }
             },
             {
-              "record_id": "HH-3112-R2",
-              "timestamp": "2026-03-19T09:40:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "agent",
-              "raw_action": "requested_idp_metadata",
-              "outcome": "awaiting_requester",
-              "details": "Asked for the current IdP metadata and signing certificate.",
-              "metadata": {
-                "request_id": "saml-2"
-              }
-            },
-            {
-              "record_id": "HH-3112-R3",
-              "timestamp": "2026-03-21T16:10:00+00:00",
+              "record_id": "HH-3068-R2",
+              "timestamp": "2026-03-12T15:05:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
               "actor_role": "requester",
               "raw_action": "provided_requested_info",
-              "outcome": "complete_context_provided",
-              "details": "Returned with the current metadata bundle and certificate chain.",
+              "outcome": "idp_metadata_uploaded",
+              "details": "Site admin returned with the corrected identity-provider metadata.",
               "metadata": {
-                "request_id": "saml-2",
                 "response_quality": "complete",
                 "fulfills_request": true
               }
             },
             {
-              "record_id": "HH-3112-R4",
-              "timestamp": "2026-03-22T18:00:00+00:00",
+              "record_id": "HH-3068-R3",
+              "timestamp": "2026-03-12T17:20:00+00:00",
               "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
+              "source_type": "status_change",
               "actor_role": "requester",
               "raw_action": "confirmed_fix",
-              "outcome": "issue_resolved",
-              "details": "Confirmed SSO succeeded once the metadata was rotated.",
+              "outcome": "sso_restored",
+              "details": "Customer confirmed the SSO configuration worked after the metadata correction.",
               "metadata": {}
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "entity_id": "acct_redgrove",
-      "account_name": "RedGrove Finance",
-      "segment": "mid_market",
-      "cases": [
-        {
-          "case_id": "RG-4010",
-          "opened_at": "2026-01-20T10:25:00+00:00",
-          "closed_at": "2026-01-21T13:45:00+00:00",
-          "channel": "email",
-          "priority": "normal",
-          "summary": "Export entitlement dispute",
-          "records": [
-            {
-              "record_id": "RG-4010-R1",
-              "timestamp": "2026-01-20T10:25:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "requester",
-              "raw_action": "ticket_opened",
-              "outcome": "limited_initial_context",
-              "details": "Claimed the export feature had never been enabled.",
-              "metadata": {
-                "initial_context_quality": "limited"
-              }
-            },
-            {
-              "record_id": "RG-4010-R2",
-              "timestamp": "2026-01-21T13:45:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "qa_review",
-              "actor_role": "qa",
-              "raw_action": "qa_marked_contradiction",
-              "outcome": "claim_conflicts_with_audit_log",
-              "details": "Audit history showed repeated exports from the same account.",
-              "metadata": {
-                "severity": "high"
-              }
             }
           ]
         },
         {
-          "case_id": "RG-4139",
-          "opened_at": "2026-03-18T14:20:00+00:00",
-          "closed_at": "2026-03-24T09:40:00+00:00",
+          "case_id": "HH-3112",
+          "opened_at": "2026-04-01T09:00:00+00:00",
+          "closed_at": "2026-04-08T18:00:00+00:00",
           "channel": "email",
-          "priority": "high",
-          "summary": "Retention policy exception request",
+          "priority": "normal",
+          "summary": "Intermittent upload issue awaiting browser capture",
           "records": [
             {
-              "record_id": "RG-4139-R1",
-              "timestamp": "2026-03-18T14:20:00+00:00",
+              "record_id": "HH-3112-R1",
+              "timestamp": "2026-04-01T09:00:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
               "actor_role": "requester",
               "raw_action": "ticket_opened",
-              "outcome": "useful_initial_context",
-              "details": "Cited the retention policy section and the affected project IDs.",
+              "outcome": "issue_reported",
+              "details": "Customer reported the upload issue but did not include a capture or console output.",
               "metadata": {
-                "initial_context_quality": "useful"
+                "initial_context_quality": "partial"
               }
             },
             {
-              "record_id": "RG-4139-R2",
-              "timestamp": "2026-03-18T15:05:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "agent",
-              "raw_action": "requested_evidence",
-              "outcome": "awaiting_requester",
-              "details": "Asked for the legal hold notice tied to the exception request.",
-              "metadata": {
-                "request_id": "hold-1"
-              }
-            },
-            {
-              "record_id": "RG-4139-R3",
-              "timestamp": "2026-03-19T12:15:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "status_change",
-              "actor_role": "system",
-              "raw_action": "reopened_with_conflicting_claim",
-              "outcome": "requester_denies_previous_exception_scope",
-              "details": "The reopened note contradicted the scope described in the first message.",
-              "metadata": {
-                "severity": "medium"
-              }
-            },
-            {
-              "record_id": "RG-4139-R4",
-              "timestamp": "2026-03-24T09:40:00+00:00",
+              "record_id": "HH-3112-R2",
+              "timestamp": "2026-04-08T18:00:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "system_timer",
               "actor_role": "system",
               "raw_action": "request_deadline_missed",
-              "outcome": "closed_pending_customer",
-              "details": "The case auto-closed after the legal hold evidence was not provided.",
+              "outcome": "browser_capture_not_received",
+              "details": "No reply arrived after support requested a browser capture sequence.",
               "metadata": {
-                "request_id": "hold-1",
-                "missed_request_count": 2
+                "missed_request_count": 1
               }
             }
           ]
@@ -521,117 +272,440 @@
     {
       "entity_id": "acct_lumina_ops",
       "account_name": "Lumina Ops",
-      "segment": "startup",
+      "segment": "mid_market",
       "cases": [
         {
           "case_id": "LO-5002",
-          "opened_at": "2026-01-08T12:10:00+00:00",
-          "closed_at": "2026-01-17T09:00:00+00:00",
+          "opened_at": "2026-01-06T12:10:00+00:00",
+          "closed_at": "2026-01-15T09:00:00+00:00",
           "channel": "email",
           "priority": "normal",
-          "summary": "Webhook delivery retry issue",
+          "summary": "Webhook payload sample requested for parsing failure",
           "records": [
             {
               "record_id": "LO-5002-R1",
-              "timestamp": "2026-01-08T12:10:00+00:00",
+              "timestamp": "2026-01-06T12:10:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
               "actor_role": "requester",
               "raw_action": "ticket_opened",
-              "outcome": "limited_initial_context",
-              "details": "Reported missed deliveries but did not attach payload examples.",
+              "outcome": "issue_reported",
+              "details": "Implementation lead reported the parsing problem with only a brief summary.",
               "metadata": {
-                "initial_context_quality": "limited"
+                "initial_context_quality": "partial"
               }
             },
             {
               "record_id": "LO-5002-R2",
-              "timestamp": "2026-01-08T12:55:00+00:00",
-              "source_system": "helpdesk_demo",
-              "source_type": "ticket_comment",
-              "actor_role": "agent",
-              "raw_action": "requested_payload_example",
-              "outcome": "awaiting_requester",
-              "details": "Asked for one failing webhook payload and delivery ID.",
-              "metadata": {
-                "request_id": "payload-1"
-              }
-            },
-            {
-              "record_id": "LO-5002-R3",
-              "timestamp": "2026-01-17T09:00:00+00:00",
+              "timestamp": "2026-01-15T09:00:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "system_timer",
               "actor_role": "system",
               "raw_action": "request_deadline_missed",
-              "outcome": "closed_pending_customer",
-              "details": "The case expired after no payload sample arrived.",
+              "outcome": "payload_example_not_received",
+              "details": "Requested webhook example never arrived before the case expired.",
               "metadata": {
-                "request_id": "payload-1",
                 "missed_request_count": 1
               }
             }
           ]
         },
         {
-          "case_id": "LO-5144",
-          "opened_at": "2026-03-12T11:40:00+00:00",
-          "closed_at": "2026-03-13T16:25:00+00:00",
-          "channel": "chat",
+          "case_id": "LO-5075",
+          "opened_at": "2026-02-03T08:05:00+00:00",
+          "closed_at": "2026-02-05T10:50:00+00:00",
+          "channel": "email",
           "priority": "normal",
-          "summary": "Retry issue isolated and verified in production",
+          "summary": "Customer provided webhook sample for parser debugging",
           "records": [
             {
-              "record_id": "LO-5144-R1",
-              "timestamp": "2026-03-12T11:40:00+00:00",
+              "record_id": "LO-5075-R1",
+              "timestamp": "2026-02-03T08:07:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
               "actor_role": "requester",
               "raw_action": "ticket_opened",
-              "outcome": "useful_initial_context",
-              "details": "Included webhook IDs, one payload sample, and retry timestamps.",
+              "outcome": "issue_reported",
+              "details": "Customer opened the case with the endpoint name and retry IDs.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "LO-5075-R2",
+              "timestamp": "2026-02-03T14:00:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "webhook_payload_uploaded",
+              "details": "Customer quickly shared the requested payload sample and headers.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "LO-5075-R3",
+              "timestamp": "2026-02-05T10:50:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "completed_requested_step",
+              "outcome": "parser_retry_validated",
+              "details": "Customer completed the requested retry test and confirmed the parser behavior.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "LO-5144",
+          "opened_at": "2026-03-11T11:40:00+00:00",
+          "closed_at": "2026-03-13T16:25:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Webhook retry fix verified in production",
+          "records": [
+            {
+              "record_id": "LO-5144-R1",
+              "timestamp": "2026-03-11T11:42:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported",
+              "details": "Customer reported the retry issue with environment and job identifiers.",
               "metadata": {
                 "initial_context_quality": "complete"
               }
             },
             {
               "record_id": "LO-5144-R2",
-              "timestamp": "2026-03-12T12:10:00+00:00",
+              "timestamp": "2026-03-12T13:10:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
               "actor_role": "requester",
               "raw_action": "provided_requested_info",
-              "outcome": "complete_context_provided",
-              "details": "Sent the redacted payload and exact delivery identifiers.",
+              "outcome": "retry_payload_shared",
+              "details": "Customer attached the retry payload and server response bundle.",
               "metadata": {
-                "request_id": "payload-2",
                 "response_quality": "complete",
                 "fulfills_request": true
               }
             },
             {
               "record_id": "LO-5144-R3",
-              "timestamp": "2026-03-13T15:30:00+00:00",
+              "timestamp": "2026-03-13T16:25:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "retry_fix_confirmed",
+              "details": "Customer validated the retry fix in production and closed the loop.",
+              "metadata": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_northwind",
+      "account_name": "Northwind Solar",
+      "segment": "mid_market",
+      "cases": [
+        {
+          "case_id": "NW-1001",
+          "opened_at": "2026-01-05T09:10:00+00:00",
+          "closed_at": "2026-01-05T11:40:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Regenerated invoice blocked on VAT certificate",
+          "records": [
+            {
+              "record_id": "NW-1001-R1",
+              "timestamp": "2026-01-05T09:12:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported",
+              "details": "Billing admin opened the issue with invoice ID and tax region details.",
+              "metadata": {
+                "initial_context_quality": "complete"
+              }
+            },
+            {
+              "record_id": "NW-1001-R2",
+              "timestamp": "2026-01-05T10:05:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "vat_certificate_uploaded",
+              "details": "Customer sent the missing VAT certificate within the hour.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "NW-1001-R3",
+              "timestamp": "2026-01-05T11:40:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "invoice_regenerated",
+              "details": "Customer confirmed the regenerated invoice solved the issue.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "NW-1027",
+          "opened_at": "2026-02-14T08:15:00+00:00",
+          "closed_at": "2026-02-14T12:20:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Gateway timeout after cache rotation",
+          "records": [
+            {
+              "record_id": "NW-1027-R1",
+              "timestamp": "2026-02-14T08:18:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported",
+              "details": "Operations contact included the gateway name, failing request IDs, and recent key rotation window.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "NW-1027-R2",
+              "timestamp": "2026-02-14T10:05:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "gateway_logs_uploaded",
+              "details": "Customer attached the requested gateway logs and curl output.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "NW-1027-R3",
+              "timestamp": "2026-02-14T12:20:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "cache_purge_accepted",
+              "details": "Customer confirmed the cache purge resolved the timeout issue.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "NW-1094",
+          "opened_at": "2026-03-28T10:00:00+00:00",
+          "closed_at": "2026-03-29T09:30:00+00:00",
+          "channel": "video",
+          "priority": "normal",
+          "summary": "Token refresh issue confirmed fixed after live call",
+          "records": [
+            {
+              "record_id": "NW-1094-R1",
+              "timestamp": "2026-03-28T10:02:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported",
+              "details": "Customer opened the issue with tenant ID, failing scope, and recent deployment timestamp.",
+              "metadata": {
+                "initial_context_quality": "complete"
+              }
+            },
+            {
+              "record_id": "NW-1094-R2",
+              "timestamp": "2026-03-28T15:30:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
               "actor_role": "requester",
               "raw_action": "completed_requested_step",
-              "outcome": "retry_completed",
-              "details": "Replayed the webhook after the retry setting was adjusted.",
-              "metadata": {
-                "step_name": "replay_webhook"
-              }
+              "outcome": "token_refresh_retested",
+              "details": "Customer joined the troubleshooting call and completed the requested token refresh test.",
+              "metadata": {}
             },
             {
-              "record_id": "LO-5144-R4",
-              "timestamp": "2026-03-13T16:25:00+00:00",
+              "record_id": "NW-1094-R3",
+              "timestamp": "2026-03-29T09:30:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "token_refresh_restored",
+              "details": "Customer confirmed the token refresh behaved correctly after the configuration fix.",
+              "metadata": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_redgrove",
+      "account_name": "Redgrove Finance",
+      "segment": "mid_market",
+      "cases": [
+        {
+          "case_id": "RG-4010",
+          "opened_at": "2026-01-17T10:25:00+00:00",
+          "closed_at": "2026-01-18T13:45:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Customer dispute over export entitlement",
+          "records": [
+            {
+              "record_id": "RG-4010-R1",
+              "timestamp": "2026-01-17T10:28:00+00:00",
               "source_system": "helpdesk_demo",
               "source_type": "ticket_comment",
               "actor_role": "requester",
-              "raw_action": "confirmed_fix",
-              "outcome": "issue_resolved",
-              "details": "Validated the retry fix in production without reopening the case.",
-              "metadata": {}
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported",
+              "details": "Finance lead opened the case with account details and a short entitlement claim.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "RG-4010-R2",
+              "timestamp": "2026-01-18T13:45:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "qa_review",
+              "actor_role": "qa",
+              "raw_action": "qa_marked_contradiction",
+              "outcome": "claim_not_supported_by_audit_log",
+              "details": "QA found repeated prior export usage in the audit log, contradicting the claim.",
+              "metadata": {
+                "severity": "medium"
+              }
+            }
+          ]
+        },
+        {
+          "case_id": "RG-4061",
+          "opened_at": "2026-02-07T07:15:00+00:00",
+          "closed_at": "2026-02-10T15:30:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Prompt CSV handoff followed by contradictory dispute",
+          "records": [
+            {
+              "record_id": "RG-4061-R1",
+              "timestamp": "2026-02-07T07:17:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported",
+              "details": "Customer opened the case with report IDs and export timestamps.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "RG-4061-R2",
+              "timestamp": "2026-02-08T09:20:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "csv_export_shared",
+              "details": "Customer promptly shared the CSV export and reconciliation sheet.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "RG-4061-R3",
+              "timestamp": "2026-02-10T15:30:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "qa_review",
+              "actor_role": "qa",
+              "raw_action": "reopened_with_conflicting_claim",
+              "outcome": "customer_disputed_same_file",
+              "details": "QA verified the customer later disputed the same CSV they had already provided.",
+              "metadata": {
+                "severity": "high"
+              }
+            }
+          ]
+        },
+        {
+          "case_id": "RG-4139",
+          "opened_at": "2026-03-16T14:20:00+00:00",
+          "closed_at": "2026-03-22T09:40:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Retention-policy exception request with missing evidence",
+          "records": [
+            {
+              "record_id": "RG-4139-R1",
+              "timestamp": "2026-03-16T14:22:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported",
+              "details": "Customer asked for a retention-policy exception without the requested compliance record.",
+              "metadata": {
+                "initial_context_quality": "partial"
+              }
+            },
+            {
+              "record_id": "RG-4139-R2",
+              "timestamp": "2026-03-18T12:05:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "followed_up_without_requested_info",
+              "outcome": "asked_for_exception_without_evidence",
+              "details": "Customer requested an exception again without sending the promised evidence.",
+              "metadata": {
+                "missing_item_count": 1
+              }
+            },
+            {
+              "record_id": "RG-4139-R3",
+              "timestamp": "2026-03-20T09:15:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "qa_review",
+              "actor_role": "qa",
+              "raw_action": "qa_marked_contradiction",
+              "outcome": "request_conflicts_with_prior_policy_ack",
+              "details": "QA found the customer had already acknowledged the same retention policy in a prior audit trail.",
+              "metadata": {
+                "severity": "medium"
+              }
+            },
+            {
+              "record_id": "RG-4139-R4",
+              "timestamp": "2026-03-22T09:40:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "system_timer",
+              "actor_role": "system",
+              "raw_action": "request_deadline_missed",
+              "outcome": "evidence_not_received",
+              "details": "No requested documentation arrived before the deadline and the case closed.",
+              "metadata": {
+                "missed_request_count": 1
+              }
             }
           ]
         }
