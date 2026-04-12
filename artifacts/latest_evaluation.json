@@ -1,0 +1,1016 @@
+{
+  "run_metadata": {
+    "generated_at": "2026-04-12T09:41:59.854099+02:00",
+    "dataset_path": "C:\\Users\\benda\\Desktop\\IntuitionMemoryLayer\\datasets\\synthetic_entities.json",
+    "export_path": "C:\\Users\\benda\\Desktop\\IntuitionMemoryLayer\\artifacts\\latest_evaluation.json",
+    "scenario_expectations_version": "v1",
+    "stakes": "low",
+    "decay_gap_days": 21,
+    "first_impression_event_count": 3,
+    "final_decision_gap_days": 7
+  },
+  "aggregate_metrics": {
+    "entities_evaluated": 5,
+    "total_events_replayed": 59,
+    "decay_checkpoints_applied": 7,
+    "revalidations_triggered": 3,
+    "fast_path_count": 0,
+    "deep_path_count": 5,
+    "average_overall_confidence": 0.37276000000000004,
+    "average_unknownness": 0.64628,
+    "entities_with_all_expectations_passed": 5,
+    "entities_with_failed_expectations": 0,
+    "false_first_impression_recovery_proxy": 1.0
+  },
+  "baseline_comparison": [
+    {
+      "method": "IML",
+      "fast_path_count": 0,
+      "deep_path_count": 5,
+      "average_overall_confidence": 0.37276000000000004,
+      "average_unknownness": 0.64628
+    },
+    {
+      "method": "naive_summary",
+      "fast_path_count": 3,
+      "deep_path_count": 2,
+      "average_overall_confidence": 0.7301181818181819,
+      "average_unknownness": 0.2858818181818182
+    },
+    {
+      "method": "full_history",
+      "fast_path_count": 2,
+      "deep_path_count": 3,
+      "average_overall_confidence": 0.8634706348761944,
+      "average_unknownness": 0.16867336512380574
+    }
+  ],
+  "entity_summaries": [
+    {
+      "entity_id": "entity_stable_good_01",
+      "scenario": "stable_good_actor",
+      "event_count": 15,
+      "decay_checkpoint_count": 0,
+      "first_impression_event_index": 3,
+      "final_decision_gap_days": 7,
+      "first_impression_trust": 0.8362999999999999,
+      "final_trust": 1.0,
+      "overall_confidence": 0.51448,
+      "unknownness": 0.54432,
+      "freshness": 0.79,
+      "contradiction_load": 0.0,
+      "revalidation_triggered": false,
+      "revalidation_reasons": [],
+      "scenario_expectations": {
+        "version": "v1",
+        "expected": [
+          "high_final_trust",
+          "low_contradiction_peak"
+        ],
+        "passed": [
+          "high_final_trust",
+          "low_contradiction_peak"
+        ],
+        "failed": [],
+        "all_expectations_passed": true
+      },
+      "iml": {
+        "selected_path": "deep_path",
+        "decision_reason": "overall_confidence below 0.55, unknownness above 0.45"
+      },
+      "naive_summary": {
+        "selected_path": "fast_path",
+        "overall_confidence": 0.8906666666666667,
+        "unknownness": 0.10933333333333328,
+        "decision_reason": "Baseline score is confident, low-risk, low-contradiction, and low-unknown."
+      },
+      "full_history": {
+        "selected_path": "fast_path",
+        "overall_confidence": 1.0,
+        "unknownness": 0.0,
+        "decision_reason": "Baseline score is confident, low-risk, low-contradiction, and low-unknown."
+      }
+    },
+    {
+      "entity_id": "entity_false_positive_01",
+      "scenario": "false_positive_first_impression",
+      "event_count": 10,
+      "decay_checkpoint_count": 0,
+      "first_impression_event_index": 3,
+      "final_decision_gap_days": 7,
+      "first_impression_trust": 0.75128,
+      "final_trust": 0.49492999999999976,
+      "overall_confidence": 0.41298,
+      "unknownness": 0.6258199999999999,
+      "freshness": 0.7,
+      "contradiction_load": 0.287354199153682,
+      "revalidation_triggered": true,
+      "revalidation_reasons": [
+        "confidence_below_threshold",
+        "contradiction_load_above_threshold",
+        "unknownness_above_threshold"
+      ],
+      "scenario_expectations": {
+        "version": "v1",
+        "expected": [
+          "recover_by_end",
+          "route_to_deep_path"
+        ],
+        "passed": [
+          "recover_by_end",
+          "route_to_deep_path"
+        ],
+        "failed": [],
+        "all_expectations_passed": true
+      },
+      "iml": {
+        "selected_path": "deep_path",
+        "decision_reason": "overall_confidence below 0.55, unknownness above 0.45"
+      },
+      "naive_summary": {
+        "selected_path": "deep_path",
+        "overall_confidence": 0.6496,
+        "unknownness": 0.35040000000000004,
+        "decision_reason": "risk above 0.55"
+      },
+      "full_history": {
+        "selected_path": "deep_path",
+        "overall_confidence": 0.862697713097713,
+        "unknownness": 0.13730228690228696,
+        "decision_reason": "risk above 0.55"
+      }
+    },
+    {
+      "entity_id": "entity_false_negative_01",
+      "scenario": "false_negative_first_impression",
+      "event_count": 15,
+      "decay_checkpoint_count": 0,
+      "first_impression_event_index": 3,
+      "final_decision_gap_days": 7,
+      "first_impression_trust": 0.367225,
+      "final_trust": 1.0,
+      "overall_confidence": 0.50098,
+      "unknownness": 0.55782,
+      "freshness": 0.79,
+      "contradiction_load": 0.0,
+      "revalidation_triggered": false,
+      "revalidation_reasons": [],
+      "scenario_expectations": {
+        "version": "v1",
+        "expected": [
+          "recover_by_end"
+        ],
+        "passed": [
+          "recover_by_end"
+        ],
+        "failed": [],
+        "all_expectations_passed": true
+      },
+      "iml": {
+        "selected_path": "deep_path",
+        "decision_reason": "overall_confidence below 0.55, unknownness above 0.45"
+      },
+      "naive_summary": {
+        "selected_path": "fast_path",
+        "overall_confidence": 0.8297333333333333,
+        "unknownness": 0.17026666666666668,
+        "decision_reason": "Baseline score is confident, low-risk, low-contradiction, and low-unknown."
+      },
+      "full_history": {
+        "selected_path": "fast_path",
+        "overall_confidence": 1.0,
+        "unknownness": 0.0,
+        "decision_reason": "Baseline score is confident, low-risk, low-contradiction, and low-unknown."
+      }
+    },
+    {
+      "entity_id": "entity_high_contradiction_01",
+      "scenario": "high_contradiction_actor",
+      "event_count": 11,
+      "decay_checkpoint_count": 0,
+      "first_impression_event_index": 3,
+      "final_decision_gap_days": 7,
+      "first_impression_trust": 0.62744,
+      "final_trust": 0.6915849999999999,
+      "overall_confidence": 0.35536,
+      "unknownness": 0.60344,
+      "freshness": 0.7,
+      "contradiction_load": 0.5029748866695503,
+      "revalidation_triggered": true,
+      "revalidation_reasons": [
+        "confidence_below_threshold",
+        "contradiction_load_above_threshold",
+        "unknownness_above_threshold"
+      ],
+      "scenario_expectations": {
+        "version": "v1",
+        "expected": [
+          "high_contradiction_peak",
+          "route_to_deep_path"
+        ],
+        "passed": [
+          "high_contradiction_peak",
+          "route_to_deep_path"
+        ],
+        "failed": [],
+        "all_expectations_passed": true
+      },
+      "iml": {
+        "selected_path": "deep_path",
+        "decision_reason": "overall_confidence below 0.55, contradiction_load above 0.35, unknownness above 0.45"
+      },
+      "naive_summary": {
+        "selected_path": "fast_path",
+        "overall_confidence": 0.6670909090909092,
+        "unknownness": 0.3329090909090908,
+        "decision_reason": "Baseline score is confident, low-risk, low-contradiction, and low-unknown."
+      },
+      "full_history": {
+        "selected_path": "deep_path",
+        "overall_confidence": 0.8836339138248687,
+        "unknownness": 0.11636608617513133,
+        "decision_reason": "contradiction_load above 0.35"
+      }
+    },
+    {
+      "entity_id": "entity_sparse_data_01",
+      "scenario": "sparse_data_actor",
+      "event_count": 8,
+      "decay_checkpoint_count": 7,
+      "first_impression_event_index": 3,
+      "final_decision_gap_days": 7,
+      "first_impression_trust": 0.62576,
+      "final_trust": 0.67613,
+      "overall_confidence": 0.08,
+      "unknownness": 0.9,
+      "freshness": 0.7,
+      "contradiction_load": 0.0,
+      "revalidation_triggered": true,
+      "revalidation_reasons": [
+        "confidence_below_threshold",
+        "unknownness_above_threshold"
+      ],
+      "scenario_expectations": {
+        "version": "v1",
+        "expected": [
+          "high_unknownness_or_low_freshness",
+          "route_to_deep_path"
+        ],
+        "passed": [
+          "high_unknownness_or_low_freshness",
+          "route_to_deep_path"
+        ],
+        "failed": [],
+        "all_expectations_passed": true
+      },
+      "iml": {
+        "selected_path": "deep_path",
+        "decision_reason": "overall_confidence below 0.55, unknownness above 0.45"
+      },
+      "naive_summary": {
+        "selected_path": "deep_path",
+        "overall_confidence": 0.6135,
+        "unknownness": 0.46649999999999997,
+        "decision_reason": "unknownness above 0.45, risk above 0.55"
+      },
+      "full_history": {
+        "selected_path": "deep_path",
+        "overall_confidence": 0.5710215474583896,
+        "unknownness": 0.5896984525416104,
+        "decision_reason": "unknownness above 0.45"
+      }
+    }
+  ],
+  "entity_trajectories": [
+    {
+      "entity_id": "entity_stable_good_01",
+      "scenario": "stable_good_actor",
+      "trajectory": [
+        {
+          "event_index": 1,
+          "event_id": "sg_001",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-03T09:00:00+00:00",
+          "trust": 0.6152,
+          "overall_confidence": 0.22496,
+          "unknownness": 0.77504,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 2,
+          "event_id": "sg_002",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-06T10:15:00+00:00",
+          "trust": 0.7234999999999999,
+          "overall_confidence": 0.24966,
+          "unknownness": 0.75034,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 3,
+          "event_id": "sg_003",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-09T08:40:00+00:00",
+          "trust": 0.8362999999999999,
+          "overall_confidence": 0.2741,
+          "unknownness": 0.7259,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 4,
+          "event_id": "sg_004",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-12T11:20:00+00:00",
+          "trust": 0.9526999999999999,
+          "overall_confidence": 0.29932,
+          "unknownness": 0.70068,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 5,
+          "event_id": "sg_005",
+          "event_type": "cooperative_response",
+          "timestamp": "2026-01-15T09:35:00+00:00",
+          "trust": 0.9861799999999998,
+          "overall_confidence": 0.31234,
+          "unknownness": 0.6876599999999999,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 6,
+          "event_id": "sg_006",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-18T09:10:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.33703999999999995,
+          "unknownness": 0.66296,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 7,
+          "event_id": "sg_007",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-21T10:50:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.362,
+          "unknownness": 0.638,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 8,
+          "event_id": "sg_008",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-24T08:55:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.38644,
+          "unknownness": 0.61356,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 9,
+          "event_id": "sg_009",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-27T09:45:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.4114,
+          "unknownness": 0.5886,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 10,
+          "event_id": "sg_010",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-30T12:05:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.4361,
+          "unknownness": 0.5639000000000001,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 11,
+          "event_id": "sg_011",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-02-02T09:20:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.46132,
+          "unknownness": 0.53868,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 12,
+          "event_id": "sg_012",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-02-05T10:30:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.48575999999999997,
+          "unknownness": 0.51424,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 13,
+          "event_id": "sg_013",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-02-08T09:00:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.51072,
+          "unknownness": 0.48928000000000005,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 14,
+          "event_id": "sg_014",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-02-11T08:50:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.53542,
+          "unknownness": 0.46458,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 15,
+          "event_id": "sg_015",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-02-14T09:05:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.55648,
+          "unknownness": 0.44352,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        }
+      ]
+    },
+    {
+      "entity_id": "entity_false_positive_01",
+      "scenario": "false_positive_first_impression",
+      "trajectory": [
+        {
+          "event_index": 1,
+          "event_id": "fp_001",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-05T09:10:00+00:00",
+          "trust": 0.614,
+          "overall_confidence": 0.22469999999999998,
+          "unknownness": 0.7753,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 2,
+          "event_id": "fp_002",
+          "event_type": "cooperative_response",
+          "timestamp": "2026-01-07T14:20:00+00:00",
+          "trust": 0.6464,
+          "overall_confidence": 0.2373,
+          "unknownness": 0.7626999999999999,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 3,
+          "event_id": "fp_003",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-09T10:00:00+00:00",
+          "trust": 0.75128,
+          "overall_confidence": 0.26122,
+          "unknownness": 0.73878,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 4,
+          "event_id": "fp_004",
+          "event_type": "contradiction_detected",
+          "timestamp": "2026-01-12T16:30:00+00:00",
+          "trust": 0.75128,
+          "overall_confidence": 0.28258,
+          "unknownness": 0.71742,
+          "freshness": 1.0,
+          "contradiction_load": 0.20826000000000003
+        },
+        {
+          "event_index": 5,
+          "event_id": "fp_005",
+          "event_type": "ignored_request",
+          "timestamp": "2026-01-14T11:25:00+00:00",
+          "trust": 0.7082799999999999,
+          "overall_confidence": 0.29634000000000005,
+          "unknownness": 0.70366,
+          "freshness": 1.0,
+          "contradiction_load": 0.20201220000000003
+        },
+        {
+          "event_index": 6,
+          "event_id": "fp_006",
+          "event_type": "contradiction_detected",
+          "timestamp": "2026-01-18T09:40:00+00:00",
+          "trust": 0.7082799999999999,
+          "overall_confidence": 0.31818,
+          "unknownness": 0.68182,
+          "freshness": 1.0,
+          "contradiction_load": 0.41495220000000005
+        },
+        {
+          "event_index": 7,
+          "event_id": "fp_007",
+          "event_type": "ignored_request",
+          "timestamp": "2026-01-20T13:00:00+00:00",
+          "trust": 0.6642799999999999,
+          "overall_confidence": 0.33226000000000006,
+          "unknownness": 0.66774,
+          "freshness": 1.0,
+          "contradiction_load": 0.40250363400000005
+        },
+        {
+          "event_index": 8,
+          "event_id": "fp_008",
+          "event_type": "ignored_request",
+          "timestamp": "2026-01-23T15:10:00+00:00",
+          "trust": 0.6102799999999998,
+          "overall_confidence": 0.34666,
+          "unknownness": 0.65334,
+          "freshness": 1.0,
+          "contradiction_load": 0.39042852498
+        },
+        {
+          "event_index": 9,
+          "event_id": "fp_009",
+          "event_type": "ignored_request",
+          "timestamp": "2026-01-25T10:45:00+00:00",
+          "trust": 0.5624299999999998,
+          "overall_confidence": 0.36058,
+          "unknownness": 0.63942,
+          "freshness": 1.0,
+          "contradiction_load": 0.3787156692306
+        },
+        {
+          "event_index": 10,
+          "event_id": "fp_010",
+          "event_type": "ignored_request",
+          "timestamp": "2026-01-28T09:50:00+00:00",
+          "trust": 0.49492999999999976,
+          "overall_confidence": 0.37498000000000004,
+          "unknownness": 0.6250199999999999,
+          "freshness": 1.0,
+          "contradiction_load": 0.367354199153682
+        }
+      ]
+    },
+    {
+      "entity_id": "entity_false_negative_01",
+      "scenario": "false_negative_first_impression",
+      "trajectory": [
+        {
+          "event_index": 1,
+          "event_id": "fn_001",
+          "event_type": "ignored_request",
+          "timestamp": "2026-01-02T08:30:00+00:00",
+          "trust": 0.455,
+          "overall_confidence": 0.2144,
+          "unknownness": 0.7856,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 2,
+          "event_id": "fn_002",
+          "event_type": "ignored_request",
+          "timestamp": "2026-01-05T09:15:00+00:00",
+          "trust": 0.412725,
+          "overall_confidence": 0.22864,
+          "unknownness": 0.77136,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 3,
+          "event_id": "fn_003",
+          "event_type": "ignored_request",
+          "timestamp": "2026-01-08T09:20:00+00:00",
+          "trust": 0.367225,
+          "overall_confidence": 0.2432,
+          "unknownness": 0.7568,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 4,
+          "event_id": "fn_004",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-11T10:00:00+00:00",
+          "trust": 0.476665,
+          "overall_confidence": 0.26816,
+          "unknownness": 0.73184,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 5,
+          "event_id": "fn_005",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-14T09:10:00+00:00",
+          "trust": 0.593065,
+          "overall_confidence": 0.29338,
+          "unknownness": 0.70662,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 6,
+          "event_id": "fn_006",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-17T08:55:00+00:00",
+          "trust": 0.7070649999999999,
+          "overall_confidence": 0.31808,
+          "unknownness": 0.6819200000000001,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 7,
+          "event_id": "fn_007",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-20T09:40:00+00:00",
+          "trust": 0.8222649999999999,
+          "overall_confidence": 0.34303999999999996,
+          "unknownness": 0.65696,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 8,
+          "event_id": "fn_008",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-23T09:00:00+00:00",
+          "trust": 0.9305649999999999,
+          "overall_confidence": 0.36774,
+          "unknownness": 0.63226,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 9,
+          "event_id": "fn_009",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-26T10:25:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.3927,
+          "unknownness": 0.6073,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 10,
+          "event_id": "fn_010",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-29T09:05:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.41791999999999996,
+          "unknownness": 0.58208,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 11,
+          "event_id": "fn_011",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-02-01T09:35:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.44288,
+          "unknownness": 0.5571200000000001,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 12,
+          "event_id": "fn_012",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-02-04T08:50:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.46758,
+          "unknownness": 0.53242,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 13,
+          "event_id": "fn_013",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-02-07T09:45:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.49254,
+          "unknownness": 0.50746,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 14,
+          "event_id": "fn_014",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-02-10T10:00:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.51776,
+          "unknownness": 0.48224,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 15,
+          "event_id": "fn_015",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-02-13T09:10:00+00:00",
+          "trust": 1.0,
+          "overall_confidence": 0.54298,
+          "unknownness": 0.45702,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        }
+      ]
+    },
+    {
+      "entity_id": "entity_high_contradiction_01",
+      "scenario": "high_contradiction_actor",
+      "trajectory": [
+        {
+          "event_index": 1,
+          "event_id": "hc_001",
+          "event_type": "cooperative_response",
+          "timestamp": "2026-01-04T09:00:00+00:00",
+          "trust": 0.53132,
+          "overall_confidence": 0.21218000000000004,
+          "unknownness": 0.78782,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 2,
+          "event_id": "hc_002",
+          "event_type": "contradiction_detected",
+          "timestamp": "2026-01-06T12:15:00+00:00",
+          "trust": 0.53132,
+          "overall_confidence": 0.23402000000000003,
+          "unknownness": 0.76598,
+          "freshness": 1.0,
+          "contradiction_load": 0.1638
+        },
+        {
+          "event_index": 3,
+          "event_id": "hc_003",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-09T09:30:00+00:00",
+          "trust": 0.62744,
+          "overall_confidence": 0.25716,
+          "unknownness": 0.74284,
+          "freshness": 1.0,
+          "contradiction_load": 0.158886
+        },
+        {
+          "event_index": 4,
+          "event_id": "hc_004",
+          "event_type": "contradiction_detected",
+          "timestamp": "2026-01-12T15:00:00+00:00",
+          "trust": 0.62744,
+          "overall_confidence": 0.27948000000000006,
+          "unknownness": 0.7205199999999999,
+          "freshness": 1.0,
+          "contradiction_load": 0.32628599999999996
+        },
+        {
+          "event_index": 5,
+          "event_id": "hc_005",
+          "event_type": "ignored_request",
+          "timestamp": "2026-01-14T10:20:00+00:00",
+          "trust": 0.587065,
+          "overall_confidence": 0.29308,
+          "unknownness": 0.70692,
+          "freshness": 1.0,
+          "contradiction_load": 0.31649742
+        },
+        {
+          "event_index": 6,
+          "event_id": "hc_006",
+          "event_type": "cooperative_response",
+          "timestamp": "2026-01-17T09:40:00+00:00",
+          "trust": 0.614945,
+          "overall_confidence": 0.30456000000000005,
+          "unknownness": 0.69544,
+          "freshness": 1.0,
+          "contradiction_load": 0.30700249739999996
+        },
+        {
+          "event_index": 7,
+          "event_id": "hc_007",
+          "event_type": "contradiction_detected",
+          "timestamp": "2026-01-20T13:35:00+00:00",
+          "trust": 0.614945,
+          "overall_confidence": 0.32664,
+          "unknownness": 0.67336,
+          "freshness": 1.0,
+          "contradiction_load": 0.4643224974
+        },
+        {
+          "event_index": 8,
+          "event_id": "hc_008",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-23T09:05:00+00:00",
+          "trust": 0.709985,
+          "overall_confidence": 0.34952,
+          "unknownness": 0.65048,
+          "freshness": 1.0,
+          "contradiction_load": 0.45039282247799994
+        },
+        {
+          "event_index": 9,
+          "event_id": "hc_009",
+          "event_type": "contradiction_detected",
+          "timestamp": "2026-01-25T11:50:00+00:00",
+          "trust": 0.709985,
+          "overall_confidence": 0.37208,
+          "unknownness": 0.62792,
+          "freshness": 1.0,
+          "contradiction_load": 0.619592822478
+        },
+        {
+          "event_index": 10,
+          "event_id": "hc_010",
+          "event_type": "ignored_request",
+          "timestamp": "2026-01-27T09:25:00+00:00",
+          "trust": 0.6659849999999999,
+          "overall_confidence": 0.38616,
+          "unknownness": 0.6138399999999999,
+          "freshness": 1.0,
+          "contradiction_load": 0.60100503780366
+        },
+        {
+          "event_index": 11,
+          "event_id": "hc_011",
+          "event_type": "cooperative_response",
+          "timestamp": "2026-01-30T14:10:00+00:00",
+          "trust": 0.6915849999999999,
+          "overall_confidence": 0.39736000000000005,
+          "unknownness": 0.60264,
+          "freshness": 1.0,
+          "contradiction_load": 0.5829748866695502
+        }
+      ]
+    },
+    {
+      "entity_id": "entity_sparse_data_01",
+      "scenario": "sparse_data_actor",
+      "trajectory": [
+        {
+          "event_index": 1,
+          "event_id": "sd_001",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-01-03T09:00:00+00:00",
+          "trust": 0.5972,
+          "overall_confidence": 0.2234,
+          "unknownness": 0.7766,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 2,
+          "event_id": "sd_002",
+          "event_type": "long_inactivity",
+          "timestamp": "2026-01-28T09:00:00+00:00",
+          "trust": 0.5972,
+          "overall_confidence": 0.07516000000000002,
+          "unknownness": 0.92484,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 3,
+          "event_id": "sd_003",
+          "event_type": "cooperative_response",
+          "timestamp": "2026-02-20T10:10:00+00:00",
+          "trust": 0.62576,
+          "overall_confidence": 0.011760000000000001,
+          "unknownness": 0.98824,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 4,
+          "event_id": "sd_004",
+          "event_type": "long_inactivity",
+          "timestamp": "2026-03-18T09:30:00+00:00",
+          "trust": 0.62576,
+          "overall_confidence": 0.0018000000000000002,
+          "unknownness": 0.9982,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 5,
+          "event_id": "sd_005",
+          "event_type": "ignored_request",
+          "timestamp": "2026-04-12T11:45:00+00:00",
+          "trust": 0.58841,
+          "overall_confidence": 0.01328,
+          "unknownness": 0.98672,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 6,
+          "event_id": "sd_006",
+          "event_type": "long_inactivity",
+          "timestamp": "2026-05-07T09:15:00+00:00",
+          "trust": 0.58841,
+          "overall_confidence": 0.00182,
+          "unknownness": 0.99818,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 7,
+          "event_id": "sd_007",
+          "event_type": "fulfilled_commitment",
+          "timestamp": "2026-05-31T08:55:00+00:00",
+          "trust": 0.67613,
+          "overall_confidence": 0.022359999999999998,
+          "unknownness": 0.97764,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        },
+        {
+          "event_index": 8,
+          "event_id": "sd_008",
+          "event_type": "long_inactivity",
+          "timestamp": "2026-06-26T09:05:00+00:00",
+          "trust": 0.67613,
+          "overall_confidence": 0.00184,
+          "unknownness": 0.99816,
+          "freshness": 1.0,
+          "contradiction_load": 0.0
+        }
+      ]
+    }
+  ],
+  "trajectory_metrics": {
+    "aggregate": {
+      "average_trust_trajectory_span": 0.30806200000000006,
+      "average_contradiction_peak": 0.20690900449559999,
+      "recoverable_entity_count": 2,
+      "recovered_entity_count": 2,
+      "average_recovery_event_index": 7.5
+    },
+    "per_entity": [
+      {
+        "entity_id": "entity_stable_good_01",
+        "scenario": "stable_good_actor",
+        "first_impression_event_index": 3,
+        "recovery_event_index": null,
+        "trust_trajectory_span": 0.38480000000000003,
+        "contradiction_peak": 0.0
+      },
+      {
+        "entity_id": "entity_false_positive_01",
+        "scenario": "false_positive_first_impression",
+        "first_impression_event_index": 3,
+        "recovery_event_index": 10,
+        "trust_trajectory_span": 0.2563500000000002,
+        "contradiction_peak": 0.41495220000000005
+      },
+      {
+        "entity_id": "entity_false_negative_01",
+        "scenario": "false_negative_first_impression",
+        "first_impression_event_index": 3,
+        "recovery_event_index": 5,
+        "trust_trajectory_span": 0.632775,
+        "contradiction_peak": 0.0
+      },
+      {
+        "entity_id": "entity_high_contradiction_01",
+        "scenario": "high_contradiction_actor",
+        "first_impression_event_index": 3,
+        "recovery_event_index": null,
+        "trust_trajectory_span": 0.17866499999999996,
+        "contradiction_peak": 0.619592822478
+      },
+      {
+        "entity_id": "entity_sparse_data_01",
+        "scenario": "sparse_data_actor",
+        "first_impression_event_index": 3,
+        "recovery_event_index": null,
+        "trust_trajectory_span": 0.08772000000000002,
+        "contradiction_peak": 0.0
+      }
+    ]
+  }
+}

@@ -31,6 +31,19 @@ class AggregateMetrics:
 
 
 @dataclass(frozen=True)
+class TrajectoryPoint:
+    event_index: int
+    event_id: str
+    event_type: str
+    timestamp: str
+    trust: float
+    overall_confidence: float
+    unknownness: float
+    freshness: float
+    contradiction_load: float
+
+
+@dataclass(frozen=True)
 class MethodEvaluationSummary:
     method: str
     selected_path: str
@@ -132,6 +145,46 @@ def false_first_impression_recovery_proxy(
         1 for summary in relevant_summaries if is_false_first_impression_recovered(summary)
     )
     return recovered_count / len(relevant_summaries)
+
+
+def recovery_event_index(
+    scenario: str,
+    trajectory: list[TrajectoryPoint],
+    *,
+    first_impression_event_index: int,
+) -> int | None:
+    if scenario == "false_positive_first_impression":
+        for point in trajectory:
+            if point.event_index <= first_impression_event_index:
+                continue
+            if point.trust < TRUST_MIDPOINT:
+                return point.event_index
+        return None
+
+    if scenario == "false_negative_first_impression":
+        for point in trajectory:
+            if point.event_index <= first_impression_event_index:
+                continue
+            if point.trust > TRUST_MIDPOINT:
+                return point.event_index
+        return None
+
+    return None
+
+
+def trust_trajectory_span(trajectory: list[TrajectoryPoint]) -> float:
+    if not trajectory:
+        return 0.0
+
+    trust_values = [point.trust for point in trajectory]
+    return max(trust_values) - min(trust_values)
+
+
+def contradiction_peak(trajectory: list[TrajectoryPoint]) -> float:
+    if not trajectory:
+        return 0.0
+
+    return max(point.contradiction_load for point in trajectory)
 
 
 def summarize_metrics(entity_summaries: list[EntityEvaluationSummary]) -> AggregateMetrics:
