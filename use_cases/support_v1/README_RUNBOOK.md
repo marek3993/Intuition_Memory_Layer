@@ -99,7 +99,10 @@ py use_cases/support_v1/run_support_label_pack_comparison.py
 
 This flow reuses the labeled decision-point evaluation logic, writes `use_cases/support_v1/artifacts/support_label_pack_comparison.json`, and prints one compact accuracy table for `iml`, `calibrated_iml`, `naive_summary`, and `full_history` across every slice.
 
-It also writes `use_cases/support_v1/artifacts/support_label_pack_comparison.md`, a compact human-readable summary that calls out the winner on `pack_a`, `pack_b`, `pack_c`, `combined_ab`, and `combined_abc`, along with the key accuracy deltas, route-quality metrics, diagnostics, and one overall takeaway.
+It also writes:
+
+- `use_cases/support_v1/artifacts/support_label_pack_comparison.md`, a compact human-readable summary that calls out the winner on `pack_a`, `pack_b`, `pack_c`, `combined_ab`, and `combined_abc`, along with the key accuracy deltas, route-quality metrics, diagnostics, and one overall takeaway
+- `use_cases/support_v1/artifacts/support_label_pack_decision_memo.md`, a concise engineering recommendation memo that turns the comparison into an explicit winner summary, calibration readout, baseline position, main risks, and one recommended next step
 
 ## Quick inspection
 

@@ -46,6 +46,7 @@ PACK_C_CASES_PATH = SCRIPT_DIR / "sample_support_cases_pack_c.json"
 PACK_C_LABELS_PATH = SCRIPT_DIR / "sample_support_labels_pack_c.json"
 EXPORT_PATH = ARTIFACTS_DIR / "support_label_pack_comparison.json"
 MARKDOWN_EXPORT_PATH = ARTIFACTS_DIR / "support_label_pack_comparison.md"
+DECISION_MEMO_EXPORT_PATH = ARTIFACTS_DIR / "support_label_pack_decision_memo.md"
 ROUTE_QUALITY_FIELDS: tuple[str, ...] = (
     "fast_path_precision",
     "fast_path_recall",
@@ -58,6 +59,7 @@ METHOD_NAMES: tuple[str, ...] = (
     "naive_summary",
     "full_history",
 )
+ACCURACY_TOLERANCE = 1e-12
 
 
 def assert_unique_values(
@@ -245,13 +247,17 @@ def format_delta(value: float) -> str:
     return format_percent(0.0)
 
 
+def accuracies_match(left: float, right: float) -> bool:
+    return abs(left - right) <= ACCURACY_TOLERANCE
+
+
 def get_slice_winners(slice_result: dict[str, Any]) -> list[str]:
     accuracies = slice_result["accuracies"]
     highest_accuracy = max(float(accuracies[method_name]) for method_name in METHOD_NAMES)
     return [
         method_name
         for method_name in METHOD_NAMES
-        if float(accuracies[method_name]) == highest_accuracy
+        if accuracies_match(float(accuracies[method_name]), highest_accuracy)
     ]
 
 
@@ -259,6 +265,25 @@ def format_winner_text(winners: Sequence[str]) -> str:
     if len(winners) == 1:
         return winners[0]
     return f"Tie: {', '.join(winners)}"
+
+
+def format_method_list(method_names: Sequence[str]) -> str:
+    if not method_names:
+        return ""
+    quoted_names = [f"`{method_name}`" for method_name in method_names]
+    if len(quoted_names) == 1:
+        return quoted_names[0]
+    if len(quoted_names) == 2:
+        return f"{quoted_names[0]} and {quoted_names[1]}"
+    return f"{', '.join(quoted_names[:-1])}, and {quoted_names[-1]}"
+
+
+def compare_accuracy(active_accuracy: float, baseline_accuracy: float) -> str:
+    if accuracies_match(active_accuracy, baseline_accuracy):
+        return "ties"
+    if active_accuracy > baseline_accuracy:
+        return "beats"
+    return "loses to"
 
 
 def build_win_stats(
@@ -396,6 +421,234 @@ def build_takeaway(slice_results: Sequence[dict[str, Any]]) -> str:
     return "No single method dominates every slice; the results stay slice-dependent."
 
 
+def build_winner_summary_lines(slice_results: Sequence[dict[str, Any]]) -> list[str]:
+    lines: list[str] = ["## Current Winner Summary", ""]
+
+    for slice_result in slice_results:
+        winners = get_slice_winners(slice_result)
+        winning_accuracy = max(
+            float(slice_result["accuracies"][method_name]) for method_name in METHOD_NAMES
+        )
+        if len(winners) == 1:
+            lines.append(
+                f"- `{slice_result['slice_name']}`: {format_method_list(winners)} wins by accuracy at {format_percent(winning_accuracy)}."
+            )
+            continue
+        lines.append(
+            f"- `{slice_result['slice_name']}`: tied at {format_percent(winning_accuracy)} across {format_method_list(winners)}."
+        )
+
+    lines.append("")
+    return lines
+
+
+def build_calibration_effect_lines(slice_results: Sequence[dict[str, Any]]) -> list[str]:
+    lines: list[str] = ["## Calibration Effect Summary", ""]
+    improved_slices = 0
+    tied_slices = 0
+
+    for slice_result in slice_results:
+        calibrated_accuracy = float(slice_result["accuracies"]["calibrated_iml"])
+        default_accuracy = float(slice_result["accuracies"]["iml"])
+        delta = calibrated_accuracy - default_accuracy
+        relation = compare_accuracy(calibrated_accuracy, default_accuracy)
+        if relation == "beats":
+            improved_slices += 1
+        elif relation == "ties":
+            tied_slices += 1
+        lines.append(
+            (
+                f"- `{slice_result['slice_name']}`: calibrated IML {relation} default IML "
+                f"by {format_delta(delta)} ({format_percent(calibrated_accuracy)} vs {format_percent(default_accuracy)})."
+            )
+        )
+
+    overall_label = "consistent" if improved_slices == len(slice_results) else "mixed"
+    lines.append(
+        (
+            f"- Overall: improvement is {overall_label}; calibrated IML beats default IML on "
+            f"{improved_slices} of {len(slice_results)} slices and ties on {tied_slices} of {len(slice_results)} slices."
+        )
+    )
+    lines.append("")
+    return lines
+
+
+def build_baseline_position_lines(slice_results: Sequence[dict[str, Any]]) -> list[str]:
+    lines: list[str] = ["## Baseline Position Summary", ""]
+    beats_both_count = 0
+
+    for slice_result in slice_results:
+        calibrated_accuracy = float(slice_result["accuracies"]["calibrated_iml"])
+        naive_accuracy = float(slice_result["accuracies"]["naive_summary"])
+        full_history_accuracy = float(slice_result["accuracies"]["full_history"])
+        beats_naive = calibrated_accuracy > naive_accuracy and not accuracies_match(
+            calibrated_accuracy, naive_accuracy
+        )
+        beats_full_history = calibrated_accuracy > full_history_accuracy and not accuracies_match(
+            calibrated_accuracy, full_history_accuracy
+        )
+
+        if beats_naive and beats_full_history:
+            beats_both_count += 1
+            lines.append(
+                f"- `{slice_result['slice_name']}`: calibrated IML beats both baselines."
+            )
+            continue
+
+        lines.append(
+            (
+                f"- `{slice_result['slice_name']}`: calibrated IML "
+                f"{compare_accuracy(calibrated_accuracy, naive_accuracy)} `naive_summary` and "
+                f"{compare_accuracy(calibrated_accuracy, full_history_accuracy)} `full_history`."
+            )
+        )
+
+    lines.append(
+        f"- Overall: calibrated IML beats both baselines on {beats_both_count} of {len(slice_results)} slices."
+    )
+    lines.append("")
+    return lines
+
+
+def build_main_risk_lines(slice_results: Sequence[dict[str, Any]]) -> list[str]:
+    lines: list[str] = ["## Main Risks", ""]
+    small_sample_slices = [
+        f"`{slice_result['slice_name']}` ({slice_result['total_labels']} labels)"
+        for slice_result in slice_results
+        if slice_result["total_labels"] < 10
+    ]
+    if small_sample_slices:
+        lines.append(
+            f"- Small sample size remains a risk on {', '.join(small_sample_slices)}."
+        )
+
+    non_outright_wins = [
+        f"`{slice_result['slice_name']}`"
+        for slice_result in slice_results
+        if "calibrated_iml" not in get_slice_winners(slice_result)
+        or len(get_slice_winners(slice_result)) > 1
+    ]
+    if non_outright_wins:
+        lines.append(
+            (
+                "- Calibrated IML is not an outright winner on every slice; "
+                f"the comparison stays mixed on {', '.join(non_outright_wins)}."
+            )
+        )
+
+    baseline_competitive_slices: list[str] = []
+    for slice_result in slice_results:
+        calibrated_accuracy = float(slice_result["accuracies"]["calibrated_iml"])
+        baseline_notes: list[str] = []
+        for baseline_name in ("naive_summary", "full_history"):
+            baseline_accuracy = float(slice_result["accuracies"][baseline_name])
+            relation = compare_accuracy(calibrated_accuracy, baseline_accuracy)
+            if relation != "beats":
+                baseline_notes.append(f"{relation} `{baseline_name}`")
+        if baseline_notes:
+            baseline_competitive_slices.append(
+                f"`{slice_result['slice_name']}` ({'; '.join(baseline_notes)})"
+            )
+    if baseline_competitive_slices:
+        lines.append(
+            (
+                "- Baselines remain competitive on "
+                f"{', '.join(baseline_competitive_slices)}."
+            )
+        )
+
+    if len(lines) == 2:
+        lines.append("- No additional material risk signal appears in the current slice comparison.")
+
+    lines.append("")
+    return lines
+
+
+def choose_recommended_next_step(slice_results: Sequence[dict[str, Any]]) -> tuple[str, str]:
+    small_sample_count = sum(1 for slice_result in slice_results if slice_result["total_labels"] < 10)
+    calibrated_losses_to_baseline = 0
+    calibrated_ties_to_baseline = 0
+    calibrated_losses_to_default = 0
+    combined_abc_result = next(
+        (
+            slice_result
+            for slice_result in slice_results
+            if slice_result["slice_name"] == "combined_abc"
+        ),
+        None,
+    )
+
+    for slice_result in slice_results:
+        calibrated_accuracy = float(slice_result["accuracies"]["calibrated_iml"])
+        default_accuracy = float(slice_result["accuracies"]["iml"])
+        if calibrated_accuracy < default_accuracy and not accuracies_match(
+            calibrated_accuracy, default_accuracy
+        ):
+            calibrated_losses_to_default += 1
+
+        for baseline_name in ("naive_summary", "full_history"):
+            baseline_accuracy = float(slice_result["accuracies"][baseline_name])
+            relation = compare_accuracy(calibrated_accuracy, baseline_accuracy)
+            if relation == "loses to":
+                calibrated_losses_to_baseline += 1
+            elif relation == "ties":
+                calibrated_ties_to_baseline += 1
+
+    if combined_abc_result is not None:
+        combined_default_accuracy = float(combined_abc_result["accuracies"]["iml"])
+        combined_calibrated_accuracy = float(combined_abc_result["accuracies"]["calibrated_iml"])
+        combined_naive_accuracy = float(combined_abc_result["accuracies"]["naive_summary"])
+        combined_full_history_accuracy = float(combined_abc_result["accuracies"]["full_history"])
+        combined_baseline_best = max(combined_naive_accuracy, combined_full_history_accuracy)
+        if (
+            combined_calibrated_accuracy < combined_baseline_best
+            and not accuracies_match(combined_calibrated_accuracy, combined_baseline_best)
+            and combined_default_accuracy < combined_baseline_best
+            and not accuracies_match(combined_default_accuracy, combined_baseline_best)
+        ):
+            return (
+                "revisit event mapping",
+                "Both default and calibrated IML trail the baseline ceiling on the largest combined slice, which points to a mapping problem rather than a calibration-only issue.",
+            )
+    if calibrated_losses_to_default or calibrated_losses_to_baseline >= 2:
+        return (
+            "refine calibration",
+            "Current results still show calibration losses or repeated baseline deficits, so the calibration policy needs another pass before wider rollout.",
+        )
+    if small_sample_count or calibrated_ties_to_baseline:
+        return (
+            "hold current calibration and validate on larger slice",
+            "Calibrated IML leads the combined slices and does not post a clear loss, but small-slice ties mean the recommendation still needs confirmation on more labels.",
+        )
+    return (
+        "expand labeled data",
+        "Calibrated IML is already ahead in the current comparison, so the next constraint is coverage rather than another immediate tuning loop.",
+    )
+
+
+def build_decision_memo(slice_results: Sequence[dict[str, Any]]) -> str:
+    recommended_next_step, recommendation_reason = choose_recommended_next_step(slice_results)
+    lines = [
+        "# Support V1 Pack Comparison Decision Memo",
+        "",
+    ]
+    lines.extend(build_winner_summary_lines(slice_results))
+    lines.extend(build_calibration_effect_lines(slice_results))
+    lines.extend(build_baseline_position_lines(slice_results))
+    lines.extend(build_main_risk_lines(slice_results))
+    lines.extend(
+        [
+            "## Recommended Next Step",
+            "",
+            f"- {recommended_next_step}",
+            f"- Rationale: {recommendation_reason}",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
 def build_markdown_report(slice_results: Sequence[dict[str, Any]]) -> str:
     outright_wins, tied_slices = build_win_stats(slice_results)
     max_wins = max(outright_wins.values())
@@ -459,6 +712,7 @@ def build_export_payload(slice_results: Sequence[dict[str, Any]]) -> dict[str, A
             "runner_path": project_relative_path(Path(__file__).resolve()),
             "export_path": project_relative_path(EXPORT_PATH),
             "markdown_export_path": project_relative_path(MARKDOWN_EXPORT_PATH),
+            "decision_memo_export_path": project_relative_path(DECISION_MEMO_EXPORT_PATH),
             "slice_names": [slice_result["slice_name"] for slice_result in slice_results],
             "calibration": {
                 "name": CALIBRATION_NAME,
@@ -501,7 +755,26 @@ def export_markdown_report(markdown_report: str) -> Path:
     return MARKDOWN_EXPORT_PATH
 
 
-def print_summary_table(slice_results: Sequence[dict[str, Any]]) -> None:
+def export_decision_memo(decision_memo: str) -> Path:
+    ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
+    temp_export_path = DECISION_MEMO_EXPORT_PATH.with_name(
+        f"{DECISION_MEMO_EXPORT_PATH.stem}.{uuid4().hex}.tmp"
+    )
+    with temp_export_path.open("w", encoding="utf-8") as handle:
+        handle.write(decision_memo)
+        if not decision_memo.endswith("\n"):
+            handle.write("\n")
+    temp_export_path.replace(DECISION_MEMO_EXPORT_PATH)
+    return DECISION_MEMO_EXPORT_PATH
+
+
+def print_summary_table(
+    slice_results: Sequence[dict[str, Any]],
+    *,
+    json_artifact_path: Path,
+    markdown_artifact_path: Path,
+    decision_memo_artifact_path: Path,
+) -> None:
     rows = [
         (
             slice_result["slice_name"],
@@ -536,8 +809,9 @@ def print_summary_table(slice_results: Sequence[dict[str, Any]]) -> None:
     print("-+-".join("-" * width for width in widths))
     for row in rows:
         print(format_row(row))
-    print(f"json_artifact: {project_relative_path(EXPORT_PATH)}")
-    print(f"markdown_artifact: {project_relative_path(MARKDOWN_EXPORT_PATH)}")
+    print(f"json_artifact: {project_relative_path(json_artifact_path)}")
+    print(f"markdown_artifact: {project_relative_path(markdown_artifact_path)}")
+    print(f"decision_memo_artifact: {project_relative_path(decision_memo_artifact_path)}")
 
 
 def main() -> None:
@@ -570,9 +844,16 @@ def main() -> None:
     ]
     export_payload = build_export_payload(slice_results)
     markdown_report = build_markdown_report(slice_results)
-    export_results(export_payload)
-    export_markdown_report(markdown_report)
-    print_summary_table(slice_results)
+    decision_memo = build_decision_memo(slice_results)
+    json_artifact_path = export_results(export_payload)
+    markdown_artifact_path = export_markdown_report(markdown_report)
+    decision_memo_artifact_path = export_decision_memo(decision_memo)
+    print_summary_table(
+        slice_results,
+        json_artifact_path=json_artifact_path,
+        markdown_artifact_path=markdown_artifact_path,
+        decision_memo_artifact_path=decision_memo_artifact_path,
+    )
 
 
 if __name__ == "__main__":
