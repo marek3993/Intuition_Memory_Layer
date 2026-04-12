@@ -1,0 +1,57 @@
+{
+  "label_set_name": "support_v1_sample_labels_pack_b",
+  "labels": [
+    {
+      "label_id": "support_pack_b_label_001",
+      "entity_id": "acct_summitgrid",
+      "ticket_id": "SG-6179",
+      "decision_timestamp": "2026-02-18T14:40:00+00:00",
+      "should_route": "fast_path",
+      "note": "The requester already completed the requested certificate refresh inside the same ticket, and the visible entity history is cooperative and recent."
+    },
+    {
+      "label_id": "support_pack_b_label_002",
+      "entity_id": "acct_summitgrid",
+      "ticket_id": "SG-6248",
+      "decision_timestamp": "2026-04-11T17:30:00+00:00",
+      "should_route": "deep_path",
+      "profile_too_stale": true,
+      "note": "Earlier cooperation is now stale after a long gap, and the current ticket is still sparse with the requested traceroute capture missing at the deadline."
+    },
+    {
+      "label_id": "support_pack_b_label_003",
+      "entity_id": "acct_maplecrest",
+      "ticket_id": "MC-7164",
+      "decision_timestamp": "2026-03-03T15:05:00+00:00",
+      "should_route": "fast_path",
+      "note": "The requester supplied the replay token and headers quickly, so the visible history still supports routine low-stakes handling."
+    },
+    {
+      "label_id": "support_pack_b_label_004",
+      "entity_id": "acct_maplecrest",
+      "ticket_id": "MC-7218",
+      "decision_timestamp": "2026-03-27T10:10:00+00:00",
+      "should_route": "fast_path",
+      "note": "This ticket already has strong context plus the requested payload sample, and the surrounding account history remains consistently cooperative."
+    },
+    {
+      "label_id": "support_pack_b_label_005",
+      "entity_id": "acct_ironvale",
+      "ticket_id": "IV-8220",
+      "decision_timestamp": "2026-04-04T16:55:00+00:00",
+      "should_route": "deep_path",
+      "contradiction_present": true,
+      "wrong_first_impression": true,
+      "note": "The ticket initially looked routine because the requester promptly supplied the audit package, but the reopened claim now directly conflicts with that same evidence."
+    },
+    {
+      "label_id": "support_pack_b_label_006",
+      "entity_id": "acct_oakchannel",
+      "ticket_id": "OC-9088",
+      "decision_timestamp": "2026-03-27T18:25:00+00:00",
+      "should_route": "deep_path",
+      "contradiction_present": true,
+      "note": "The customer kept pushing for release without the promised loading evidence, and QA has now identified a contradiction against the signed route audit."
+    }
+  ]
+}

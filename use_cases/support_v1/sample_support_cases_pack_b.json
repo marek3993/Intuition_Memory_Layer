@@ -1,0 +1,502 @@
+{
+  "dataset_name": "support_v1_sample_pack_b",
+  "entity_type": "support_account",
+  "entities": [
+    {
+      "entity_id": "acct_summitgrid",
+      "account_name": "SummitGrid Analytics",
+      "segment": "enterprise",
+      "cases": [
+        {
+          "case_id": "SG-6102",
+          "opened_at": "2026-01-08T09:10:00+00:00",
+          "closed_at": "2026-01-09T15:40:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Report scheduler skipped a timezone offset after maintenance",
+          "records": [
+            {
+              "record_id": "SG-6102-R1",
+              "timestamp": "2026-01-08T09:14:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_offset_details",
+              "details": "Analytics manager included the workspace ID, cron window, and the incorrect timezone offset.",
+              "metadata": {
+                "initial_context_quality": "complete"
+              }
+            },
+            {
+              "record_id": "SG-6102-R2",
+              "timestamp": "2026-01-08T13:25:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "scheduler_logs_uploaded",
+              "details": "Customer uploaded the requested scheduler logs and affected job IDs.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "SG-6102-R3",
+              "timestamp": "2026-01-09T15:40:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "scheduler_offset_restored",
+              "details": "Customer confirmed the scheduler fired on the expected local time after the fix.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "SG-6179",
+          "opened_at": "2026-02-18T10:00:00+00:00",
+          "closed_at": "2026-02-19T16:10:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Warehouse export retry succeeded after certificate refresh",
+          "records": [
+            {
+              "record_id": "SG-6179-R1",
+              "timestamp": "2026-02-18T10:03:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_export_ids",
+              "details": "Operations lead included the export job IDs, target endpoint, and the recent certificate rotation window.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "SG-6179-R2",
+              "timestamp": "2026-02-18T14:40:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "completed_requested_step",
+              "outcome": "certificate_refresh_completed",
+              "details": "Customer completed the requested certificate refresh and reran the export during the same shift.",
+              "metadata": {}
+            },
+            {
+              "record_id": "SG-6179-R3",
+              "timestamp": "2026-02-19T16:10:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "warehouse_export_restored",
+              "details": "Customer confirmed the export retry completed successfully after the certificate refresh.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "SG-6248",
+          "opened_at": "2026-04-05T08:20:00+00:00",
+          "closed_at": "2026-04-11T17:30:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Regional replication lag pending requested traceroute capture",
+          "records": [
+            {
+              "record_id": "SG-6248-R1",
+              "timestamp": "2026-04-05T08:20:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "lag_reported_without_capture",
+              "details": "Customer reported rising replication lag but only included the region pair and a short note from the overnight team.",
+              "metadata": {
+                "initial_context_quality": "partial"
+              }
+            },
+            {
+              "record_id": "SG-6248-R2",
+              "timestamp": "2026-04-11T17:30:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "system_timer",
+              "actor_role": "system",
+              "raw_action": "request_deadline_missed",
+              "outcome": "traceroute_capture_not_received",
+              "details": "No traceroute capture or latency sample arrived before the requested deadline.",
+              "metadata": {
+                "missed_request_count": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_maplecrest",
+      "account_name": "Maplecrest Commerce",
+      "segment": "mid_market",
+      "cases": [
+        {
+          "case_id": "MC-7101",
+          "opened_at": "2026-01-20T11:05:00+00:00",
+          "closed_at": "2026-01-22T09:50:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Refund export mismatch resolved after order sample review",
+          "records": [
+            {
+              "record_id": "MC-7101-R1",
+              "timestamp": "2026-01-20T11:09:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_batch_context",
+              "details": "Billing lead included the refund batch ID, order count, and the affected export date.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "MC-7101-R2",
+              "timestamp": "2026-01-21T08:35:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "order_sample_uploaded",
+              "details": "Customer uploaded the requested order sample and reconciliation notes before the next business day.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "MC-7101-R3",
+              "timestamp": "2026-01-22T09:50:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "refund_export_balanced",
+              "details": "Customer confirmed the regenerated refund export matched their ledger totals.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "MC-7164",
+          "opened_at": "2026-03-03T09:30:00+00:00",
+          "closed_at": "2026-03-04T12:45:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Inventory sync delay cleared after replay token test",
+          "records": [
+            {
+              "record_id": "MC-7164-R1",
+              "timestamp": "2026-03-03T09:34:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_retry_window",
+              "details": "Customer supplied the sync job name, failed retry IDs, and the deployment window when the lag started.",
+              "metadata": {
+                "initial_context_quality": "complete"
+              }
+            },
+            {
+              "record_id": "MC-7164-R2",
+              "timestamp": "2026-03-03T15:05:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "replay_token_and_headers_uploaded",
+              "details": "Customer quickly attached the replay token, request headers, and a short reproduction note.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "MC-7164-R3",
+              "timestamp": "2026-03-04T12:45:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "inventory_sync_restored",
+              "details": "Customer confirmed the inventory sync delay cleared after support replayed the token path.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "MC-7218",
+          "opened_at": "2026-03-27T07:50:00+00:00",
+          "closed_at": "2026-03-28T11:20:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Promotion feed mismatch isolated with requested payload sample",
+          "records": [
+            {
+              "record_id": "MC-7218-R1",
+              "timestamp": "2026-03-27T07:54:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_feed_context",
+              "details": "Customer included the promotion feed ID, storefront region, and the last known good publish time.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "MC-7218-R2",
+              "timestamp": "2026-03-27T10:10:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "payload_sample_uploaded",
+              "details": "Customer attached the requested payload sample, transform output, and one failing SKU set.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "MC-7218-R3",
+              "timestamp": "2026-03-28T11:20:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "completed_requested_step",
+              "outcome": "promotion_feed_replay_validated",
+              "details": "Customer completed the requested replay test and confirmed the corrected feed output.",
+              "metadata": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_ironvale",
+      "account_name": "Ironvale Systems",
+      "segment": "mid_market",
+      "cases": [
+        {
+          "case_id": "IV-8104",
+          "opened_at": "2026-02-11T13:15:00+00:00",
+          "closed_at": "2026-02-12T17:35:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Directory sync alert cleared after attribute remap",
+          "records": [
+            {
+              "record_id": "IV-8104-R1",
+              "timestamp": "2026-02-11T13:18:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_tenant_context",
+              "details": "Customer included the tenant ID, failing directory group, and the recent attribute mapping change.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "IV-8104-R2",
+              "timestamp": "2026-02-12T09:05:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "attribute_map_and_logs_uploaded",
+              "details": "Customer returned the requested attribute map and sync logs on the next morning.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "IV-8104-R3",
+              "timestamp": "2026-02-12T17:35:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "directory_sync_restored",
+              "details": "Customer confirmed the remapped attribute fixed the sync alert.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "IV-8220",
+          "opened_at": "2026-04-02T10:40:00+00:00",
+          "closed_at": "2026-04-04T16:55:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Provisioning exception reopened with claim that conflicts with provided audit package",
+          "records": [
+            {
+              "record_id": "IV-8220-R1",
+              "timestamp": "2026-04-02T10:43:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_user_ids",
+              "details": "Customer opened the escalation with user IDs, provisioning batch number, and a brief request for rollback.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "IV-8220-R2",
+              "timestamp": "2026-04-03T09:30:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "audit_package_uploaded",
+              "details": "Customer promptly attached the requested audit package and the original provisioning spreadsheet.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "IV-8220-R3",
+              "timestamp": "2026-04-04T16:55:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "qa_review",
+              "actor_role": "qa",
+              "raw_action": "reopened_with_conflicting_claim",
+              "outcome": "rollback_request_conflicts_with_uploaded_audit_package",
+              "details": "QA confirmed the customer's reopened claim contradicted the same audit package they had supplied one day earlier.",
+              "metadata": {
+                "severity": "high"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity_id": "acct_oakchannel",
+      "account_name": "OakChannel Logistics",
+      "segment": "enterprise",
+      "cases": [
+        {
+          "case_id": "OC-9005",
+          "opened_at": "2026-01-15T07:40:00+00:00",
+          "closed_at": "2026-01-16T13:10:00+00:00",
+          "channel": "email",
+          "priority": "normal",
+          "summary": "Manifest import resumed after delimiter sample review",
+          "records": [
+            {
+              "record_id": "OC-9005-R1",
+              "timestamp": "2026-01-15T07:44:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "issue_reported_with_manifest_context",
+              "details": "Customer included the manifest ID, connector version, and one malformed line example.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "OC-9005-R2",
+              "timestamp": "2026-01-15T11:05:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "provided_requested_info",
+              "outcome": "delimiter_sample_uploaded",
+              "details": "Customer uploaded the requested delimiter sample and cleaned manifest excerpt during the same morning.",
+              "metadata": {
+                "response_quality": "complete",
+                "fulfills_request": true
+              }
+            },
+            {
+              "record_id": "OC-9005-R3",
+              "timestamp": "2026-01-16T13:10:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "status_change",
+              "actor_role": "requester",
+              "raw_action": "confirmed_fix",
+              "outcome": "manifest_import_resumed",
+              "details": "Customer confirmed the manifest import resumed after the parser fix.",
+              "metadata": {}
+            }
+          ]
+        },
+        {
+          "case_id": "OC-9088",
+          "opened_at": "2026-03-25T12:15:00+00:00",
+          "closed_at": "2026-03-27T18:25:00+00:00",
+          "channel": "email",
+          "priority": "high",
+          "summary": "Delivery hold dispute escalated without promised loading evidence",
+          "records": [
+            {
+              "record_id": "OC-9088-R1",
+              "timestamp": "2026-03-25T12:18:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "ticket_opened",
+              "outcome": "hold_dispute_reported",
+              "details": "Customer opened the case with shipment IDs, route number, and a short claim that the hold was applied incorrectly.",
+              "metadata": {
+                "initial_context_quality": "useful"
+              }
+            },
+            {
+              "record_id": "OC-9088-R2",
+              "timestamp": "2026-03-26T09:40:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "ticket_comment",
+              "actor_role": "requester",
+              "raw_action": "followed_up_without_requested_info",
+              "outcome": "asked_for_release_without_loading_scan",
+              "details": "Customer pushed for a faster release but still did not attach the promised loading scan or dock log.",
+              "metadata": {
+                "missing_item_count": 2
+              }
+            },
+            {
+              "record_id": "OC-9088-R3",
+              "timestamp": "2026-03-27T18:25:00+00:00",
+              "source_system": "helpdesk_demo",
+              "source_type": "qa_review",
+              "actor_role": "qa",
+              "raw_action": "qa_marked_contradiction",
+              "outcome": "release_request_conflicts_with_prior_hold_acknowledgement",
+              "details": "QA found the customer had already acknowledged the same delivery hold in the signed route audit.",
+              "metadata": {
+                "severity": "medium"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
