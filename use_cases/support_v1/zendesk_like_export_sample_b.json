@@ -1,0 +1,236 @@
+{
+  "export_name": "zendesk_like_support_export_sample_b",
+  "exported_at": "2026-04-13T08:30:00+00:00",
+  "source_system": "zendesk_like",
+  "organizations": [
+    {
+      "organization_id": 9201,
+      "entity_id": "acct_northstar",
+      "external_account_id": "001RP00002821",
+      "name": "Northstar Commerce",
+      "details": {
+        "segment": "smb",
+        "plan_tier": "growth"
+      }
+    },
+    {
+      "organization_id": 9202,
+      "entity_id": "acct_orchard",
+      "external_account_id": "001RP00002822",
+      "name": "Orchard Clinical Ops",
+      "details": {
+        "segment": "enterprise",
+        "plan_tier": "regulated_plus"
+      }
+    }
+  ],
+  "users": [
+    {
+      "user_id": 2101,
+      "role": "end_user",
+      "name": "Iris Cole",
+      "email": "iris.cole@northstar.example",
+      "organization_id": 9201,
+      "tags": [
+        "ops_admin"
+      ]
+    },
+    {
+      "user_id": 2102,
+      "role": "end_user",
+      "name": "Evan Ross",
+      "email": "evan.ross@orchard.example",
+      "organization_id": 9202,
+      "tags": [
+        "support_contact"
+      ]
+    },
+    {
+      "user_id": 3101,
+      "role": "agent",
+      "name": "Kara Lin",
+      "group_name": "Technical Support"
+    },
+    {
+      "user_id": 5101,
+      "role": "qa",
+      "name": "Owen Blake",
+      "group_name": "Support QA"
+    }
+  ],
+  "tickets": [
+    {
+      "id": 22041,
+      "external_id": "NS-22041",
+      "subject": "Catalog sync resumed after customer supplied the requested payload diff",
+      "requester_id": 2101,
+      "organization_id": 9201,
+      "assignee_id": 3101,
+      "created_at": "2026-03-04T09:00:00+00:00",
+      "updated_at": "2026-03-05T12:00:00+00:00",
+      "closed_at": "2026-03-05T12:00:00+00:00",
+      "status": "solved",
+      "priority": "normal",
+      "via": {
+        "channel": "email"
+      },
+      "tags": [
+        "catalog_sync",
+        "payload_diff"
+      ],
+      "ticket_form": {
+        "id": "technical_issue",
+        "name": "Technical Issue"
+      },
+      "custom_fields": {
+        "product_area": "catalog",
+        "environment": "production"
+      }
+    },
+    {
+      "id": 44102,
+      "external_id": "OC-44102",
+      "subject": "Reopened audit export dispute still lacks the requested evidence bundle",
+      "requester_id": 2102,
+      "organization_id": 9202,
+      "assignee_id": 3101,
+      "created_at": "2026-03-22T10:20:00+00:00",
+      "updated_at": "2026-03-24T15:45:00+00:00",
+      "closed_at": "2026-03-24T15:45:00+00:00",
+      "status": "closed",
+      "priority": "high",
+      "via": {
+        "channel": "web"
+      },
+      "tags": [
+        "audit_export",
+        "reopened"
+      ],
+      "ticket_form": {
+        "id": "regulated_support",
+        "name": "Compliance Issue"
+      },
+      "custom_fields": {
+        "product_area": "exports",
+        "environment": "production"
+      }
+    }
+  ],
+  "comments": [
+    {
+      "comment_id": "22041-c1",
+      "ticket_id": 22041,
+      "created_at": "2026-03-04T09:02:00+00:00",
+      "author_id": 2101,
+      "public": true,
+      "body": "Northstar opened with the catalog job ID, the affected storefront IDs, and the exact sync window.",
+      "metadata": {
+        "initial_context_quality": "complete",
+        "thread_id": "zd-thread-22041"
+      }
+    },
+    {
+      "comment_id": "22041-c2",
+      "ticket_id": 22041,
+      "created_at": "2026-03-04T09:20:00+00:00",
+      "author_id": 3101,
+      "public": true,
+      "body": "Support requested one before and after payload diff and the failing catalog sample.",
+      "metadata": {
+        "request_id": "diag-22041",
+        "requested_items": [
+          "payload_diff",
+          "catalog_sample"
+        ]
+      }
+    },
+    {
+      "comment_id": "22041-c3",
+      "ticket_id": 22041,
+      "created_at": "2026-03-04T10:10:00+00:00",
+      "author_id": 2101,
+      "public": true,
+      "body": "The customer uploaded the requested diff and sample payload within the hour.",
+      "metadata": {
+        "response_quality": "complete",
+        "fulfills_request": true,
+        "requested_item": "payload_diff",
+        "attachment_count": 2
+      }
+    },
+    {
+      "comment_id": "44102-c1",
+      "ticket_id": 44102,
+      "created_at": "2026-03-22T10:24:00+00:00",
+      "author_id": 2102,
+      "public": true,
+      "body": "Orchard reopened the audit export issue with the prior case ID and a short note that the mismatch remained.",
+      "metadata": {
+        "initial_context_quality": "useful",
+        "reopened_from_ticket_id": 43880
+      }
+    },
+    {
+      "comment_id": "44102-c2",
+      "ticket_id": 44102,
+      "created_at": "2026-03-22T10:50:00+00:00",
+      "author_id": 3101,
+      "public": true,
+      "body": "Support requested the signed audit bundle and one before and after export row pair.",
+      "metadata": {
+        "request_id": "diag-44102",
+        "requested_items": [
+          "signed_audit_bundle",
+          "export_row_pair"
+        ]
+      }
+    },
+    {
+      "comment_id": "44102-c3",
+      "ticket_id": 44102,
+      "created_at": "2026-03-23T13:15:00+00:00",
+      "author_id": 2102,
+      "public": true,
+      "body": "The requester followed up without attaching the requested bundle or the export row pair.",
+      "metadata": {
+        "followup_without_requested_info": true,
+        "missing_item_count": 2,
+        "missing_items": [
+          "signed_audit_bundle",
+          "export_row_pair"
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "event_id": "22041-e1",
+      "ticket_id": 22041,
+      "created_at": "2026-03-05T12:00:00+00:00",
+      "type": "status_change",
+      "author_id": 2101,
+      "note": "The customer confirmed the catalog sync completed normally after the diff was applied.",
+      "metadata": {
+        "raw_action_hint": "confirmed_fix",
+        "resolution_code": "fixed",
+        "status": {
+          "from": "open",
+          "to": "solved"
+        }
+      }
+    },
+    {
+      "event_id": "44102-e1",
+      "ticket_id": 44102,
+      "created_at": "2026-03-24T15:45:00+00:00",
+      "type": "qa_review",
+      "author_id": 5101,
+      "note": "QA marked the reopened claim as conflicting with the prior closure because the requested evidence bundle never arrived.",
+      "metadata": {
+        "raw_action_hint": "qa_marked_contradiction",
+        "severity": "high",
+        "review_id": "qa-44102"
+      }
+    }
+  ]
+}
