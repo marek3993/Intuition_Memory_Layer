@@ -2,6 +2,24 @@
 
 Run commands from the repository root.
 
+## Master guide PDF builder
+
+Build the two print-friendly master guides into PDF artifacts:
+
+```powershell
+python use_cases/support_v1/build_support_v1_pdf_guides.py
+```
+
+This builder reads:
+
+- `use_cases/support_v1/SUPPORT_V1_MASTER_GUIDE_FOR_PDF.md`
+- `use_cases/support_v1/SUPPORT_V1_MASTER_GUIDE_SK_FOR_PDF.md`
+
+and writes:
+
+- `use_cases/support_v1/artifacts/support_v1_master_guide.pdf`
+- `use_cases/support_v1/artifacts/support_v1_master_guide_sk.pdf`
+
 ## Real pilot workspace initializer
 
 Create one clean working folder for a first real pilot, preloaded with the core intake templates, decision docs, runbooks, references, the latest mode-specific evaluation artifacts, and the latest pilot package and handoff bundle when they already exist:
