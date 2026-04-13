@@ -442,6 +442,21 @@ This builder adds:
 
 It reads the existing bundle folders under `use_cases/support_v1/artifacts/pilot_packages/` and `use_cases/support_v1/artifacts/pilot_handoff_bundles/`, uses `validation_result.json` when present, and does not rerun validation automatically.
 
+## Real pilot workspace summary builder
+
+Build one compact top-level readiness snapshot across the existing real pilot workspaces:
+
+```powershell
+py use_cases/support_v1/build_support_v1_real_pilot_workspace_summary.py
+```
+
+This builder adds:
+
+- `use_cases/support_v1/artifacts/support_v1_real_pilot_workspace_summary.json`, a machine-readable workspace-readiness snapshot covering total workspaces found, validated pass/fail counts, missing validation count, latest validated workspace per mode when present, latest workspace overall, and a compact PASS/FAIL/WARN overview by workspace path
+- `use_cases/support_v1/artifacts/support_v1_real_pilot_workspace_summary.md`, a compact human-readable summary of the same workspace readiness signals
+
+It reads the existing workspace folders under `use_cases/support_v1/artifacts/real_pilot_workspaces/`, uses `validation_result.json` when present, and does not rerun workspace validation automatically.
+
 ## Quick inspection
 
 Inspect the latest decision-point artifact with PowerShell:
