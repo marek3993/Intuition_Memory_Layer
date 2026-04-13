@@ -56,6 +56,8 @@ from run_support_zendesk_like_pack_comparison import (
     ZENDESK_SAMPLE_A_PATH,
     ZENDESK_SAMPLE_B_LABELS_PATH,
     ZENDESK_SAMPLE_B_PATH,
+    ZENDESK_SAMPLE_C_LABELS_PATH,
+    ZENDESK_SAMPLE_C_PATH,
     evaluate_slice as evaluate_zendesk_slice,
 )
 
@@ -274,16 +276,26 @@ def build_modality_configs() -> tuple[dict[str, Any], ...]:
                     },
                 },
                 {
-                    "slice_name": "combined_ab",
+                    "slice_name": "zendesk_sample_c",
+                    "evaluator": evaluate_zendesk_slice,
+                    "kwargs": {
+                        "export_paths": (ZENDESK_SAMPLE_C_PATH,),
+                        "labels_paths": (ZENDESK_SAMPLE_C_LABELS_PATH,),
+                    },
+                },
+                {
+                    "slice_name": "combined_abc",
                     "evaluator": evaluate_zendesk_slice,
                     "kwargs": {
                         "export_paths": (
                             ZENDESK_SAMPLE_A_PATH,
                             ZENDESK_SAMPLE_B_PATH,
+                            ZENDESK_SAMPLE_C_PATH,
                         ),
                         "labels_paths": (
                             ZENDESK_SAMPLE_A_LABELS_PATH,
                             ZENDESK_SAMPLE_B_LABELS_PATH,
+                            ZENDESK_SAMPLE_C_LABELS_PATH,
                         ),
                     },
                 },

@@ -1,0 +1,435 @@
+{
+  "export_name": "zendesk_like_support_export_sample_c",
+  "exported_at": "2026-04-13T10:45:00+00:00",
+  "source_system": "zendesk_like",
+  "organizations": [
+    {
+      "organization_id": 9301,
+      "entity_id": "acct_harborgrid",
+      "external_account_id": "001RP00003831",
+      "name": "HarborGrid Retail",
+      "details": {
+        "segment": "smb",
+        "plan_tier": "growth"
+      }
+    },
+    {
+      "organization_id": 9302,
+      "entity_id": "acct_lumenpath",
+      "external_account_id": "001RP00003832",
+      "name": "LumenPath Mobility",
+      "details": {
+        "segment": "mid_market",
+        "plan_tier": "growth"
+      }
+    },
+    {
+      "organization_id": 9303,
+      "entity_id": "acct_summitcare",
+      "external_account_id": "001RP00003833",
+      "name": "SummitCare Benefits",
+      "details": {
+        "segment": "enterprise",
+        "plan_tier": "regulated_plus"
+      }
+    },
+    {
+      "organization_id": 9304,
+      "entity_id": "acct_pinecrest",
+      "external_account_id": "001RP00003834",
+      "name": "Pinecrest Labs",
+      "details": {
+        "segment": "mid_market",
+        "plan_tier": "enterprise_plus"
+      }
+    }
+  ],
+  "users": [
+    {
+      "user_id": 2301,
+      "role": "end_user",
+      "name": "Anya Brooks",
+      "email": "anya.brooks@harborgrid.example",
+      "organization_id": 9301,
+      "tags": [
+        "ops_admin"
+      ]
+    },
+    {
+      "user_id": 2302,
+      "role": "end_user",
+      "name": "Luis Ortega",
+      "email": "luis.ortega@lumenpath.example",
+      "organization_id": 9302,
+      "tags": [
+        "finance_ops"
+      ]
+    },
+    {
+      "user_id": 2303,
+      "role": "end_user",
+      "name": "Rhea Solis",
+      "email": "rhea.solis@summitcare.example",
+      "organization_id": 9303,
+      "tags": [
+        "support_contact"
+      ]
+    },
+    {
+      "user_id": 2304,
+      "role": "end_user",
+      "name": "Miles Kent",
+      "email": "miles.kent@pinecrest.example",
+      "organization_id": 9304,
+      "tags": [
+        "warehouse_lead"
+      ]
+    },
+    {
+      "user_id": 3301,
+      "role": "agent",
+      "name": "Serena Holt",
+      "group_name": "Technical Support"
+    },
+    {
+      "user_id": 4301,
+      "role": "system",
+      "name": "Follow-up SLA Timer"
+    },
+    {
+      "user_id": 5301,
+      "role": "qa",
+      "name": "Drew Mercer",
+      "group_name": "Support QA"
+    }
+  ],
+  "tickets": [
+    {
+      "id": 33018,
+      "external_id": "HG-33018",
+      "subject": "Storefront publish queue cleared after customer attached failing SKU diff",
+      "requester_id": 2301,
+      "organization_id": 9301,
+      "assignee_id": 3301,
+      "created_at": "2026-04-01T09:10:00+00:00",
+      "updated_at": "2026-04-01T13:05:00+00:00",
+      "closed_at": "2026-04-01T13:05:00+00:00",
+      "status": "solved",
+      "priority": "normal",
+      "via": {
+        "channel": "email"
+      },
+      "tags": [
+        "publish_queue",
+        "sku_diff"
+      ],
+      "ticket_form": {
+        "id": "technical_issue",
+        "name": "Technical Issue"
+      },
+      "custom_fields": {
+        "product_area": "catalog_publish",
+        "environment": "production"
+      }
+    },
+    {
+      "id": 11807,
+      "external_id": "LP-11807",
+      "subject": "Driver payout export delay narrowed after customer supplied a batch sample",
+      "requester_id": 2302,
+      "organization_id": 9302,
+      "assignee_id": 3301,
+      "created_at": "2026-04-09T08:40:00+00:00",
+      "updated_at": "2026-04-10T09:15:00+00:00",
+      "closed_at": "2026-04-10T09:15:00+00:00",
+      "status": "solved",
+      "priority": "normal",
+      "via": {
+        "channel": "web"
+      },
+      "tags": [
+        "payout_export",
+        "batch_sample"
+      ],
+      "ticket_form": {
+        "id": "technical_issue",
+        "name": "Technical Issue"
+      },
+      "custom_fields": {
+        "product_area": "finance_exports",
+        "environment": "production"
+      }
+    },
+    {
+      "id": 77104,
+      "external_id": "SC-77104",
+      "subject": "Eligibility roster retry is still blocked because the signed delta manifest never arrived",
+      "requester_id": 2303,
+      "organization_id": 9303,
+      "assignee_id": 3301,
+      "created_at": "2026-01-19T14:00:00+00:00",
+      "updated_at": "2026-03-04T16:20:00+00:00",
+      "closed_at": "2026-03-04T16:20:00+00:00",
+      "status": "closed",
+      "priority": "high",
+      "via": {
+        "channel": "web"
+      },
+      "tags": [
+        "eligibility_roster",
+        "signed_manifest"
+      ],
+      "ticket_form": {
+        "id": "regulated_support",
+        "name": "Compliance Issue"
+      },
+      "custom_fields": {
+        "product_area": "eligibility_exports",
+        "environment": "production"
+      }
+    },
+    {
+      "id": 55190,
+      "external_id": "PC-55190",
+      "subject": "Shipment exception count looked resolved at first, but the reassuring update was misleading",
+      "requester_id": 2304,
+      "organization_id": 9304,
+      "assignee_id": 3301,
+      "created_at": "2026-04-11T08:00:00+00:00",
+      "updated_at": "2026-04-12T15:20:00+00:00",
+      "closed_at": "2026-04-12T15:20:00+00:00",
+      "status": "closed",
+      "priority": "high",
+      "via": {
+        "channel": "chat"
+      },
+      "tags": [
+        "shipment_exceptions",
+        "misleading_update"
+      ],
+      "ticket_form": {
+        "id": "enterprise_support",
+        "name": "Technical Issue"
+      },
+      "custom_fields": {
+        "product_area": "warehouse_ops",
+        "environment": "production"
+      }
+    }
+  ],
+  "comments": [
+    {
+      "comment_id": "33018-c1",
+      "ticket_id": 33018,
+      "created_at": "2026-04-01T09:12:00+00:00",
+      "author_id": 2301,
+      "public": true,
+      "body": "HarborGrid opened with the affected storefront IDs, the failed publish batch, and the exact SKU diff window.",
+      "metadata": {
+        "initial_context_quality": "complete",
+        "thread_id": "zd-thread-33018"
+      }
+    },
+    {
+      "comment_id": "33018-c2",
+      "ticket_id": 33018,
+      "created_at": "2026-04-01T09:30:00+00:00",
+      "author_id": 3301,
+      "public": true,
+      "body": "Support requested one failing SKU diff and the publish payload for the first rejected batch.",
+      "metadata": {
+        "request_id": "diag-33018",
+        "requested_items": [
+          "sku_diff",
+          "publish_payload"
+        ]
+      }
+    },
+    {
+      "comment_id": "33018-c3",
+      "ticket_id": 33018,
+      "created_at": "2026-04-01T11:05:00+00:00",
+      "author_id": 2301,
+      "public": true,
+      "body": "The customer uploaded the requested diff and the failing publish payload before lunch.",
+      "metadata": {
+        "response_quality": "complete",
+        "fulfills_request": true,
+        "requested_item": "sku_diff",
+        "attachment_count": 2
+      }
+    },
+    {
+      "comment_id": "11807-c1",
+      "ticket_id": 11807,
+      "created_at": "2026-04-09T08:43:00+00:00",
+      "author_id": 2302,
+      "public": true,
+      "body": "LumenPath included the payout job ID, the delayed driver cohort, and the export retry window.",
+      "metadata": {
+        "initial_context_quality": "useful",
+        "thread_id": "zd-thread-11807"
+      }
+    },
+    {
+      "comment_id": "11807-c2",
+      "ticket_id": 11807,
+      "created_at": "2026-04-09T09:05:00+00:00",
+      "author_id": 3301,
+      "public": true,
+      "body": "Support requested one ledger slice and one delayed payout row from the affected batch.",
+      "metadata": {
+        "request_id": "diag-11807",
+        "requested_items": [
+          "ledger_slice",
+          "delayed_payout_row"
+        ]
+      }
+    },
+    {
+      "comment_id": "11807-c3",
+      "ticket_id": 11807,
+      "created_at": "2026-04-09T10:40:00+00:00",
+      "author_id": 2302,
+      "public": true,
+      "body": "The requester uploaded the ledger slice and one delayed payout row while the ticket was still fresh.",
+      "metadata": {
+        "response_quality": "complete",
+        "fulfills_request": true,
+        "requested_item": "ledger_slice",
+        "attachment_count": 2
+      }
+    },
+    {
+      "comment_id": "77104-c1",
+      "ticket_id": 77104,
+      "created_at": "2026-01-19T14:05:00+00:00",
+      "author_id": 2303,
+      "public": true,
+      "body": "SummitCare shared the roster run ID, the downstream trading partner, and the window where the retry started failing.",
+      "metadata": {
+        "initial_context_quality": "useful",
+        "case_reason": "eligibility_roster_failure"
+      }
+    },
+    {
+      "comment_id": "77104-c2",
+      "ticket_id": 77104,
+      "created_at": "2026-01-20T09:15:00+00:00",
+      "author_id": 3301,
+      "public": true,
+      "body": "Support requested the signed delta manifest and the source-side timestamp export for one rejected roster.",
+      "metadata": {
+        "request_id": "diag-77104",
+        "requested_items": [
+          "signed_delta_manifest",
+          "source_timestamp_export"
+        ]
+      }
+    },
+    {
+      "comment_id": "55190-c1",
+      "ticket_id": 55190,
+      "created_at": "2026-04-11T08:03:00+00:00",
+      "author_id": 2304,
+      "public": true,
+      "body": "Pinecrest opened with impacted route IDs and a note that the shipment exception count appeared back to normal.",
+      "metadata": {
+        "initial_context_quality": "complete",
+        "thread_id": "zd-thread-55190"
+      }
+    },
+    {
+      "comment_id": "55190-c2",
+      "ticket_id": 55190,
+      "created_at": "2026-04-11T08:22:00+00:00",
+      "author_id": 3301,
+      "public": true,
+      "body": "Support requested one before and after exception export and the impacted route IDs in CSV form.",
+      "metadata": {
+        "request_id": "diag-55190",
+        "requested_items": [
+          "exception_export_pair",
+          "route_id_csv"
+        ]
+      }
+    },
+    {
+      "comment_id": "55190-c3",
+      "ticket_id": 55190,
+      "created_at": "2026-04-12T09:10:00+00:00",
+      "author_id": 2304,
+      "public": true,
+      "body": "The requester said the exception count looked better again, but still did not attach the requested export or route list.",
+      "metadata": {
+        "followup_without_requested_info": true,
+        "missing_item_count": 2,
+        "missing_items": [
+          "exception_export_pair",
+          "route_id_csv"
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "event_id": "33018-e1",
+      "ticket_id": 33018,
+      "created_at": "2026-04-01T13:05:00+00:00",
+      "type": "status_change",
+      "author_id": 2301,
+      "note": "The customer confirmed new storefront publishes completed normally after the diff was replayed.",
+      "metadata": {
+        "raw_action_hint": "confirmed_fix",
+        "resolution_code": "fixed",
+        "status": {
+          "from": "open",
+          "to": "solved"
+        }
+      }
+    },
+    {
+      "event_id": "11807-e1",
+      "ticket_id": 11807,
+      "created_at": "2026-04-10T09:15:00+00:00",
+      "type": "status_change",
+      "author_id": 2302,
+      "note": "LumenPath confirmed the delayed payout batch completed after the export queue was rebalanced.",
+      "metadata": {
+        "raw_action_hint": "confirmed_fix",
+        "resolution_code": "fixed",
+        "status": {
+          "from": "open",
+          "to": "solved"
+        }
+      }
+    },
+    {
+      "event_id": "77104-e1",
+      "ticket_id": 77104,
+      "created_at": "2026-03-04T16:20:00+00:00",
+      "type": "sla_breach",
+      "author_id": 4301,
+      "note": "The signed delta manifest and source timestamp export never arrived before the escalation window expired.",
+      "metadata": {
+        "raw_action_hint": "request_deadline_missed",
+        "missed_request_count": 2,
+        "due_at": "2026-03-04T16:00:00+00:00",
+        "request_id": "diag-77104"
+      }
+    },
+    {
+      "event_id": "55190-e1",
+      "ticket_id": 55190,
+      "created_at": "2026-04-12T15:20:00+00:00",
+      "type": "qa_review",
+      "author_id": 5301,
+      "note": "QA confirmed the reassuring update conflicted with route-level counts and that the requested export pair still never arrived.",
+      "metadata": {
+        "raw_action_hint": "qa_marked_contradiction",
+        "severity": "high",
+        "review_id": "qa-55190"
+      }
+    }
+  ]
+}

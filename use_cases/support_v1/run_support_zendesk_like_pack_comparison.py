@@ -43,6 +43,8 @@ ZENDESK_SAMPLE_A_PATH = SCRIPT_DIR / "zendesk_like_export_sample.json"
 ZENDESK_SAMPLE_A_LABELS_PATH = SCRIPT_DIR / "zendesk_like_export_sample_labels.json"
 ZENDESK_SAMPLE_B_PATH = SCRIPT_DIR / "zendesk_like_export_sample_b.json"
 ZENDESK_SAMPLE_B_LABELS_PATH = SCRIPT_DIR / "zendesk_like_export_sample_b_labels.json"
+ZENDESK_SAMPLE_C_PATH = SCRIPT_DIR / "zendesk_like_export_sample_c.json"
+ZENDESK_SAMPLE_C_LABELS_PATH = SCRIPT_DIR / "zendesk_like_export_sample_c_labels.json"
 EXPORT_PATH = ARTIFACTS_DIR / "support_zendesk_like_pack_comparison.json"
 MARKDOWN_EXPORT_PATH = ARTIFACTS_DIR / "support_zendesk_like_pack_comparison.md"
 
@@ -301,7 +303,8 @@ def build_markdown_report(slice_results: Sequence[dict[str, Any]]) -> str:
         "# Support Zendesk-Like Pack Comparison",
         "",
         (
-            "Compares `zendesk_sample_a`, `zendesk_sample_b`, and `combined_ab` by "
+            "Compares `zendesk_sample_a`, `zendesk_sample_b`, `zendesk_sample_c`, "
+            "and `combined_abc` by "
             "running the existing Zendesk-like adapter plus labeled decision-point "
             "evaluation flow on each slice."
         ),
@@ -333,8 +336,8 @@ def build_markdown_report(slice_results: Sequence[dict[str, Any]]) -> str:
             (
                 "- This comparison adds one explicit Zendesk-like pack runner so the "
                 "adapter-backed labeled evaluation path can be checked on sample A, "
-                "sample B, and an in-memory combined A+B slice without mutating the "
-                "source exports."
+                "sample B, sample C, and an in-memory combined A+B+C slice without "
+                "mutating the source exports."
             ),
             "",
         ]
@@ -449,9 +452,22 @@ def main() -> None:
             labels_paths=(ZENDESK_SAMPLE_B_LABELS_PATH,),
         ),
         evaluate_slice(
-            "combined_ab",
-            export_paths=(ZENDESK_SAMPLE_A_PATH, ZENDESK_SAMPLE_B_PATH),
-            labels_paths=(ZENDESK_SAMPLE_A_LABELS_PATH, ZENDESK_SAMPLE_B_LABELS_PATH),
+            "zendesk_sample_c",
+            export_paths=(ZENDESK_SAMPLE_C_PATH,),
+            labels_paths=(ZENDESK_SAMPLE_C_LABELS_PATH,),
+        ),
+        evaluate_slice(
+            "combined_abc",
+            export_paths=(
+                ZENDESK_SAMPLE_A_PATH,
+                ZENDESK_SAMPLE_B_PATH,
+                ZENDESK_SAMPLE_C_PATH,
+            ),
+            labels_paths=(
+                ZENDESK_SAMPLE_A_LABELS_PATH,
+                ZENDESK_SAMPLE_B_LABELS_PATH,
+                ZENDESK_SAMPLE_C_LABELS_PATH,
+            ),
         ),
     ]
     export_payload = build_export_payload(slice_results)
