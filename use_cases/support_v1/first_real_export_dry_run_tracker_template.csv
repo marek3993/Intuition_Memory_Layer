@@ -1,0 +1,12 @@
+stage_name,owner,status,date,artifact_path,notes
+export received,,,,,
+intake captured,,,,,
+contract validated,,,,,
+normalization path selected,,,,,
+normalization run complete,,,,,
+labels prepared,,,,,
+evaluation run complete,,,,,
+calibrated vs baseline reviewed,,,,,
+pilot package built,,,,,
+handoff package exported,,,,,
+final dry-run conclusion,,,,,
