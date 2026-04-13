@@ -24,6 +24,15 @@ from run_support_csv_ingest_pack_comparison import (
     CSV_SAMPLE_B_PATH,
     evaluate_slice as evaluate_csv_slice,
 )
+from run_support_mapped_ingest_pack_comparison import (
+    MAPPED_SAMPLE_A_LABELS_PATH,
+    MAPPED_SAMPLE_A_PATH,
+    MAPPED_SAMPLE_B_LABELS_PATH,
+    MAPPED_SAMPLE_B_PATH,
+    DEFAULT_MAPPING_PATH as MAPPED_MAPPING_PATH,
+    evaluate_slice as evaluate_mapped_slice,
+    load_mapping as load_mapped_mapping,
+)
 from run_support_label_pack_comparison import (
     PACK_A_CASES_PATH,
     PACK_A_LABELS_PATH,
@@ -80,6 +89,8 @@ def format_delta(value: float) -> str:
 
 
 def build_modality_configs() -> tuple[dict[str, Any], ...]:
+    mapped_mapping = load_mapped_mapping(MAPPED_MAPPING_PATH)
+
     return (
         {
             "modality": "labeled_support_packs",
@@ -199,6 +210,45 @@ def build_modality_configs() -> tuple[dict[str, Any], ...]:
                             CSV_SAMPLE_A_LABELS_PATH,
                             CSV_SAMPLE_B_LABELS_PATH,
                         ),
+                    },
+                },
+            ),
+        },
+        {
+            "modality": "mapped_ingest_packs",
+            "display_name": "mapped-ingest packs",
+            "slices": (
+                {
+                    "slice_name": "mapped_sample_a",
+                    "evaluator": evaluate_mapped_slice,
+                    "kwargs": {
+                        "csv_paths": (MAPPED_SAMPLE_A_PATH,),
+                        "labels_paths": (MAPPED_SAMPLE_A_LABELS_PATH,),
+                        "mapping": mapped_mapping,
+                        "mapping_path": MAPPED_MAPPING_PATH,
+                    },
+                },
+                {
+                    "slice_name": "mapped_sample_b",
+                    "evaluator": evaluate_mapped_slice,
+                    "kwargs": {
+                        "csv_paths": (MAPPED_SAMPLE_B_PATH,),
+                        "labels_paths": (MAPPED_SAMPLE_B_LABELS_PATH,),
+                        "mapping": mapped_mapping,
+                        "mapping_path": MAPPED_MAPPING_PATH,
+                    },
+                },
+                {
+                    "slice_name": "combined_ab",
+                    "evaluator": evaluate_mapped_slice,
+                    "kwargs": {
+                        "csv_paths": (MAPPED_SAMPLE_A_PATH, MAPPED_SAMPLE_B_PATH),
+                        "labels_paths": (
+                            MAPPED_SAMPLE_A_LABELS_PATH,
+                            MAPPED_SAMPLE_B_LABELS_PATH,
+                        ),
+                        "mapping": mapped_mapping,
+                        "mapping_path": MAPPED_MAPPING_PATH,
                     },
                 },
             ),
@@ -537,8 +587,8 @@ def build_top_level_summary(modality_results: Sequence[dict[str, Any]]) -> dict[
         "run_command_powershell": RUN_COMMAND,
         "what_this_adds": (
             "One unified support_v1 runner that executes the existing labeled, raw, "
-            "CSV, and Zendesk-like evaluation paths together and reports a single "
-            "cross-modality accuracy table plus compact conclusion."
+            "CSV, mapped, and Zendesk-like evaluation paths together and reports "
+            "a single cross-modality accuracy table plus compact conclusion."
         ),
         "calibrated_iml_vs_default_iml_across_modalities": calibrated_vs_iml,
         "calibrated_iml_vs_baselines_on_largest_slice_per_modality": baseline_on_largest,
