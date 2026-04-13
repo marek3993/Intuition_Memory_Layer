@@ -2,6 +2,24 @@
 
 Run commands from the repository root.
 
+## Real pilot workspace initializer
+
+Create one clean working folder for a first real pilot, preloaded with the core intake templates, decision docs, runbooks, references, the latest mode-specific evaluation artifacts, and the latest pilot package and handoff bundle when they already exist:
+
+```powershell
+py use_cases/support_v1/init_support_v1_real_pilot_workspace.py --mode raw_ingest --workspace-name first_real_pilot
+```
+
+The supported `--mode` values are:
+
+- `labeled_support`
+- `raw_ingest`
+- `csv_ingest`
+- `mapped_ingest`
+- `zendesk_like`
+
+Without `--workspace-name`, the initializer creates a mode-prefixed timestamped folder under `use_cases/support_v1/artifacts/real_pilot_workspaces/` and writes `workspace_manifest.json`.
+
 ## Real export intake pack
 
 Use these fill-in templates before the first real helpdesk export onboarding:
