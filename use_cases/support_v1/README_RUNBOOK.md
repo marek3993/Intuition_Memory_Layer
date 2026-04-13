@@ -304,6 +304,30 @@ This builder adds:
 - `use_cases/support_v1/artifacts/support_v1_readiness_memo.md`, a compact readiness memo that summarizes the current support_v1 position across ingest, validation, and evaluation without rerunning the underlying evaluations
 - console output listing the source artifact paths actually used plus the output memo path
 
+## Pilot execution bundle builder
+
+Build one compact human-review bundle for one pilot mode from the existing support_v1 artifacts:
+
+```powershell
+py use_cases/support_v1/build_support_v1_pilot_execution_bundle.py labeled_support
+```
+
+Supported modes are:
+
+- `labeled_support`
+- `raw_ingest`
+- `csv_ingest`
+- `mapped_ingest`
+- `zendesk_like`
+
+This builder adds:
+
+- one timestamped folder under `use_cases/support_v1/artifacts/pilot_execution_bundles/`
+- the latest mode-specific evaluation JSON plus any available review CSV, focused error CSV, route-change CSV, comparison artifact, and contract/readiness evidence that already exists for that mode
+- `bundle_manifest.json`, which records the bundle type, source artifacts used, bundle output paths, generation time, and readiness/pilot document references
+
+It prefers already-written artifacts and does not rerun the underlying evaluations.
+
 ## Quick inspection
 
 Inspect the latest decision-point artifact with PowerShell:
