@@ -393,6 +393,21 @@ This exporter adds:
 
 It checks the summary artifact when present and also scans `use_cases/support_v1/artifacts/pilot_packages/` so the newest valid package for the selected mode wins without rebuilding packages or rerunning evaluations.
 
+## Pilot bundle validation summary builder
+
+Build one compact top-level validation snapshot across the existing pilot packages and pilot handoff bundles:
+
+```powershell
+py use_cases/support_v1/build_support_v1_pilot_bundle_validation_summary.py
+```
+
+This builder adds:
+
+- `use_cases/support_v1/artifacts/support_v1_pilot_bundle_validation_summary.json`, a machine-readable bundle-health snapshot covering totals, pass/fail counts, latest validated bundle per mode when present, missing `validation_result.json` files, and a compact status overview by bundle path
+- `use_cases/support_v1/artifacts/support_v1_pilot_bundle_validation_summary.md`, a compact human-readable summary of the same validation coverage and bundle health signals
+
+It reads the existing bundle folders under `use_cases/support_v1/artifacts/pilot_packages/` and `use_cases/support_v1/artifacts/pilot_handoff_bundles/`, uses `validation_result.json` when present, and does not rerun validation automatically.
+
 ## Quick inspection
 
 Inspect the latest decision-point artifact with PowerShell:
