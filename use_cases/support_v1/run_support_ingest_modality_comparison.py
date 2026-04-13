@@ -22,6 +22,8 @@ from run_support_csv_ingest_pack_comparison import (
     CSV_SAMPLE_A_PATH,
     CSV_SAMPLE_B_LABELS_PATH,
     CSV_SAMPLE_B_PATH,
+    CSV_SAMPLE_C_LABELS_PATH,
+    CSV_SAMPLE_C_PATH,
     evaluate_slice as evaluate_csv_slice,
 )
 from run_support_mapped_ingest_pack_comparison import (
@@ -206,13 +208,26 @@ def build_modality_configs() -> tuple[dict[str, Any], ...]:
                     },
                 },
                 {
-                    "slice_name": "combined_ab",
+                    "slice_name": "csv_sample_c",
                     "evaluator": evaluate_csv_slice,
                     "kwargs": {
-                        "csv_paths": (CSV_SAMPLE_A_PATH, CSV_SAMPLE_B_PATH),
+                        "csv_paths": (CSV_SAMPLE_C_PATH,),
+                        "labels_paths": (CSV_SAMPLE_C_LABELS_PATH,),
+                    },
+                },
+                {
+                    "slice_name": "combined_abc",
+                    "evaluator": evaluate_csv_slice,
+                    "kwargs": {
+                        "csv_paths": (
+                            CSV_SAMPLE_A_PATH,
+                            CSV_SAMPLE_B_PATH,
+                            CSV_SAMPLE_C_PATH,
+                        ),
                         "labels_paths": (
                             CSV_SAMPLE_A_LABELS_PATH,
                             CSV_SAMPLE_B_LABELS_PATH,
+                            CSV_SAMPLE_C_LABELS_PATH,
                         ),
                     },
                 },

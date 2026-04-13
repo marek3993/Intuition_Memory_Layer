@@ -43,6 +43,8 @@ CSV_SAMPLE_A_PATH = SCRIPT_DIR / "raw_support_export_sample.csv"
 CSV_SAMPLE_A_LABELS_PATH = SCRIPT_DIR / "raw_support_export_sample_labels.json"
 CSV_SAMPLE_B_PATH = SCRIPT_DIR / "raw_support_export_sample_b.csv"
 CSV_SAMPLE_B_LABELS_PATH = SCRIPT_DIR / "raw_support_export_sample_b_labels.json"
+CSV_SAMPLE_C_PATH = SCRIPT_DIR / "raw_support_export_sample_c.csv"
+CSV_SAMPLE_C_LABELS_PATH = SCRIPT_DIR / "raw_support_export_sample_c_labels.json"
 EXPORT_PATH = ARTIFACTS_DIR / "support_csv_ingest_pack_comparison.json"
 MARKDOWN_EXPORT_PATH = ARTIFACTS_DIR / "support_csv_ingest_pack_comparison.md"
 
@@ -303,8 +305,9 @@ def build_markdown_report(slice_results: Sequence[dict[str, Any]]) -> str:
         "# Support CSV Ingest Pack Comparison",
         "",
         (
-            "Compares `csv_sample_a`, `csv_sample_b`, and `combined_ab` by running the "
-            "existing CSV normalization and labeled decision-point evaluation flow end to end."
+            "Compares `csv_sample_a`, `csv_sample_b`, `csv_sample_c`, and "
+            "`combined_abc` by running the existing CSV normalization and "
+            "labeled decision-point evaluation flow end to end."
         ),
         "",
         "## Summary",
@@ -334,7 +337,7 @@ def build_markdown_report(slice_results: Sequence[dict[str, Any]]) -> str:
             (
                 "- This comparison adds one explicit CSV-ingest pack check so support_v1 "
                 "can be compared on each CSV sample independently and on the in-memory "
-                "combined A+B slice without mutating source datasets."
+                "combined A+B+C slice without mutating source datasets."
             ),
             "",
         ]
@@ -449,9 +452,18 @@ def main() -> None:
             labels_paths=(CSV_SAMPLE_B_LABELS_PATH,),
         ),
         evaluate_slice(
-            "combined_ab",
-            csv_paths=(CSV_SAMPLE_A_PATH, CSV_SAMPLE_B_PATH),
-            labels_paths=(CSV_SAMPLE_A_LABELS_PATH, CSV_SAMPLE_B_LABELS_PATH),
+            "csv_sample_c",
+            csv_paths=(CSV_SAMPLE_C_PATH,),
+            labels_paths=(CSV_SAMPLE_C_LABELS_PATH,),
+        ),
+        evaluate_slice(
+            "combined_abc",
+            csv_paths=(CSV_SAMPLE_A_PATH, CSV_SAMPLE_B_PATH, CSV_SAMPLE_C_PATH),
+            labels_paths=(
+                CSV_SAMPLE_A_LABELS_PATH,
+                CSV_SAMPLE_B_LABELS_PATH,
+                CSV_SAMPLE_C_LABELS_PATH,
+            ),
         ),
     ]
     export_payload = build_export_payload(slice_results)
