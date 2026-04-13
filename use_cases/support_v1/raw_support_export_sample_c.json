@@ -1,0 +1,364 @@
+{
+  "export_name": "support_raw_export_sample_c",
+  "exported_at": "2026-04-13T15:30:00+00:00",
+  "accounts": [
+    {
+      "account_ref": "acc_harborgrid",
+      "entity_id": "acct_harborgrid",
+      "display_name": "HarborGrid Retail",
+      "segment": "smb",
+      "source_system": "hubspot",
+      "external_account_id": "001RP00003801"
+    },
+    {
+      "account_ref": "acc_lumenpath",
+      "entity_id": "acct_lumenpath",
+      "display_name": "LumenPath Mobility",
+      "segment": "mid_market",
+      "source_system": "salesforce",
+      "external_account_id": "001RP00003802"
+    },
+    {
+      "account_ref": "acc_summitcare",
+      "entity_id": "acct_summitcare",
+      "display_name": "SummitCare Benefits",
+      "segment": "enterprise",
+      "source_system": "jira_service_management",
+      "external_account_id": "001RP00003803"
+    },
+    {
+      "account_ref": "acc_pinecrest",
+      "entity_id": "acct_pinecrest",
+      "display_name": "Pinecrest Labs",
+      "segment": "mid_market",
+      "source_system": "zendesk",
+      "external_account_id": "001RP00003804"
+    }
+  ],
+  "tickets": [
+    {
+      "ticket_ref": "hubspot_33018",
+      "case_id": "HG-33018",
+      "account_ref": "acc_harborgrid",
+      "opened_at": "2026-04-01T09:10:00+00:00",
+      "closed_at": "2026-04-01T13:05:00+00:00",
+      "channel": "email",
+      "priority": "normal",
+      "subject": "Storefront publish queue cleared after customer attached failing SKU diff",
+      "origin_system": "hubspot_service",
+      "status": "closed"
+    },
+    {
+      "ticket_ref": "sfdc_11807",
+      "case_id": "LP-11807",
+      "account_ref": "acc_lumenpath",
+      "opened_at": "2026-04-09T08:40:00+00:00",
+      "closed_at": "2026-04-10T09:15:00+00:00",
+      "channel": "web",
+      "priority": "normal",
+      "subject": "Driver payout export delay narrowed after customer supplied a batch sample",
+      "origin_system": "salesforce_service_cloud",
+      "status": "closed"
+    },
+    {
+      "ticket_ref": "jsm_77104",
+      "case_id": "SC-77104",
+      "account_ref": "acc_summitcare",
+      "opened_at": "2026-01-19T14:00:00+00:00",
+      "closed_at": "2026-03-04T16:20:00+00:00",
+      "channel": "web",
+      "priority": "high",
+      "subject": "Eligibility roster retry is still blocked because the signed delta manifest never arrived",
+      "origin_system": "jira_service_management",
+      "status": "done"
+    },
+    {
+      "ticket_ref": "zd_55190",
+      "case_id": "PC-55190",
+      "account_ref": "acc_pinecrest",
+      "opened_at": "2026-04-11T08:00:00+00:00",
+      "closed_at": "2026-04-12T15:20:00+00:00",
+      "channel": "chat",
+      "priority": "high",
+      "subject": "Shipment exception count looked resolved at first but the reassuring update was misleading",
+      "origin_system": "zendesk",
+      "status": "solved"
+    }
+  ],
+  "records": [
+    {
+      "event_ref": "evt_33018_01",
+      "ticket_ref": "hubspot_33018",
+      "occurred_at": "2026-04-01T09:12:00+00:00",
+      "source_system": "hubspot_service",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_771",
+        "display_name": "Dana Brooks"
+      },
+      "event_name": "ticket_created",
+      "body": "HarborGrid opened with the affected storefront IDs, the failed publish batch, and the exact SKU diff window.",
+      "data": {
+        "initial_context_quality": "complete",
+        "attachments": [
+          "storefront-ids.csv"
+        ],
+        "thread_id": "hubspot-thread-33018"
+      }
+    },
+    {
+      "event_ref": "evt_33018_02",
+      "ticket_ref": "hubspot_33018",
+      "occurred_at": "2026-04-01T09:30:00+00:00",
+      "source_system": "hubspot_service",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_88",
+        "display_name": "Rowan Kim"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support requested one failing SKU diff and the publish payload for the first rejected batch.",
+      "data": {
+        "request_id": "diag-33018",
+        "requested_items": [
+          "sku_diff",
+          "publish_payload"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_33018_03",
+      "ticket_ref": "hubspot_33018",
+      "occurred_at": "2026-04-01T11:05:00+00:00",
+      "source_system": "hubspot_service",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_771",
+        "display_name": "Dana Brooks"
+      },
+      "event_name": "customer_supplied_artifacts",
+      "body": "The customer uploaded the requested diff and the failing publish payload before lunch.",
+      "data": {
+        "response_quality": "complete",
+        "fulfills_request": true,
+        "requested_item": "publish_payload",
+        "attachment_count": 2
+      }
+    },
+    {
+      "event_ref": "evt_33018_04",
+      "ticket_ref": "hubspot_33018",
+      "occurred_at": "2026-04-01T13:05:00+00:00",
+      "source_system": "hubspot_service",
+      "source_type": "ticket_status",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_771",
+        "display_name": "Dana Brooks"
+      },
+      "event_name": "customer_confirmed_resolution",
+      "body": "The customer confirmed new storefront publishes completed normally after the diff was replayed.",
+      "data": {
+        "resolution_code": "fixed"
+      }
+    },
+    {
+      "event_ref": "evt_11807_01",
+      "ticket_ref": "sfdc_11807",
+      "occurred_at": "2026-04-09T08:43:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_611",
+        "display_name": "Leo Hart"
+      },
+      "event_name": "ticket_created",
+      "body": "LumenPath included the payout job ID, the delayed driver cohort, and the export retry window.",
+      "data": {
+        "initial_context_quality": "useful",
+        "case_reason": "driver_payout_export_delay"
+      }
+    },
+    {
+      "event_ref": "evt_11807_02",
+      "ticket_ref": "sfdc_11807",
+      "occurred_at": "2026-04-09T09:05:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_73",
+        "display_name": "Mila Tran"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support requested one ledger slice and one delayed payout row from the affected batch.",
+      "data": {
+        "request_id": "diag-11807",
+        "requested_items": [
+          "ledger_slice",
+          "delayed_payout_row"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_11807_03",
+      "ticket_ref": "sfdc_11807",
+      "occurred_at": "2026-04-09T10:40:00+00:00",
+      "source_system": "salesforce_service_cloud",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_611",
+        "display_name": "Leo Hart"
+      },
+      "event_name": "customer_supplied_artifacts",
+      "body": "The requester uploaded the ledger slice and one delayed payout row while the ticket was still fresh.",
+      "data": {
+        "response_quality": "complete",
+        "fulfills_request": true,
+        "requested_item": "ledger_slice",
+        "attachment_count": 2
+      }
+    },
+    {
+      "event_ref": "evt_77104_01",
+      "ticket_ref": "jsm_77104",
+      "occurred_at": "2026-01-19T14:05:00+00:00",
+      "source_system": "jira_service_management",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "cnt_882",
+        "display_name": "Asha Patel"
+      },
+      "event_name": "ticket_created",
+      "body": "SummitCare shared the roster run ID, the downstream trading partner, and the window where the retry started failing.",
+      "data": {
+        "initial_context_quality": "useful",
+        "thread_id": "jsm-thread-77104"
+      }
+    },
+    {
+      "event_ref": "evt_77104_02",
+      "ticket_ref": "jsm_77104",
+      "occurred_at": "2026-01-20T09:15:00+00:00",
+      "source_system": "jira_service_management",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_74",
+        "display_name": "Priya Nair"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support requested the signed delta manifest and the source-side timestamp export for one rejected roster.",
+      "data": {
+        "request_id": "diag-77104",
+        "requested_items": [
+          "signed_delta_manifest",
+          "source_timestamp_export"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_77104_03",
+      "ticket_ref": "jsm_77104",
+      "occurred_at": "2026-03-04T16:20:00+00:00",
+      "source_system": "workflow_orchestrator",
+      "source_type": "workflow_timer",
+      "actor": {
+        "role": "automation",
+        "actor_id": "timer_63",
+        "display_name": "Follow-up SLA Timer"
+      },
+      "event_name": "requester_deadline_elapsed",
+      "body": "The signed delta manifest and source timestamp export never arrived before the escalation window expired.",
+      "data": {
+        "missed_request_count": 2,
+        "due_at": "2026-03-04T16:00:00+00:00",
+        "request_id": "diag-77104"
+      }
+    },
+    {
+      "event_ref": "evt_55190_01",
+      "ticket_ref": "zd_55190",
+      "occurred_at": "2026-04-11T08:03:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_944",
+        "display_name": "Noah Price"
+      },
+      "event_name": "ticket_created",
+      "body": "Pinecrest opened with impacted route IDs and a note that the shipment exception count appeared back to normal.",
+      "data": {
+        "initial_context_quality": "complete",
+        "reopened_from_ticket_ref": "zd_54401"
+      }
+    },
+    {
+      "event_ref": "evt_55190_02",
+      "ticket_ref": "zd_55190",
+      "occurred_at": "2026-04-11T08:22:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "support_agent",
+        "actor_id": "agt_12",
+        "display_name": "Jordan Lee"
+      },
+      "event_name": "agent_requested_logs",
+      "body": "Support requested one before and after exception export and the impacted route IDs in CSV form.",
+      "data": {
+        "request_id": "diag-55190",
+        "requested_items": [
+          "exception_export_pair",
+          "route_id_csv"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_55190_03",
+      "ticket_ref": "zd_55190",
+      "occurred_at": "2026-04-12T09:10:00+00:00",
+      "source_system": "zendesk",
+      "source_type": "message",
+      "actor": {
+        "role": "customer",
+        "actor_id": "usr_944",
+        "display_name": "Noah Price"
+      },
+      "event_name": "customer_replied_without_artifacts",
+      "body": "The requester said the exception count looked better again but still did not attach the requested export or route list.",
+      "data": {
+        "missing_item_count": 2,
+        "missing_items": [
+          "exception_export_pair",
+          "route_id_csv"
+        ]
+      }
+    },
+    {
+      "event_ref": "evt_55190_04",
+      "ticket_ref": "zd_55190",
+      "occurred_at": "2026-04-12T15:20:00+00:00",
+      "source_system": "qa_console",
+      "source_type": "audit_entry",
+      "actor": {
+        "role": "qa_analyst",
+        "actor_id": "qa_27",
+        "display_name": "Nadia Chen"
+      },
+      "event_name": "qa_flagged_conflict",
+      "body": "QA confirmed the reassuring update conflicted with route-level counts and that the requested export pair still never arrived.",
+      "data": {
+        "severity": "high",
+        "review_id": "qa-55190"
+      }
+    }
+  ]
+}

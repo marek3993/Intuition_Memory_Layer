@@ -43,6 +43,8 @@ RAW_SAMPLE_A_PATH = SCRIPT_DIR / "raw_support_export_sample.json"
 RAW_SAMPLE_A_LABELS_PATH = SCRIPT_DIR / "raw_support_export_sample_labels.json"
 RAW_SAMPLE_B_PATH = SCRIPT_DIR / "raw_support_export_sample_b.json"
 RAW_SAMPLE_B_LABELS_PATH = SCRIPT_DIR / "raw_support_export_sample_b_labels.json"
+RAW_SAMPLE_C_PATH = SCRIPT_DIR / "raw_support_export_sample_c.json"
+RAW_SAMPLE_C_LABELS_PATH = SCRIPT_DIR / "raw_support_export_sample_c_labels.json"
 EXPORT_PATH = ARTIFACTS_DIR / "support_raw_ingest_pack_comparison.json"
 MARKDOWN_EXPORT_PATH = ARTIFACTS_DIR / "support_raw_ingest_pack_comparison.md"
 
@@ -331,8 +333,9 @@ def build_markdown_report(slice_results: Sequence[dict[str, Any]]) -> str:
         "# Support Raw Ingest Pack Comparison",
         "",
         (
-            "Compares `raw_sample_a`, `raw_sample_b`, and `combined_ab` by running the "
-            "existing raw normalization and labeled decision-point evaluation flow end to end."
+            "Compares `raw_sample_a`, `raw_sample_b`, `raw_sample_c`, and "
+            "`combined_abc` by running the existing raw normalization and "
+            "labeled decision-point evaluation flow end to end."
         ),
         "",
         "## Summary",
@@ -361,8 +364,8 @@ def build_markdown_report(slice_results: Sequence[dict[str, Any]]) -> str:
             "",
             (
                 "- This comparison shows whether the existing support_v1 raw-ingest path "
-                "holds up consistently across each raw sample alone and when both samples "
-                "are evaluated as one combined labeled slice."
+                "holds up consistently across each raw sample alone and when all three "
+                "samples are evaluated as one combined labeled slice."
             ),
             "",
         ]
@@ -477,9 +480,18 @@ def main() -> None:
             labels_paths=(RAW_SAMPLE_B_LABELS_PATH,),
         ),
         evaluate_slice(
-            "combined_ab",
-            raw_paths=(RAW_SAMPLE_A_PATH, RAW_SAMPLE_B_PATH),
-            labels_paths=(RAW_SAMPLE_A_LABELS_PATH, RAW_SAMPLE_B_LABELS_PATH),
+            "raw_sample_c",
+            raw_paths=(RAW_SAMPLE_C_PATH,),
+            labels_paths=(RAW_SAMPLE_C_LABELS_PATH,),
+        ),
+        evaluate_slice(
+            "combined_abc",
+            raw_paths=(RAW_SAMPLE_A_PATH, RAW_SAMPLE_B_PATH, RAW_SAMPLE_C_PATH),
+            labels_paths=(
+                RAW_SAMPLE_A_LABELS_PATH,
+                RAW_SAMPLE_B_LABELS_PATH,
+                RAW_SAMPLE_C_LABELS_PATH,
+            ),
         ),
     ]
     export_payload = build_export_payload(slice_results)
