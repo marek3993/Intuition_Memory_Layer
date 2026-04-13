@@ -368,6 +368,31 @@ This builder adds:
 
 It reads the existing `use_cases/support_v1/artifacts/pilot_packages/` folders only and does not rebuild packages or rerun evaluations.
 
+## Pilot handoff bundle exporter
+
+Export one shareable pilot handoff bundle for one mode from the existing reviewer-ready package plus the highest-value summary docs:
+
+```powershell
+py use_cases/support_v1/export_support_v1_pilot_handoff_bundle.py --mode labeled_support
+```
+
+Supported modes are:
+
+- `labeled_support`
+- `raw_ingest`
+- `csv_ingest`
+- `mapped_ingest`
+- `zendesk_like`
+
+This exporter adds:
+
+- one timestamped folder under `use_cases/support_v1/artifacts/pilot_handoff_bundles/`
+- one copied latest pilot package folder for the selected mode
+- copied handoff documents when present, including `support_v1_pilot_package_summary.json`, `support_v1_pilot_package_summary.md`, `support_v1_readiness_memo.md`, `executive_status_brief.md`, `investor_value_brief.md`, `pilot_handoff_summary.md`, `support_v1_roi_model.md`, `support_v1_pilot_scorecard.md`, `support_v1_pilot_decision_memo_template.md`, `ARTIFACT_INDEX.md`, `PILOT_PACKAGE_INDEX.md`, and `FIRST_LIVE_PILOT_RUNBOOK.md`
+- `handoff_manifest.json`, which records the selected mode, source package used, included docs, output paths, generation time, and handoff purpose note
+
+It prefers the existing `use_cases/support_v1/artifacts/support_v1_pilot_package_summary.json` artifact when available, falls back to scanning `use_cases/support_v1/artifacts/pilot_packages/`, and does not rebuild packages or rerun evaluations.
+
 ## Quick inspection
 
 Inspect the latest decision-point artifact with PowerShell:
