@@ -1,0 +1,49 @@
+{
+  "label_set_name": "support_v1_helpdesk_export_sample_generic_c_labels",
+  "labels": [
+    {
+      "label_id": "mapped_support_c_label_001",
+      "entity_id": "acct_harborgrid",
+      "ticket_id": "HG-33018",
+      "decision_timestamp": "2026-04-01T13:05:00+00:00",
+      "should_route": "fast_path",
+      "note": "HarborGrid supplied the requested diff quickly and closed with a requester-confirmed fix, so this is a clean recent fast-path case."
+    },
+    {
+      "label_id": "mapped_support_c_label_002",
+      "entity_id": "acct_lumenpath",
+      "ticket_id": "LP-11807",
+      "decision_timestamp": "2026-04-09T10:40:00+00:00",
+      "should_route": "fast_path",
+      "note": "LumenPath is still borderline because the ticket is mid-flight, but the visible history is fresh, cooperative, and complete enough for the calibrated fast path."
+    },
+    {
+      "label_id": "mapped_support_c_label_003",
+      "entity_id": "acct_summitcare",
+      "ticket_id": "SC-77104",
+      "decision_timestamp": "2026-03-04T16:20:00+00:00",
+      "should_route": "deep_path",
+      "profile_too_stale": true,
+      "note": "SummitCare never delivered either requested artifact and the history has gone stale enough that this should stay on the deep path."
+    },
+    {
+      "label_id": "mapped_support_c_label_004",
+      "entity_id": "acct_pinecrest",
+      "ticket_id": "PC-55190",
+      "decision_timestamp": "2026-04-12T09:10:00+00:00",
+      "should_route": "deep_path",
+      "wrong_first_impression": true,
+      "note": "Pinecrest sounds reassuring at first glance, but the follow-up still omits the requested export pair and route list, so the first fast-path impression is unsafe."
+    },
+    {
+      "label_id": "mapped_support_c_label_005",
+      "entity_id": "acct_pinecrest",
+      "ticket_id": "PC-55190",
+      "decision_timestamp": "2026-04-12T15:20:00+00:00",
+      "should_route": "deep_path",
+      "contradiction_present": true,
+      "wrong_first_impression": true,
+      "note": "QA has now marked the reassuring update as conflicting with route-level counts, so the case clearly requires deeper review."
+    }
+  ]
+}

@@ -49,6 +49,10 @@ MAPPED_SAMPLE_A_PATH = SCRIPT_DIR / "helpdesk_export_sample_generic.csv"
 MAPPED_SAMPLE_A_LABELS_PATH = SCRIPT_DIR / "helpdesk_export_sample_generic_labels.json"
 MAPPED_SAMPLE_B_PATH = SCRIPT_DIR / "helpdesk_export_sample_generic_b.csv"
 MAPPED_SAMPLE_B_LABELS_PATH = SCRIPT_DIR / "helpdesk_export_sample_generic_b_labels.json"
+MAPPED_SAMPLE_C_PATH = SCRIPT_DIR / "helpdesk_export_sample_generic_c.csv"
+MAPPED_SAMPLE_C_LABELS_PATH = (
+    SCRIPT_DIR / "helpdesk_export_sample_generic_c_labels.json"
+)
 EXPORT_PATH = ARTIFACTS_DIR / "support_mapped_ingest_pack_comparison.json"
 MARKDOWN_EXPORT_PATH = ARTIFACTS_DIR / "support_mapped_ingest_pack_comparison.md"
 
@@ -324,8 +328,9 @@ def build_markdown_report(slice_results: Sequence[dict[str, Any]]) -> str:
         "# Support Mapped Ingest Pack Comparison",
         "",
         (
-            "Compares `mapped_sample_a`, `mapped_sample_b`, and `combined_ab` by running "
-            "the existing mapped normalization and labeled decision-point evaluation flow end to end."
+            "Compares `mapped_sample_a`, `mapped_sample_b`, `mapped_sample_c`, and "
+            "`combined_abc` by running the existing mapped normalization and labeled "
+            "decision-point evaluation flow end to end."
         ),
         "",
         "## Summary",
@@ -355,7 +360,7 @@ def build_markdown_report(slice_results: Sequence[dict[str, Any]]) -> str:
             (
                 "- This comparison adds one explicit mapped-ingest pack check so support_v1 "
                 "can be compared on each mapped sample independently and on the in-memory "
-                "combined A+B slice without mutating source datasets."
+                "combined A+B+C slice without mutating source datasets."
             ),
             "",
         ]
@@ -482,9 +487,20 @@ def main() -> None:
             mapping_path=mapping_path,
         ),
         evaluate_slice(
-            "combined_ab",
-            csv_paths=(MAPPED_SAMPLE_A_PATH, MAPPED_SAMPLE_B_PATH),
-            labels_paths=(MAPPED_SAMPLE_A_LABELS_PATH, MAPPED_SAMPLE_B_LABELS_PATH),
+            "mapped_sample_c",
+            csv_paths=(MAPPED_SAMPLE_C_PATH,),
+            labels_paths=(MAPPED_SAMPLE_C_LABELS_PATH,),
+            mapping=mapping,
+            mapping_path=mapping_path,
+        ),
+        evaluate_slice(
+            "combined_abc",
+            csv_paths=(MAPPED_SAMPLE_A_PATH, MAPPED_SAMPLE_B_PATH, MAPPED_SAMPLE_C_PATH),
+            labels_paths=(
+                MAPPED_SAMPLE_A_LABELS_PATH,
+                MAPPED_SAMPLE_B_LABELS_PATH,
+                MAPPED_SAMPLE_C_LABELS_PATH,
+            ),
             mapping=mapping,
             mapping_path=mapping_path,
         ),

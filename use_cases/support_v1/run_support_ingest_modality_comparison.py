@@ -29,6 +29,8 @@ from run_support_mapped_ingest_pack_comparison import (
     MAPPED_SAMPLE_A_PATH,
     MAPPED_SAMPLE_B_LABELS_PATH,
     MAPPED_SAMPLE_B_PATH,
+    MAPPED_SAMPLE_C_LABELS_PATH,
+    MAPPED_SAMPLE_C_PATH,
     DEFAULT_MAPPING_PATH as MAPPED_MAPPING_PATH,
     evaluate_slice as evaluate_mapped_slice,
     load_mapping as load_mapped_mapping,
@@ -241,13 +243,28 @@ def build_modality_configs() -> tuple[dict[str, Any], ...]:
                     },
                 },
                 {
-                    "slice_name": "combined_ab",
+                    "slice_name": "mapped_sample_c",
                     "evaluator": evaluate_mapped_slice,
                     "kwargs": {
-                        "csv_paths": (MAPPED_SAMPLE_A_PATH, MAPPED_SAMPLE_B_PATH),
+                        "csv_paths": (MAPPED_SAMPLE_C_PATH,),
+                        "labels_paths": (MAPPED_SAMPLE_C_LABELS_PATH,),
+                        "mapping": mapped_mapping,
+                        "mapping_path": MAPPED_MAPPING_PATH,
+                    },
+                },
+                {
+                    "slice_name": "combined_abc",
+                    "evaluator": evaluate_mapped_slice,
+                    "kwargs": {
+                        "csv_paths": (
+                            MAPPED_SAMPLE_A_PATH,
+                            MAPPED_SAMPLE_B_PATH,
+                            MAPPED_SAMPLE_C_PATH,
+                        ),
                         "labels_paths": (
                             MAPPED_SAMPLE_A_LABELS_PATH,
                             MAPPED_SAMPLE_B_LABELS_PATH,
+                            MAPPED_SAMPLE_C_LABELS_PATH,
                         ),
                         "mapping": mapped_mapping,
                         "mapping_path": MAPPED_MAPPING_PATH,
