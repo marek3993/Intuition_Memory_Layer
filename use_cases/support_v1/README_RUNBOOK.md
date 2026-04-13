@@ -353,6 +353,21 @@ This builder adds:
 
 It prefers already-built execution bundles and does not rerun the underlying evaluations.
 
+## Pilot package summary builder
+
+Build one compact summary over the existing reviewer-ready pilot packages:
+
+```powershell
+py use_cases/support_v1/build_support_v1_pilot_package_summary.py
+```
+
+This builder adds:
+
+- `use_cases/support_v1/artifacts/support_v1_pilot_package_summary.json`, a machine-readable summary of which supported modes already have a package, which modes are still missing one, the latest package per mode, and the latest package overall
+- `use_cases/support_v1/artifacts/support_v1_pilot_package_summary.md`, a compact human-readable summary that points reviewers to the latest package folder, manifest, source execution bundle, and included docs count for each mode
+
+It reads the existing `use_cases/support_v1/artifacts/pilot_packages/` folders only and does not rebuild packages or rerun evaluations.
+
 ## Quick inspection
 
 Inspect the latest decision-point artifact with PowerShell:
