@@ -328,6 +328,31 @@ This builder adds:
 
 It prefers already-written artifacts and does not rerun the underlying evaluations.
 
+## Pilot package builder
+
+Build one reviewer-ready pilot package for one mode by combining the latest existing execution bundle with the key pilot docs:
+
+```powershell
+py use_cases/support_v1/build_support_v1_pilot_package.py labeled_support
+```
+
+Supported modes are:
+
+- `labeled_support`
+- `raw_ingest`
+- `csv_ingest`
+- `mapped_ingest`
+- `zendesk_like`
+
+This builder adds:
+
+- one timestamped folder under `use_cases/support_v1/artifacts/pilot_packages/`
+- `execution_bundle/`, containing the copied contents of the latest existing mode-specific execution bundle
+- `docs/`, containing `support_v1_readiness_memo.md`, `real_export_onboarding_checklist.md`, `pilot_handoff_summary.md`, `support_v1_pilot_scorecard.md`, `support_v1_pilot_decision_memo_template.md`, `FIRST_LIVE_PILOT_RUNBOOK.md`, and a generated `PILOT_PACKAGE_INDEX.md`
+- `pilot_package_manifest.json`, which records the package type, selected mode, source execution bundle used, included docs, output paths, generation time, and package purpose notes
+
+It prefers already-built execution bundles and does not rerun the underlying evaluations.
+
 ## Quick inspection
 
 Inspect the latest decision-point artifact with PowerShell:
