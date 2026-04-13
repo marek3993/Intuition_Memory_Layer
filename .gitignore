@@ -3,5 +3,5 @@
 *.pyo
 *.pyd
 .pytest_cache/
-use_cases/support_v1/artifacts/
+use_cases/support_v1/artifacts/pilot_execution_bundles/
 artifacts/
