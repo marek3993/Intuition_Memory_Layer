@@ -427,6 +427,28 @@ This exporter adds:
 
 It checks the summary artifact when present and also scans `use_cases/support_v1/artifacts/pilot_packages/` so the newest valid package for the selected mode wins without rebuilding packages or rerunning evaluations.
 
+## Pilot outreach pack exporter
+
+Export one minimal decision and onboarding pack for the first real external pilot conversation:
+
+```powershell
+py use_cases/support_v1/export_support_v1_pilot_outreach_pack.py
+```
+
+Optional named output folder:
+
+```powershell
+py use_cases/support_v1/export_support_v1_pilot_outreach_pack.py --pack-name first_external_pilot
+```
+
+This exporter adds:
+
+- one timestamped or named folder under `use_cases/support_v1/artifacts/pilot_outreach_packs/`
+- copied latest available versions of `pilot_readiness_decision_brief.md`, `pilot_handoff_summary.md`, `pilot_handoff_email_template.md`, `support_v1_readiness_memo.md`, `real_export_onboarding_checklist.md`, `real_export_intake_template.md`, `real_export_field_inventory_template.csv`, `helpdesk_export_contract.md`, `executive_status_brief.md`, and `investor_value_brief.md`
+- `outreach_pack_manifest.json`, which records generation time, included docs, output paths, the outreach purpose note, and the recommended starting mode
+
+It reads existing artifacts only, does not rerun evaluations, and does not rebuild pilot packages.
+
 ## Pilot bundle validation summary builder
 
 Build one compact top-level validation snapshot across the existing pilot packages and pilot handoff bundles:
