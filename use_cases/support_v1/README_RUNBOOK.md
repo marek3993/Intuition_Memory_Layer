@@ -2,6 +2,17 @@
 
 Run commands from the repository root.
 
+## First pilot golden path
+
+For the first real external `support_v1` pilot, start with `raw_ingest` unless the partner cannot provide a usable raw export shape. The explicit default path, required outputs, fallback conditions, and the exact raw-ingest runner order now live in `use_cases/support_v1/GOLDEN_PATH_FIRST_PILOT.md`.
+
+Start with:
+
+```powershell
+py use_cases/support_v1/init_support_v1_real_pilot_workspace.py --mode raw_ingest --workspace-name first_real_pilot
+py use_cases/support_v1/validate_support_v1_real_pilot_workspace.py --workspace-path use_cases/support_v1/artifacts/real_pilot_workspaces/first_real_pilot
+```
+
 ## Master guide PDF builder
 
 Build the two print-friendly master guides into PDF artifacts:
