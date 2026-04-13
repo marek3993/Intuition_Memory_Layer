@@ -20,6 +20,22 @@ The supported `--mode` values are:
 
 Without `--workspace-name`, the initializer creates a mode-prefixed timestamped folder under `use_cases/support_v1/artifacts/real_pilot_workspaces/` and writes `workspace_manifest.json`.
 
+## Real pilot workspace validator
+
+Validate that one initialized real pilot workspace is structurally complete and ready for use:
+
+```powershell
+py use_cases/support_v1/validate_support_v1_real_pilot_workspace.py --workspace-path use_cases/support_v1/artifacts/real_pilot_workspaces/first_real_pilot
+```
+
+This validator adds one explicit readiness check that:
+
+- reads `workspace_manifest.json`
+- checks the required workspace subfolders plus intake, evaluation, decision, and reference files
+- verifies that manifest-listed copied artifacts still exist
+- separates hard failures from warnings
+- writes `validation_result.json` into the target workspace
+
 ## Real export intake pack
 
 Use these fill-in templates before the first real helpdesk export onboarding:
