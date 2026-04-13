@@ -391,7 +391,7 @@ This exporter adds:
 - copied handoff documents when present, including `support_v1_pilot_package_summary.json`, `support_v1_pilot_package_summary.md`, `support_v1_readiness_memo.md`, `executive_status_brief.md`, `investor_value_brief.md`, `pilot_handoff_summary.md`, `support_v1_roi_model.md`, `support_v1_pilot_scorecard.md`, `support_v1_pilot_decision_memo_template.md`, `ARTIFACT_INDEX.md`, `PILOT_PACKAGE_INDEX.md`, and `FIRST_LIVE_PILOT_RUNBOOK.md`
 - `handoff_manifest.json`, which records the selected mode, source package used, included docs, output paths, generation time, and handoff purpose note
 
-It prefers the existing `use_cases/support_v1/artifacts/support_v1_pilot_package_summary.json` artifact when available, falls back to scanning `use_cases/support_v1/artifacts/pilot_packages/`, and does not rebuild packages or rerun evaluations.
+It checks the summary artifact when present and also scans `use_cases/support_v1/artifacts/pilot_packages/` so the newest valid package for the selected mode wins without rebuilding packages or rerunning evaluations.
 
 ## Quick inspection
 
