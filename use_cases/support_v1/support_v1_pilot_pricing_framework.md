@@ -2,17 +2,17 @@
 
 ## What this adds
 
-This note adds a practical way to package and price a first paid `support_v1` pilot after initial free or discounted validation work. It keeps the commercial ask aligned with the current pilot boundary: one partner, one queue, one export modality, one bounded slice, and no core-engine changes.
+This note adds a practical way to package and price a first paid Support V1 pilot after initial free or discounted validation work. It keeps the commercial ask aligned with the current pilot boundary: one partner, one queue, one export format, one bounded slice, and no core-engine changes.
 
 ## What the pilot includes
 
 - One scoped pilot for one support queue or workflow.
-- One supported export modality and one redacted, auditable export slice.
+- One supported export format and one redacted, auditable export slice.
 - Contract validation for the supplied export.
-- Normalization into the current `support_v1` flow.
+- Normalization into the current Support V1 workflow.
 - One labeled review pass on the real slice.
-- One comparison readout across the current routing methods, including calibrated `iml`.
-- One operator-facing handoff package with recommendation, risks, and next-step decision.
+- One comparison readout across the current routing methods, including calibrated routing.
+- One operator-facing handoff summary with recommendation, risks, and next-step decision.
 
 ## Explicitly out of scope
 
@@ -53,8 +53,8 @@ Best when the buyer wants to confirm export fit and see whether a real slice is 
 
 Best default shape for a first paid pilot.
 
-- Scope: one queue, one supported modality, one real redacted slice, one defined label review pass.
-- Focus: validate ingest quality, produce a credible comparison, and tie the results to an ROI discussion.
+- Scope: one queue, one supported export format, one real redacted slice, one defined label review pass.
+- Focus: validate export quality, produce a credible comparison, and tie the results to an ROI discussion.
 - Good fit when: the team wants a decision-ready result for whether to repeat or expand.
 
 ### 3. Extended pilot
@@ -71,7 +71,7 @@ Pricing should be tied to delivery effort and decision value, not to broad marke
 
 - Base pilot fee should cover setup, export validation, normalization, evaluation, and handoff.
 - Price should increase with complexity drivers such as export messiness, mapping effort, label-review effort, and iteration count.
-- `raw_ingest` should usually be the simplest commercial entry point because it is the strongest current starting path.
+- The raw JSON export path should usually be the simplest commercial entry point because it is the strongest current starting path.
 - CSV or mapped CSV pilots may justify higher pricing when field mapping, joins, or cleanup work is heavier.
 - Extended pilots should be priced above the standard shape because they consume more review time and create more customer-specific handling.
 - ROI upside can support the commercial case, but pilot pricing should not depend on promising a fixed savings outcome from today's evidence base.
