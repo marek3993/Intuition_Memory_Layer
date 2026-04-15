@@ -9,7 +9,21 @@ import {
   siteContent
 } from "@/data/site-content";
 
+const creatorLinkedInUrl = "https://www.linkedin.com/in/marek-benda-imlayer/";
 const localeLabels: Record<Locale, string> = { en: "EN", sk: "SK" };
+const creatorAttribution: Record<
+  Locale,
+  { footer: string; linkLabel: string }
+> = {
+  en: {
+    footer: "Created by Marek Benda",
+    linkLabel: "LinkedIn"
+  },
+  sk: {
+    footer: "Vytvoril Marek Benda",
+    linkLabel: "LinkedIn"
+  }
+};
 
 export function LandingPage() {
   const [locale, setLocale] = useState<Locale>("en");
@@ -430,8 +444,21 @@ export function LandingPage() {
 
       <footer className="border-t border-white/10 bg-[rgba(4,7,16,0.96)]">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-white/48 sm:px-6 md:flex-row md:items-center md:justify-between">
-          <span>{PUBLIC_BRAND_NAME}</span>
-          <span className="pretty-copy max-w-2xl text-right">{content.footer.oneLine}</span>
+          <div className="flex flex-col gap-2">
+            <span>{PUBLIC_BRAND_NAME}</span>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/34">
+              <span>{creatorAttribution[locale].footer}</span>
+              <a
+                href={creatorLinkedInUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-white/42 underline decoration-white/12 underline-offset-4 transition duration-300 hover:text-accent hover:decoration-accent/45"
+              >
+                {creatorAttribution[locale].linkLabel}
+              </a>
+            </div>
+          </div>
+          <span className="pretty-copy max-w-2xl text-left md:text-right">{content.footer.oneLine}</span>
         </div>
       </footer>
     </main>
