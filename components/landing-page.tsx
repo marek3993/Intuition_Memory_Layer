@@ -215,7 +215,9 @@ export function LandingPage() {
         </div>
       </Section>
 
-      <Section id="first-application" tone="tone-graphite">
+      <ProductTransition id="first-application" {...content.productTransition} />
+
+      <Section tone="tone-graphite">
         <Intro {...content.supportFirst} />
         <div className="section-grid mt-10">
           {content.supportFirst.cards.map((card) => (
@@ -433,6 +435,42 @@ export function LandingPage() {
         </div>
       </footer>
     </main>
+  );
+}
+
+function ProductTransition({
+  id,
+  eyebrow,
+  title,
+  body
+}: {
+  id: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+}) {
+  return (
+    <section
+      id={id}
+      className="anchor-soft relative overflow-hidden border-y border-white/10 bg-[linear-gradient(180deg,#080c16_0%,#0d1420_100%)]"
+    >
+      <SectionGlow />
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-6 lg:py-16">
+        <div className="grid gap-7 border-l border-accent/30 pl-6 md:grid-cols-[minmax(180px,0.36fr)_minmax(0,1fr)] md:items-end md:gap-10 lg:pl-8">
+          <div>
+            <span className="eyebrow">{eyebrow}</span>
+          </div>
+          <div className="max-w-4xl">
+            <h2 className="balanced-heading text-[2rem] font-semibold leading-[1.04] tracking-[-0.05em] text-white sm:text-[2.75rem]">
+              {title}
+            </h2>
+            <p className="pretty-copy mt-4 max-w-3xl text-base leading-8 text-white/68 sm:text-[1.03rem]">
+              {body}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 

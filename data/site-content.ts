@@ -68,6 +68,11 @@ type SiteLocaleContent = {
     body: string;
     cards: Card[];
   };
+  productTransition: {
+    eyebrow: string;
+    title: string;
+    body: string;
+  };
   supportFirst: {
     eyebrow: string;
     title: string;
@@ -234,11 +239,17 @@ export const siteContent: Record<Locale, SiteLocaleContent> = {
         }
       ]
     },
-    supportFirst: {
-      eyebrow: "Why support is first",
-      title: "Support is the first wedge because it is verifiable, bounded, and commercially useful.",
+    productTransition: {
+      eyebrow: "First product",
+      title: "First product built on imLayer",
       body:
-        "Support gives IML a serious first proving ground: real exports, visible decision points, constrained pilot scope, and a workflow where review quality can be examined directly.",
+        "The sections above describe the imLayer core technology. The sections below show its first applied product: support_v1."
+    },
+    supportFirst: {
+      eyebrow: "Why support_v1 starts here",
+      title: "support_v1 is the first applied workflow because support is verifiable, bounded, and commercially useful.",
+      body:
+        "As the first product built on imLayer, support_v1 gives the core layer a serious proving ground: real exports, visible decision points, constrained pilot scope, and a workflow where review quality can be examined directly.",
       cards: [
         {
           title: "Verifiable decision points",
@@ -264,9 +275,9 @@ export const siteContent: Record<Locale, SiteLocaleContent> = {
     },
     firstApplication: {
       eyebrow: "First application",
-      title: "support_v1 is the first pilot-ready applied vertical for IML.",
+      title: "support_v1 is the first pilot-ready applied workflow built on imLayer.",
       body:
-        "support_v1 applies IML to support routing workflows. It is not the whole product. It is the first place where the core layer is being shaped into a bounded pilot-ready implementation.",
+        "support_v1 applies the imLayer core technology to support routing workflows. It is not the whole technology. It is the first use case where the core layer is being shaped into a bounded pilot-ready implementation.",
       workflowLabel: "Workflow",
       workflowTitle: "How support_v1 applies the layer",
       workflow: [
@@ -534,11 +545,17 @@ export const siteContent: Record<Locale, SiteLocaleContent> = {
         }
       ]
     },
-    supportFirst: {
-      eyebrow: "Prečo je support prvý",
-      title: "Support je prvý wedge, pretože je overiteľný, ohraničený a komerčne užitočný.",
+    productTransition: {
+      eyebrow: "Prvý produkt",
+      title: "Prvý produkt postavený na imLayer",
       body:
-        "Support dáva IML seriózne prvé proving ground: reálne exporty, viditeľné decision points, úzky pilot scope a workflow, kde sa dá review quality posudzovať priamo.",
+        "Sekcie vyššie popisujú jadrovú technológiu imLayer. Sekcie nižšie ukazujú jej prvý aplikovaný produkt: support_v1."
+    },
+    supportFirst: {
+      eyebrow: "Prečo support_v1 začína tu",
+      title: "support_v1 je prvý aplikovaný workflow, pretože support je overiteľný, ohraničený a komerčne užitočný.",
+      body:
+        "Ako prvý produkt postavený na imLayer dáva support_v1 jadrovej vrstve seriózne prvé proving ground: reálne exporty, viditeľné decision points, úzky pilot scope a workflow, kde sa dá review quality posudzovať priamo.",
       cards: [
         {
           title: "Overiteľné decision points",
@@ -564,9 +581,9 @@ export const siteContent: Record<Locale, SiteLocaleContent> = {
     },
     firstApplication: {
       eyebrow: "Prvá aplikácia",
-      title: "support_v1 je prvá aplikovaná vertikála IML pripravená na pilot.",
+      title: "support_v1 je prvý aplikovaný workflow postavený na imLayer a pripravený na pilot.",
       body:
-        "support_v1 aplikuje IML na support routing workflow. Nie je to celý produkt. Je to prvé miesto, kde sa základná vrstva mení na ohraničenú implementáciu pripravenú na pilot.",
+        "support_v1 aplikuje jadrovú technológiu imLayer na support routing workflow. Nie je to celá technológia. Je to prvý use case, kde sa jadrová vrstva mení na ohraničenú implementáciu pripravenú na pilot.",
       workflowLabel: "Workflow",
       workflowTitle: "Ako support_v1 aplikuje vrstvu",
       workflow: [
