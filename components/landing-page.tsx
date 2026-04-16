@@ -2,15 +2,38 @@
 
 import Image from "next/image";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
-import {
-  CONTACT_EMAIL,
-  Locale,
-  PUBLIC_BRAND_NAME,
-  siteContent
-} from "@/data/site-content";
+import { Locale, PUBLIC_BRAND_NAME, siteContent } from "@/data/site-content";
 
 const creatorLinkedInUrl = "https://www.linkedin.com/in/marek-benda-imlayer/";
 const localeLabels: Record<Locale, string> = { en: "EN", sk: "SK" };
+const emptyForm = {
+  name: "",
+  email: "",
+  company: "",
+  message: ""
+};
+const formStatusMessages: Record<
+  Locale,
+  {
+    submitLoadingLabel: string;
+    success: string;
+    validationError: string;
+    error: string;
+  }
+> = {
+  en: {
+    submitLoadingLabel: "Sending request...",
+    success: "Your pilot request was sent. Expect a reply by email.",
+    validationError: "Please complete the required fields with a valid work email.",
+    error: "The form could not be sent. Please try again in a moment."
+  },
+  sk: {
+    submitLoadingLabel: "Odosielam ziadost...",
+    success: "Pilotna ziadost bola odoslana. Odpoved pride e-mailom.",
+    validationError: "Vyplnte povinne polia a zadajte platny pracovny e-mail.",
+    error: "Formular sa nepodarilo odoslat. Skuste to este raz o chvilu."
+  }
+};
 const creatorAttribution: Record<
   Locale,
   { footer: string; linkLabel: string }
@@ -31,12 +54,9 @@ export function LandingPage() {
     path: string;
     title: string;
   } | null>(null);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    company: "",
-    message: ""
-  });
+  const [form, setForm] = useState(emptyForm);
+  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
 
   const content = siteContent[locale];
 
@@ -65,23 +85,53 @@ export function LandingPage() {
     };
   }, [expandedAsset]);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleFieldChange = (field: keyof typeof emptyForm, value: string) => {
+    setForm((current) => ({ ...current, [field]: value }));
+
+    if (submitState !== "idle") {
+      setSubmitState("idle");
+      setSubmitMessage("");
+    }
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const fields = [
-      [content.cta.form.nameLabel, form.name],
-      [content.cta.form.emailLabel, form.email],
-      [content.cta.form.companyLabel, form.company],
-      [content.cta.form.messageLabel, form.message]
-    ];
+    if (submitState === "loading") {
+      return;
+    }
 
-    const body = fields
-      .map(([label, value], index) =>
-        index === fields.length - 1 ? `${label}:\n${value}` : `${label}: ${value}`
-      )
-      .join("\n\n");
+    const messages = formStatusMessages[locale];
 
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(content.cta.form.subject)}&body=${encodeURIComponent(body)}`;
+    setSubmitState("loading");
+    setSubmitMessage("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
+
+      const result = (await response.json().catch(() => null)) as
+        | { success?: boolean; error?: string }
+        | null;
+
+      if (!response.ok || !result?.success) {
+        throw new Error(response.status === 400 ? messages.validationError : messages.error);
+      }
+
+      setForm(emptyForm);
+      setSubmitState("success");
+      setSubmitMessage(messages.success);
+    } catch (error) {
+      setSubmitState("error");
+      setSubmitMessage(
+        error instanceof Error && error.message ? error.message : messages.error
+      );
+    }
   };
 
   const roadmapExpandLabel =
@@ -390,7 +440,8 @@ export function LandingPage() {
                 <Input
                   value={form.name}
                   placeholder={content.cta.form.namePlaceholder}
-                  onChange={(event) => setForm({ ...form, name: event.target.value })}
+                  onChange={(event) => handleFieldChange("name", event.target.value)}
+                  disabled={submitState === "loading"}
                   required
                 />
               </Field>
@@ -399,7 +450,8 @@ export function LandingPage() {
                   type="email"
                   value={form.email}
                   placeholder={content.cta.form.emailPlaceholder}
-                  onChange={(event) => setForm({ ...form, email: event.target.value })}
+                  onChange={(event) => handleFieldChange("email", event.target.value)}
+                  disabled={submitState === "loading"}
                   required
                 />
               </Field>
@@ -408,26 +460,46 @@ export function LandingPage() {
               <Input
                 value={form.company}
                 placeholder={content.cta.form.companyPlaceholder}
-                onChange={(event) => setForm({ ...form, company: event.target.value })}
+                onChange={(event) => handleFieldChange("company", event.target.value)}
+                disabled={submitState === "loading"}
               />
             </Field>
             <Field label={content.cta.form.messageLabel}>
               <TextArea
                 value={form.message}
                 placeholder={content.cta.form.messagePlaceholder}
-                onChange={(event) => setForm({ ...form, message: event.target.value })}
+                onChange={(event) => handleFieldChange("message", event.target.value)}
+                disabled={submitState === "loading"}
                 required
               />
             </Field>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <button type="submit" className={buttonStyles("primary")}>
-                {content.cta.form.submitLabel}
+            <div className="flex flex-col gap-3">
+              <button
+                type="submit"
+                disabled={submitState === "loading"}
+                className={cx(
+                  buttonStyles("primary"),
+                  submitState === "loading" && "pointer-events-none opacity-80"
+                )}
+              >
+                {submitState === "loading"
+                  ? formStatusMessages[locale].submitLoadingLabel
+                  : content.cta.form.submitLabel}
                 <ArrowIcon />
               </button>
-              <a href={`mailto:${CONTACT_EMAIL}`} className={buttonStyles("secondary")}>
-                {content.cta.directEmailLabel}
-                <ArrowIcon />
-              </a>
+              <p
+                aria-live="polite"
+                className={cx(
+                  "min-h-5 text-sm",
+                  submitState === "success"
+                    ? "text-accent"
+                    : submitState === "error"
+                      ? "text-[#ffb0b0]"
+                      : "text-white/0"
+                )}
+              >
+                {submitMessage}
+              </p>
             </div>
           </form>
         </div>
@@ -688,7 +760,7 @@ function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
       {...props}
-      className="min-h-12 rounded-[18px] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-white/34"
+      className="min-h-12 rounded-[18px] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
     />
   );
 }
@@ -697,7 +769,7 @@ function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
       {...props}
-      className="min-h-[148px] rounded-[18px] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-white/34"
+      className="min-h-[148px] rounded-[18px] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-white/34 disabled:cursor-not-allowed disabled:opacity-60"
     />
   );
 }
