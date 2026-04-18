@@ -9,6 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
+from pilot_ops.io import write_manifest as write_manifest_file
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -377,14 +378,7 @@ def build_manifest(
 
 def write_manifest(bundle_dir: Path, manifest: dict[str, Any]) -> Path:
     manifest_path = bundle_dir / MANIFEST_FILENAME
-    temp_manifest_path = manifest_path.with_name(
-        f"{manifest_path.stem}.{uuid4().hex}.tmp"
-    )
-    with temp_manifest_path.open("w", encoding="utf-8") as handle:
-        json.dump(manifest, handle, indent=2)
-        handle.write("\n")
-    temp_manifest_path.replace(manifest_path)
-    return manifest_path
+    return write_manifest_file(manifest_path, manifest)
 
 
 def main() -> None:

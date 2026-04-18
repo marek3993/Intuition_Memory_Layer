@@ -10,14 +10,14 @@ This brief adds one short executive-facing view of where `support_v1` stands tod
 
 - Prototype ingest paths already exist for raw JSON exports, flat CSV exports, mapped CSV exports, and Zendesk-like nested exports.
 - A contract validator already checks whether an export has the ids, joins, timestamps, ordering, and text detail needed for the current flow.
-- Existing evaluation runners already compare default `iml`, calibrated `iml`, `naive_summary`, and `full_history` on the same labeled decision points.
+- Existing evaluation runners already compare standard routing (`default iml`), calibrated routing (`calibrated iml`), `naive_summary`, and `full_history` on the same labeled decision points.
 
 ## What evidence exists today
 
-- Across the loaded readiness artifacts, calibrated `iml` never underperforms default `iml`: 18 improved, 1 tied, 0 regressed across 19 slices.
-- In the unified ingest comparison, calibrated `iml` improves on default `iml` in 13 of 14 slices and ties once.
-- On the largest slice in every implemented modality, calibrated `iml` beats the best baseline.
-- The strongest current result is the raw-ingest comparison, where calibrated `iml` reaches 92.31% versus 69.23% for the best non-calibrated method.
+- Across the loaded readiness artifacts, calibrated routing never underperforms standard routing: 18 improved, 1 tied, 0 regressed across 19 slices.
+- In the unified ingest comparison, calibrated routing improves on standard routing in 13 of 14 slices and ties once.
+- On the largest slice in every implemented export format, calibrated routing beats the best comparison method.
+- The strongest current result is the raw JSON export path comparison, where calibrated routing reaches 92.31% versus 69.23% for the best non-calibrated comparison method.
 
 ## What is still missing before real production use
 

@@ -3,5 +3,7 @@
 *.pyo
 *.pyd
 .pytest_cache/
+benchmark_v0/
+tmp*/
 use_cases/support_v1/artifacts/pilot_execution_bundles/
 artifacts/

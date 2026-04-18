@@ -8,6 +8,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
+from pilot_ops.io import write_manifest as write_manifest_file, write_report
 
 from build_support_v1_pilot_execution_bundle import (
     BUNDLES_DIR,
@@ -266,8 +267,7 @@ def copy_pilot_docs(
         included_docs=included_docs,
         missing_docs=missing_docs,
     )
-    with index_path.open("w", encoding="utf-8") as handle:
-        handle.write(index_content)
+    write_report(index_path, index_content)
 
     included_docs.append(
         {
@@ -327,14 +327,7 @@ def build_manifest(
 
 def write_manifest(package_dir: Path, manifest: dict[str, Any]) -> Path:
     manifest_path = package_dir / PILOT_PACKAGE_MANIFEST_FILENAME
-    temp_manifest_path = manifest_path.with_name(
-        f"{manifest_path.stem}.{uuid4().hex}.tmp"
-    )
-    with temp_manifest_path.open("w", encoding="utf-8") as handle:
-        json.dump(manifest, handle, indent=2)
-        handle.write("\n")
-    temp_manifest_path.replace(manifest_path)
-    return manifest_path
+    return write_manifest_file(manifest_path, manifest)
 
 
 def main() -> None:

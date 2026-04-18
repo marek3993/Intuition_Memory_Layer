@@ -38,6 +38,15 @@ Core modules in the running MVP:
 - `iml/metrics.py`: per-entity and aggregate evaluation metrics.
 - `run_evaluation.py`: synthetic evaluation runner over `datasets/synthetic_entities.json`.
 
+Adapter and evaluation surfaces around the core:
+
+- `use_cases/support_v1/`: domain adapter that maps support-style exports into the unchanged `iml/` engine.
+- `use_cases/support_v1/run_support_*.py`: thin CLI entrypoints kept stable for existing commands.
+- `use_cases/support_v1/ingest/`: reusable ingest-evaluation flows for raw, CSV, mapped, and Zendesk-like support exports.
+- `use_cases/support_v1/eval/`: reusable decision-point evaluation logic shared across the support runners.
+- `use_cases/support_v1/compare/`: pack and modality comparison logic extracted out of the runner wrappers.
+- `use_cases/support_v1/pilot_ops/` and `use_cases/support_v1/shared/`: small utility modules for atomic artifact writes and pilot packaging/report generation.
+
 ## End-to-end flow
 
 1. `run_evaluation.py` loads synthetic entities and sorts each entity's events by timestamp.
@@ -117,6 +126,7 @@ Difference in lifecycle:
 - Decay changes freshness and confidence but does not change attribute values.
 - Revalidation is heuristic and state-based. It does not inspect raw history again.
 - The evaluation runner only evaluates low-stakes routing and prints human-readable output to stdout.
+- The `support_v1` cleanup keeps the public runner commands in place, but shifts reusable support logic into subpackages so runner scripts do not act as shared libraries.
 - Several modules exist but are not part of the running MVP path yet: `iml/profile.py`, `iml/contradiction.py`, `iml/event_log.py`, and `iml/fact_store.py` are currently empty.
 
 ## What is intentionally not in scope yet

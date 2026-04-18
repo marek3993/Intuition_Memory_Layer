@@ -53,8 +53,9 @@ This is enough to exercise the end-to-end memory loop without hiding behavior be
 
 ```text
 .
+|-- agent_integration/
+|-- benchmarks/
 |-- datasets/
-|   `-- synthetic_entities.json
 |-- iml/
 |   |-- models.py
 |   |-- extractor.py
@@ -64,11 +65,18 @@ This is enough to exercise the end-to-end memory loop without hiding behavior be
 |   |-- decision.py
 |   |-- explain.py
 |   `-- metrics.py
+|-- use_cases/
+|   `-- support_v1/
+|       |-- convert_support_cases_to_events.py
+|       |-- evaluate_support_labels.py
+|       |-- run_support_*.py
+|       |-- ingest/
+|       |-- eval/
+|       |-- compare/
+|       |-- pilot_ops/
+|       |-- shared/
+|       `-- artifacts/
 |-- tests/
-|   |-- test_update_engine.py
-|   |-- test_decay.py
-|   |-- test_revalidate.py
-|   `-- test_decision.py
 |-- main.py
 |-- run_evaluation.py
 |-- EVALUATION_NOTES.md
@@ -80,8 +88,10 @@ Notes:
 
 - `main.py` is the simplest end-to-end demo of event replay, decay, revalidation, and routing
 - `run_evaluation.py` is the current synthetic evaluation runner
-- `tests/` covers the core update, decay, revalidation, and routing logic
-- `datasets/synthetic_entities.json` is a compact hand-authored scenario dataset for deterministic inspection
+- `use_cases/support_v1/` is the most complete domain adapter and keeps CLI entrypoints at the top level while reusable runner logic now lives under `ingest/`, `eval/`, `compare/`, `pilot_ops/`, and `shared/`
+- `benchmarks/` and `agent_integration/` hold newer benchmark and integration work that sits beside, not inside, the core `iml/` engine
+- `tests/` covers the core update, decay, revalidation, routing, and newer benchmark surfaces
+- `datasets/` now includes the original synthetic evaluation data plus newer benchmark-supporting datasets
 
 ## Running The Project
 
@@ -119,6 +129,15 @@ py run_evaluation.py
 ```
 
 The evaluation runner replays the synthetic dataset, applies decay across long gaps, triggers revalidation heuristics at the final decision point when needed, and reports both per-entity and aggregate metrics. Evaluation output includes a console summary and a machine-readable JSON artifact; the current artifact structure is documented in `docs/evaluation_artifact_format.md`.
+
+### Run Support V1
+
+```powershell
+py use_cases/support_v1/run_support_evaluation.py
+py use_cases/support_v1/run_support_label_evaluation.py
+```
+
+The support adapter keeps the original top-level runner commands stable, but the reusable evaluation, ingest, comparison, and pilot-packaging logic now lives in the subpackages under `use_cases/support_v1/`.
 
 ## Current Evaluation Scenarios
 

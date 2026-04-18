@@ -5,6 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
+from pilot_ops.io import write_manifest as write_json_manifest, write_report
 
 from build_support_v1_pilot_execution_bundle import MODE_CONFIGS, SCRIPT_DIR, project_relative_path
 
@@ -201,28 +202,13 @@ def render_markdown(summary: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def write_text(path: Path, content: str) -> None:
-    temp_path = path.with_name(f"{path.stem}.{uuid4().hex}.tmp")
-    with temp_path.open("w", encoding="utf-8") as handle:
-        handle.write(content)
-    temp_path.replace(path)
-
-
-def write_json(path: Path, payload: dict[str, Any]) -> None:
-    temp_path = path.with_name(f"{path.stem}.{uuid4().hex}.tmp")
-    with temp_path.open("w", encoding="utf-8") as handle:
-        json.dump(payload, handle, indent=2)
-        handle.write("\n")
-    temp_path.replace(path)
-
-
 def main() -> None:
     valid_packages = discover_valid_packages()
     summary = build_summary(valid_packages)
     markdown = render_markdown(summary)
 
-    write_json(SUMMARY_JSON_PATH, summary)
-    write_text(SUMMARY_MARKDOWN_PATH, markdown)
+    write_json_manifest(SUMMARY_JSON_PATH, summary)
+    write_report(SUMMARY_MARKDOWN_PATH, markdown)
 
     print(f"total_package_count_found: {summary['total_package_count_found']}")
     print(

@@ -41,5 +41,5 @@ This index adds one short, practical map of the existing `support_v1` artifacts 
 
 | File | Purpose | Use when |
 | --- | --- | --- |
-| `artifacts/support_ingest_modality_comparison.md` | Human-readable comparison of results across labeled, raw, CSV, mapped, and Zendesk-like paths. | Use when explaining why `raw_ingest` is the strongest first pilot path today. |
-| `artifacts/support_v1_pilot_bundle_validation_summary.md` | Snapshot showing the current pilot packages and handoff bundles validate cleanly. | Use when you need proof that the repo already contains complete, validated pilot packaging artifacts. |
+| `artifacts/support_ingest_modality_comparison.md` | Human-readable comparison of results across labeled, raw, CSV, mapped, and Zendesk-like paths. | Use when explaining why the raw JSON export path is the strongest first pilot path today. |
+| `artifacts/support_v1_pilot_bundle_validation_summary.md` | Snapshot showing the current pilot deliverables packs and handoff materials validate cleanly. | Use when you need proof that the repo already contains complete, validated pilot deliverables packs and handoff materials. |
