@@ -40,14 +40,47 @@ function validateContactPayload(payload: ContactPayload) {
   return { name, email, company, message };
 }
 
+function getErrorMessage(error: unknown) {
+  if (!error) return "Unknown error.";
+  if (typeof error === "string") return error;
+  if (error instanceof Error) return error.message;
+
+  if (typeof error === "object") {
+    const maybeMessage = (error as { message?: unknown }).message;
+    const maybeName = (error as { name?: unknown }).name;
+
+    if (typeof maybeMessage === "string" && maybeMessage.trim()) {
+      return maybeMessage;
+    }
+
+    if (typeof maybeName === "string" && maybeName.trim()) {
+      return maybeName;
+    }
+
+    try {
+      return JSON.stringify(error);
+    } catch {
+      return "Unknown object error.";
+    }
+  }
+
+  return "Unknown error.";
+}
+
 export async function POST(request: Request) {
   const resendApiKey = process.env.RESEND_API_KEY;
   const contactEmail = process.env.CONTACT_EMAIL;
   const resendFrom = process.env.RESEND_FROM;
 
   if (!resendApiKey || !contactEmail || !resendFrom) {
+    console.error("Contact form config missing:", {
+      hasResendApiKey: !!resendApiKey,
+      hasContactEmail: !!contactEmail,
+      hasResendFrom: !!resendFrom
+    });
+
     return NextResponse.json(
-      { success: false, error: "Contact form is not configured." },
+      { success: false, error: "Contact form is not configured correctly." },
       { status: 500 }
     );
   }
@@ -56,7 +89,9 @@ export async function POST(request: Request) {
 
   try {
     payload = (await request.json()) as ContactPayload;
-  } catch {
+  } catch (error) {
+    console.error("Invalid JSON payload:", error);
+
     return NextResponse.json(
       { success: false, error: "Invalid JSON payload." },
       { status: 400 }
@@ -102,7 +137,7 @@ export async function POST(request: Request) {
   `;
 
   try {
-    const { data, error } = await resend.emails.send({
+    const result = await resend.emails.send({
       from: resendFrom,
       to: [contactEmail],
       replyTo: email,
@@ -111,17 +146,23 @@ export async function POST(request: Request) {
       html
     });
 
-    if (error) {
+    if (result.error) {
+      const resendMessage = getErrorMessage(result.error);
+      console.error("Resend API error:", result.error);
+
       return NextResponse.json(
-        { success: false, error: "Failed to send email." },
+        { success: false, error: `Resend error: ${resendMessage}` },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ success: true, id: data?.id ?? null });
-  } catch {
+    return NextResponse.json({ success: true, id: result.data?.id ?? null });
+  } catch (error) {
+    const message = getErrorMessage(error);
+    console.error("Unexpected server error in /api/contact:", error);
+
     return NextResponse.json(
-      { success: false, error: "Unexpected server error." },
+      { success: false, error: `Server error: ${message}` },
       { status: 500 }
     );
   }

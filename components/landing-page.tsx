@@ -120,7 +120,11 @@ export function LandingPage() {
         | null;
 
       if (!response.ok || !result?.success) {
-        throw new Error(response.status === 400 ? messages.validationError : messages.error);
+        throw new Error(
+          response.status === 400
+            ? result?.error || messages.validationError
+            : result?.error || messages.error
+        );
       }
 
       setForm(emptyForm);
@@ -161,7 +165,7 @@ export function LandingPage() {
                 {PUBLIC_BRAND_NAME}
               </div>
               <div className="truncate text-xs text-white/48">
-                {content.brand.subtitle}
+                {content.brand.expandedName} - {content.brand.subtitle}
               </div>
             </div>
           </a>
@@ -428,6 +432,28 @@ export function LandingPage() {
         </div>
       </Section>
 
+      <Section tone="tone-steel-blue">
+        <div className="grid gap-10 xl:grid-cols-[minmax(0,0.96fr)_minmax(320px,0.84fr)] xl:items-start">
+          <div>
+            <Intro {...content.pilotTrust} />
+            <div className="section-grid mt-10">
+              {content.pilotTrust.cards.map((card) => (
+                <Card key={card.title} {...card} />
+              ))}
+            </div>
+          </div>
+
+          <PilotAssetPanel
+            assetsLabel={content.pilotTrust.assetsLabel}
+            title={content.pilotTrust.assetsTitle}
+            body={content.pilotTrust.assetsBody}
+            assets={content.pilotTrust.assets}
+            openLabel={content.pilotTrust.openLabel}
+            requestLabel={content.pilotTrust.requestLabel}
+          />
+        </div>
+      </Section>
+
       <Section id="contact" tone="tone-deep-navy">
         <div className="max-w-3xl">
           <Intro {...content.cta} />
@@ -619,6 +645,92 @@ function Card({ title, body }: { title: string; body: string }) {
         {title}
       </h3>
       <p className="pretty-copy mt-3 text-sm leading-7 text-white/62">{body}</p>
+    </article>
+  );
+}
+
+function PilotAssetPanel({
+  assetsLabel,
+  title,
+  body,
+  assets,
+  openLabel,
+  requestLabel
+}: {
+  assetsLabel: string;
+  title: string;
+  body: string;
+  assets: Array<{
+    label: string;
+    title: string;
+    body: string;
+    access: "public" | "request";
+    href?: string;
+  }>;
+  openLabel: string;
+  requestLabel: string;
+}) {
+  return (
+    <div className="surface-strong p-6 sm:p-8">
+      <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
+        {assetsLabel}
+      </div>
+      <h3 className="balanced-heading mt-3 text-2xl font-semibold tracking-[-0.04em] text-white">
+        {title}
+      </h3>
+      <p className="pretty-copy mt-3 text-sm leading-7 text-white/64">{body}</p>
+      <div className="mt-7 grid gap-3">
+        {assets.map((asset) => (
+          <PilotAssetRow
+            key={asset.title}
+            asset={asset}
+            openLabel={openLabel}
+            requestLabel={requestLabel}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PilotAssetRow({
+  asset,
+  openLabel,
+  requestLabel
+}: {
+  asset: {
+    label: string;
+    title: string;
+    body: string;
+    access: "public" | "request";
+    href?: string;
+  };
+  openLabel: string;
+  requestLabel: string;
+}) {
+  const actionHref = asset.access === "public" && asset.href ? asset.href : "#contact";
+  const actionLabel = asset.access === "public" ? openLabel : requestLabel;
+
+  return (
+    <article className="rounded-[24px] border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <div className="text-[10px] font-medium uppercase tracking-[0.24em] text-accent/72">
+            {asset.label}
+          </div>
+          <h4 className="balanced-heading mt-2 text-base font-semibold text-white">
+            {asset.title}
+          </h4>
+          <p className="pretty-copy mt-2 text-sm leading-7 text-white/60">{asset.body}</p>
+        </div>
+
+        <div className="flex shrink-0 items-start sm:items-end">
+          <a href={actionHref} className={buttonStyles("secondary", "min-w-[9.5rem]")}>
+            {actionLabel}
+            <ArrowIcon />
+          </a>
+        </div>
+      </div>
     </article>
   );
 }
@@ -870,3 +982,4 @@ function assetSizes(variant: "layer" | "workflow" | "sequence") {
 function cx(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(" ");
 }
+
