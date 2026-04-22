@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Intuition Memory Layer | Decision-Memory Technology",
+  title: "imLayer | Decision-Memory Infrastructure for Workflow AI",
   description:
-    "Intuition Memory Layer is a decision-memory layer between memory and decisioning. support_v1 is the first pilot-ready proving ground."
+    "imLayer is decision-memory infrastructure for workflow AI. support_v1 is the first product, first applied workflow, and first pilot wedge built on the layer."
 };
 
 export default function RootLayout({

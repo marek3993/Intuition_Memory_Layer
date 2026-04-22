@@ -28,10 +28,10 @@ const formStatusMessages: Record<
     error: "The form could not be sent. Please try again in a moment."
   },
   sk: {
-    submitLoadingLabel: "Odosielam ziadost...",
-    success: "Pilotna ziadost bola odoslana. Odpoved pride e-mailom.",
-    validationError: "Vyplnte povinne polia a zadajte platny pracovny e-mail.",
-    error: "Formular sa nepodarilo odoslat. Skuste to este raz o chvilu."
+    submitLoadingLabel: "Odosielam žiadosť...",
+    success: "Pilotná žiadosť bola odoslaná. Odpoveď príde e-mailom.",
+    validationError: "Vyplňte povinné polia a zadajte platný pracovný e-mail.",
+    error: "Formulár sa nepodarilo odoslať. Skúste to ešte raz o chvíľu."
   }
 };
 const creatorAttribution: Record<
@@ -139,10 +139,10 @@ export function LandingPage() {
   };
 
   const roadmapExpandLabel =
-    locale === "sk" ? "Otvorit roadmap obrazok vo vacsom zobrazeni" : "Open roadmap image in larger view";
+    locale === "sk" ? "Otvoriť roadmap obrázok vo väčšom zobrazení" : "Open roadmap image in larger view";
   const roadmapDialogLabel =
-    locale === "sk" ? "Zvacseny roadmap obrazok" : "Enlarged roadmap image";
-  const closeLightboxLabel = locale === "sk" ? "Zavriet zvacseny obrazok" : "Close enlarged image";
+    locale === "sk" ? "Zväčšený roadmap obrázok" : "Enlarged roadmap image";
+  const closeLightboxLabel = locale === "sk" ? "Zavrieť zväčšený obrázok" : "Close enlarged image";
 
   return (
     <main lang={locale} className="relative overflow-x-clip bg-ink text-white">
@@ -239,7 +239,7 @@ export function LandingPage() {
                   {content.hero.primaryCta}
                   <ArrowIcon />
                 </a>
-                <a href="#first-application" className={buttonStyles("secondary")}>
+                <a href={content.hero.secondaryHref} className={buttonStyles("secondary")}>
                   {content.hero.secondaryCta}
                   <ArrowIcon />
                 </a>
@@ -260,7 +260,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <Section id="technology" tone="tone-charcoal-blue">
+      <Section id="what-imlayer-is" tone="tone-charcoal-blue">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(340px,0.78fr)] lg:items-start lg:gap-12">
           <div>
             <Intro {...content.technology} />
@@ -274,80 +274,12 @@ export function LandingPage() {
         </div>
       </Section>
 
-      <Section tone="tone-charcoal-blue-soft">
+      <Section id="why-now" tone="tone-charcoal-blue-soft">
         <Intro {...content.whyNow} />
         <div className="section-grid mt-10">
           {content.whyNow.cards.map((card) => (
             <Card key={card.title} {...card} />
           ))}
-        </div>
-      </Section>
-
-      <ProductTransition id="first-application" {...content.productTransition} />
-
-      <Section tone="tone-graphite">
-        <Intro {...content.supportFirst} />
-        <div className="section-grid mt-10">
-          {content.supportFirst.cards.map((card) => (
-            <Card key={card.title} {...card} />
-          ))}
-        </div>
-      </Section>
-
-      <Section tone="tone-steel-blue">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(340px,0.78fr)] lg:items-start lg:gap-12">
-          <Intro {...content.firstApplication} />
-          <AssetCard
-            asset={content.firstApplication.asset}
-            variant="workflow"
-            onExpand={setExpandedAsset}
-            expandLabel={roadmapExpandLabel}
-          />
-        </div>
-
-        <div className="mt-12 grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(300px,0.72fr)]">
-          <div className="surface-strong p-6 sm:p-8">
-            <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
-              {content.firstApplication.workflowLabel}
-            </div>
-            <h3 className="balanced-heading mt-3 text-2xl font-semibold tracking-[-0.04em] text-white">
-              {content.firstApplication.workflowTitle}
-            </h3>
-            <div className="mt-8 grid gap-4">
-              {content.firstApplication.workflow.map((step, index) => (
-                <div key={step.title} className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5">
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full border border-accent/18 bg-accent/10 text-xs font-semibold tracking-[0.12em] text-accent">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <h4 className="text-base font-semibold text-white">{step.title}</h4>
-                  </div>
-                  <p className="pretty-copy mt-3 text-sm leading-7 text-white/60">
-                    {step.body}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="surface p-6 sm:p-8">
-            <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
-              {content.firstApplication.builtLabel}
-            </div>
-            <h3 className="balanced-heading mt-3 text-2xl font-semibold tracking-[-0.04em] text-white">
-              {content.firstApplication.builtTitle}
-            </h3>
-            <div className="mt-6 grid gap-3">
-              {content.firstApplication.built.map((item) => (
-                <div key={item} className="rounded-[22px] border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-7 text-white/64">
-                  <div className="flex items-start gap-3">
-                    <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-accent shadow-[0_0_18px_rgba(137,180,255,0.38)]" />
-                    <span className="pretty-copy">{item}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </Section>
 
@@ -360,12 +292,11 @@ export function LandingPage() {
                 {content.evidence.highlight}
               </p>
             </div>
-            <div className="mt-6 grid gap-4 md:grid-cols-3">
-              <Metric label={content.evidence.metrics.calibratedLabel} value={content.evidence.metrics.calibratedValue} />
-              <Metric label={content.evidence.metrics.baselineLabel} value={content.evidence.metrics.baselineValue} />
-              <Metric label={content.evidence.metrics.deltaLabel} value={content.evidence.metrics.deltaValue} />
+            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {content.evidence.metrics.map((metric) => (
+                <Metric key={metric.label} label={metric.label} value={metric.value} />
+              ))}
             </div>
-            <p className="mt-5 text-sm text-white/54">{content.evidence.metrics.context}</p>
           </div>
 
           <div className="surface p-6 sm:p-8">
@@ -384,7 +315,109 @@ export function LandingPage() {
         </div>
       </Section>
 
-      <Section id="roadmap" tone="tone-graphite">
+      <Section id="first-product" tone="tone-graphite">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(340px,0.78fr)] lg:items-start lg:gap-12">
+          <Intro {...content.firstProduct} />
+          <AssetCard
+            asset={content.firstProduct.asset}
+            variant="workflow"
+            onExpand={setExpandedAsset}
+            expandLabel={roadmapExpandLabel}
+          />
+        </div>
+
+        <div className="section-grid mt-10">
+          {content.firstProduct.cards.map((card) => (
+            <Card key={card.title} {...card} />
+          ))}
+        </div>
+
+        <div className="mt-12 grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(300px,0.72fr)]">
+          <div className="surface-strong p-6 sm:p-8">
+            <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
+              {content.firstProduct.workflowLabel}
+            </div>
+            <h3 className="balanced-heading mt-3 text-2xl font-semibold tracking-[-0.04em] text-white">
+              {content.firstProduct.workflowTitle}
+            </h3>
+            <div className="mt-8 grid gap-4">
+              {content.firstProduct.workflow.map((step, index) => (
+                <div key={step.title} className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full border border-accent/18 bg-accent/10 text-xs font-semibold tracking-[0.12em] text-accent">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <h4 className="text-base font-semibold text-white">{step.title}</h4>
+                  </div>
+                  <p className="pretty-copy mt-3 text-sm leading-7 text-white/60">
+                    {step.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="surface p-6 sm:p-8">
+            <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
+              {content.firstProduct.builtLabel}
+            </div>
+            <h3 className="balanced-heading mt-3 text-2xl font-semibold tracking-[-0.04em] text-white">
+              {content.firstProduct.builtTitle}
+            </h3>
+            <div className="mt-6 grid gap-3">
+              {content.firstProduct.built.map((item) => (
+                <div key={item} className="rounded-[22px] border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-7 text-white/64">
+                  <div className="flex items-start gap-3">
+                    <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-accent shadow-[0_0_18px_rgba(137,180,255,0.38)]" />
+                    <span className="pretty-copy">{item}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 rounded-[24px] border border-accent/16 bg-accent/[0.07] p-5">
+              <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
+                {content.firstProduct.proofLabel}
+              </div>
+              <h4 className="balanced-heading mt-3 text-lg font-semibold tracking-[-0.035em] text-white">
+                {content.firstProduct.proofTitle}
+              </h4>
+              <div className="mt-5 grid gap-3">
+                {content.firstProduct.proofItems.map((item) => (
+                  <div key={item} className="flex items-start gap-3">
+                    <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-accent shadow-[0_0_18px_rgba(137,180,255,0.34)]" />
+                    <p className="pretty-copy text-sm leading-7 text-white/70">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section id="pilot" tone="tone-steel-blue">
+        <div className="grid gap-10 xl:grid-cols-[minmax(0,0.96fr)_minmax(320px,0.84fr)] xl:items-start">
+          <div>
+            <Intro {...content.firstPilot} />
+            <div className="section-grid mt-10">
+              {content.firstPilot.cards.map((card) => (
+                <Card key={card.title} {...card} />
+              ))}
+            </div>
+          </div>
+
+          <PilotAssetPanel
+            assetsLabel={content.firstPilot.assetsLabel}
+            title={content.firstPilot.assetsTitle}
+            body={content.firstPilot.assetsBody}
+            assets={content.firstPilot.assets}
+            openLabel={content.firstPilot.openLabel}
+            requestLabel={content.firstPilot.requestLabel}
+          />
+        </div>
+      </Section>
+
+      <Section id="roadmap" tone="tone-charcoal-blue">
         <div className="grid gap-10 xl:grid-cols-[minmax(0,0.94fr)_minmax(360px,1.02fr)] xl:items-start">
           <div>
             <Intro {...content.roadmap} />
@@ -411,45 +444,6 @@ export function LandingPage() {
             variant="sequence"
             onExpand={setExpandedAsset}
             expandLabel={roadmapExpandLabel}
-          />
-        </div>
-      </Section>
-
-      <Section tone="tone-charcoal-blue">
-        <Intro {...content.beyondSupport} />
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
-          {content.beyondSupport.examples.map((card) => (
-            <Card key={card.title} {...card} />
-          ))}
-        </div>
-        <div className="surface mt-8 p-6 sm:p-8">
-          <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/80">
-            {content.beyondSupport.examplesTitle}
-          </div>
-          <p className="pretty-copy mt-3 max-w-4xl text-base leading-8 text-white/68">
-            {content.beyondSupport.note}
-          </p>
-        </div>
-      </Section>
-
-      <Section tone="tone-steel-blue">
-        <div className="grid gap-10 xl:grid-cols-[minmax(0,0.96fr)_minmax(320px,0.84fr)] xl:items-start">
-          <div>
-            <Intro {...content.pilotTrust} />
-            <div className="section-grid mt-10">
-              {content.pilotTrust.cards.map((card) => (
-                <Card key={card.title} {...card} />
-              ))}
-            </div>
-          </div>
-
-          <PilotAssetPanel
-            assetsLabel={content.pilotTrust.assetsLabel}
-            title={content.pilotTrust.assetsTitle}
-            body={content.pilotTrust.assetsBody}
-            assets={content.pilotTrust.assets}
-            openLabel={content.pilotTrust.openLabel}
-            requestLabel={content.pilotTrust.requestLabel}
           />
         </div>
       </Section>
@@ -560,42 +554,6 @@ export function LandingPage() {
         </div>
       </footer>
     </main>
-  );
-}
-
-function ProductTransition({
-  id,
-  eyebrow,
-  title,
-  body
-}: {
-  id: string;
-  eyebrow: string;
-  title: string;
-  body: string;
-}) {
-  return (
-    <section
-      id={id}
-      className="anchor-soft relative overflow-hidden border-y border-white/10 bg-[linear-gradient(180deg,#080c16_0%,#0d1420_100%)]"
-    >
-      <SectionGlow />
-      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-6 lg:py-16">
-        <div className="grid gap-7 border-l border-accent/30 pl-6 md:grid-cols-[minmax(180px,0.36fr)_minmax(0,1fr)] md:items-end md:gap-10 lg:pl-8">
-          <div>
-            <span className="eyebrow">{eyebrow}</span>
-          </div>
-          <div className="max-w-4xl">
-            <h2 className="balanced-heading text-[2rem] font-semibold leading-[1.04] tracking-[-0.05em] text-white sm:text-[2.75rem]">
-              {title}
-            </h2>
-            <p className="pretty-copy mt-4 max-w-3xl text-base leading-8 text-white/68 sm:text-[1.03rem]">
-              {body}
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
 
