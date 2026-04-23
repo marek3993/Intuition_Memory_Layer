@@ -1,127 +1,104 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
-import { useEffect, useState, type FormEvent, type ReactNode } from "react";
-import { Locale, PUBLIC_BRAND_NAME, siteContent } from "@/data/site-content";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type FormEvent,
+  type ReactNode
+} from "react";
+import {
+  Locale,
+  PageKey,
+  PUBLIC_BRAND_EXPANDED_NAME,
+  PUBLIC_BRAND_NAME,
+  creatorLinkedInUrl,
+  localeLabels,
+  runtimeEvidenceSnapshot,
+  siteContent
+} from "@/data/site-content";
 
-const creatorLinkedInUrl = "https://www.linkedin.com/in/marek-benda-imlayer/";
-const localeLabels: Record<Locale, string> = { en: "EN", sk: "SK" };
 const emptyForm = {
   name: "",
   email: "",
   company: "",
   message: ""
 };
-const formStatusMessages: Record<
-  Locale,
-  {
-    submitLoadingLabel: string;
-    success: string;
-    validationError: string;
-    error: string;
-  }
-> = {
-  en: {
-    submitLoadingLabel: "Sending request...",
-    success: "Your pilot request was sent. Expect a reply by email.",
-    validationError: "Please complete the required fields with a valid work email.",
-    error: "The form could not be sent. Please try again in a moment."
-  },
-  sk: {
-    submitLoadingLabel: "Odosielam ĹľiadosĹĄ...",
-    success: "PilotnĂˇ ĹľiadosĹĄ bola odoslanĂˇ. OdpoveÄŹ prĂ­de e-mailom.",
-    validationError: "VyplĹte povinnĂ© polia a zadajte platnĂ˝ pracovnĂ˝ e-mail.",
-    error: "FormulĂˇr sa nepodarilo odoslaĹĄ. SkĂşste to eĹˇte raz o chvĂ­Äľu."
-  }
-};
-const creatorAttribution: Record<
-  Locale,
-  { footer: string; linkLabel: string }
-> = {
-  en: {
-    footer: "Created by Marek Benda",
-    linkLabel: "LinkedIn"
-  },
-  sk: {
-    footer: "Vytvoril Marek Benda",
-    linkLabel: "LinkedIn"
-  }
-};
-const evidenceArtworks: Record<
-  Locale,
-  {
-    desktop: { src: string; alt: string; width: number; height: number };
-    mobile: { src: string; alt: string; width: number; height: number };
-  }
-> = {
-  en: {
-    desktop: {
-      src: "/assets/evidence/evidence-en-desktop.png",
-      alt: "English internal runtime evidence artwork for desktop",
-      width: 1440,
-      height: 2320
-    },
-    mobile: {
-      src: "/assets/evidence/evidence-en-mobile.png",
-      alt: "English internal runtime evidence artwork for mobile",
-      width: 900,
-      height: 3160
-    }
-  },
-  sk: {
-    desktop: {
-      src: "/assets/evidence/evidence-sk-desktop.png",
-      alt: "Slovak internal runtime evidence artwork for desktop",
-      width: 1440,
-      height: 2320
-    },
-    mobile: {
-      src: "/assets/evidence/evidence-sk-mobile.png",
-      alt: "Slovak internal runtime evidence artwork for mobile",
-      width: 900,
-      height: 3160
-    }
-  }
+
+const heroAssetByPage: Record<PageKey, string> = {
+  home: "/assets/iml/hero-environment-visual.png",
+  evidence: "/assets/iml/hero-environment-visual.png",
+  support: "/assets/iml/hero-environment-visual.png"
 };
 
-export function LandingPage() {
-  const [locale, setLocale] = useState<Locale>("en");
-  const [expandedAsset, setExpandedAsset] = useState<{
-    path: string;
-    title: string;
-  } | null>(null);
+const pagePathByKey: Record<PageKey, string> = {
+  home: "/",
+  evidence: "/evidence-and-validation",
+  support: "/support-v1"
+};
+
+const archiveOrder = ["current", "heldout", "earlier", "support"] as const;
+type ArchiveKey = (typeof archiveOrder)[number];
+type ComparisonKey = "correctness" | "tokens" | "latency";
+type MotionLevel = "minimal" | "subtle" | "moderate" | "strong";
+
+export function LandingPage({
+  page,
+  initialLocale
+}: {
+  page: PageKey;
+  initialLocale: Locale;
+}) {
+  const router = useRouter();
+  const pathname = usePathname() || pagePathByKey[page];
+  const searchParams = useSearchParams();
+  const [locale, setLocale] = useState<Locale>(initialLocale);
   const [form, setForm] = useState(emptyForm);
   const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">(
     "idle"
   );
   const [submitMessage, setSubmitMessage] = useState("");
 
-  const content = siteContent[locale];
+  useEffect(() => {
+    setLocale(initialLocale);
+  }, [initialLocale]);
 
   useEffect(() => {
     document.documentElement.lang = locale;
+    window.localStorage.setItem("imlayer-locale", locale);
   }, [locale]);
 
   useEffect(() => {
-    if (!expandedAsset) {
+    if (searchParams.get("lang")) {
       return;
     }
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setExpandedAsset(null);
-      }
-    };
+    const storedLocale = window.localStorage.getItem("imlayer-locale");
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", handleKeyDown);
+    if ((storedLocale === "en" || storedLocale === "sk") && storedLocale !== locale) {
+      setLocale(storedLocale);
+      router.replace(
+        buildLocalizedHref(pathname, storedLocale, window.location.hash.replace("#", "")),
+        { scroll: false }
+      );
+    }
+  }, [locale, pathname, router, searchParams]);
 
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [expandedAsset]);
+  const content = siteContent[locale];
+  const currentRoute = pagePathByKey[page];
+  const contactHref = localizedHref(locale, "/support-v1", "contact");
+
+  const handleLocaleChange = (nextLocale: Locale) => {
+    setLocale(nextLocale);
+    router.replace(
+      buildLocalizedHref(pathname, nextLocale, window.location.hash.replace("#", "")),
+      { scroll: false }
+    );
+  };
 
   const handleFieldChange = (field: keyof typeof emptyForm, value: string) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -139,7 +116,7 @@ export function LandingPage() {
       return;
     }
 
-    const messages = formStatusMessages[locale];
+    const messages = content.formStatusMessages;
 
     setSubmitState("loading");
     setSubmitMessage("");
@@ -176,22 +153,13 @@ export function LandingPage() {
     }
   };
 
-  const roadmapExpandLabel =
-    locale === "sk"
-      ? "OtvoriĹĄ roadmap obrĂˇzok vo vĂ¤ÄŤĹˇom zobrazenĂ­"
-      : "Open roadmap image in larger view";
-  const roadmapDialogLabel =
-    locale === "sk" ? "ZvĂ¤ÄŤĹˇenĂ˝ roadmap obrĂˇzok" : "Enlarged roadmap image";
-  const closeLightboxLabel =
-    locale === "sk" ? "ZavrieĹĄ zvĂ¤ÄŤĹˇenĂ˝ obrĂˇzok" : "Close enlarged image";
-
   return (
     <main lang={locale} className="relative overflow-x-clip bg-ink text-white">
       <BackgroundGlow />
 
       <header className="sticky top-0 z-50 border-b border-white/10 bg-[rgba(5,8,18,0.78)] backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-2.5 sm:px-6">
-          <a href="#top" className="flex min-w-0 items-center gap-3">
+          <Link href={localizedHref(locale, "/")} className="flex min-w-0 items-center gap-3">
             <Image
               src="/assets/iml/site-logo-navbar.png"
               alt="IML logo"
@@ -206,21 +174,30 @@ export function LandingPage() {
                 {PUBLIC_BRAND_NAME}
               </div>
               <div className="truncate text-xs text-white/48">
-                {content.brand.expandedName} - {content.brand.subtitle}
+                {PUBLIC_BRAND_EXPANDED_NAME} - {content.header.brandSubtitle}
               </div>
             </div>
-          </a>
+          </Link>
 
           <nav className="hidden items-center gap-2 lg:flex">
-            {content.nav.items.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="rounded-full px-4 py-2 text-sm text-white/62 transition duration-300 hover:bg-white/[0.04] hover:text-white"
-              >
-                {item.label}
-              </a>
-            ))}
+            {content.header.routeLinks.map((item) => {
+              const active = currentRoute === item.href;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={localizedHref(locale, item.href)}
+                  className={cx(
+                    "rounded-full px-4 py-2 text-sm transition duration-300",
+                    active
+                      ? "bg-white/[0.08] text-white"
+                      : "text-white/62 hover:bg-white/[0.04] hover:text-white"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-3">
@@ -236,7 +213,7 @@ export function LandingPage() {
                   <button
                     key={option}
                     type="button"
-                    onClick={() => setLocale(option)}
+                    onClick={() => handleLocaleChange(option)}
                     className={cx(
                       "rounded-full px-3 py-2 text-xs font-semibold tracking-[0.18em] transition duration-300",
                       active ? "bg-accent text-ink" : "text-white/62 hover:text-white"
@@ -248,270 +225,720 @@ export function LandingPage() {
               })}
             </div>
 
-            <a href="#contact" className={buttonStyles("primary", "hidden sm:inline-flex")}>
-              {content.nav.cta}
+            <Link href={contactHref} className={buttonStyles("primary", "hidden sm:inline-flex")}>
+              {content.header.contactCta}
               <ArrowIcon />
-            </a>
+            </Link>
           </div>
         </div>
       </header>
 
-      <section
-        id="top"
-        className="tone-deep-navy hero-section relative overflow-hidden px-5 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:pb-24 lg:pt-20"
+      {page === "home" ? (
+        <HomePage locale={locale} />
+      ) : page === "evidence" ? (
+        <EvidencePage locale={locale} />
+      ) : (
+        <SupportPage
+          locale={locale}
+          form={form}
+          submitState={submitState}
+          submitMessage={submitMessage}
+          onFieldChange={handleFieldChange}
+          onSubmit={handleSubmit}
+        />
+      )}
+
+      <footer className="border-t border-white/10 bg-[rgba(4,7,16,0.96)]">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-white/48 sm:px-6 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-2">
+            <span>{PUBLIC_BRAND_NAME}</span>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/34">
+              <span>{content.footer.creatorFooter}</span>
+              <a
+                href={creatorLinkedInUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-white/42 underline decoration-white/12 underline-offset-4 transition duration-300 hover:text-accent hover:decoration-accent/45"
+              >
+                {content.footer.creatorLinkLabel}
+              </a>
+            </div>
+          </div>
+          <span className="pretty-copy max-w-2xl text-left md:text-right">
+            {content.footer.summary}
+          </span>
+        </div>
+      </footer>
+    </main>
+  );
+
+  function localizedHref(localeValue: Locale, path: string, hash?: string) {
+    return buildLocalizedHref(path, localeValue, hash);
+  }
+}
+
+function HomePage({ locale }: { locale: Locale }) {
+  const content = siteContent[locale].home;
+  const panelCopy =
+    locale === "sk"
+      ? {
+          title: "Runtime štruktúra",
+          layerLabel: "imLayer",
+          layerBody: "Jadrový technologický príbeh a runtime decision-memory vrstva.",
+          evidenceLabel: "Runtime dôkazy",
+          evidenceBody: "Primárna interná dôkazová vrstva pre aktuálnu validáciu tézy.",
+          supportLabel: "support_v1",
+          supportBody: "Prvý produkt, prvý komerčný wedge a prvá externá validačná cesta."
+        }
+      : {
+          title: "Runtime structure",
+          layerLabel: "imLayer",
+          layerBody: "Core technology story and runtime decision-memory layer.",
+          evidenceLabel: "Runtime evidence",
+          evidenceBody: "Primary internal proof layer for current thesis validation.",
+          supportLabel: "support_v1",
+          supportBody: "First product, first commercial wedge, and first external validation path."
+        };
+
+  return (
+    <>
+      <HeroSection
+        assetPath={heroAssetByPage.home}
+        aside={
+          <Reveal motion="subtle" className="surface-strong hidden p-6 lg:block">
+            <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
+              {panelCopy.title}
+            </div>
+            <div className="mt-5 grid gap-3">
+              <CompactMessageCard
+                label={panelCopy.layerLabel}
+                body={panelCopy.layerBody}
+              />
+              <CompactMessageCard
+                label={panelCopy.evidenceLabel}
+                body={panelCopy.evidenceBody}
+              />
+              <CompactMessageCard
+                label={panelCopy.supportLabel}
+                body={panelCopy.supportBody}
+              />
+            </div>
+          </Reveal>
+        }
       >
-        <HeroBackdrop path={content.hero.asset.path} />
-        <SectionGlow />
-        <div className="mx-auto max-w-7xl">
-          <div className="hero-content-shell">
-            <div className="max-w-[42rem]">
-              <span className="eyebrow">{content.hero.eyebrow}</span>
-              <h1 className="balanced-heading mt-6 max-w-[13ch] text-[3.2rem] font-semibold leading-[0.9] tracking-[-0.065em] text-white sm:max-w-none sm:text-[4.45rem] lg:text-[5.2rem] xl:text-[5.9rem]">
-                {content.hero.headline}
-              </h1>
-              <p className="pretty-copy mt-7 max-w-[35rem] text-[1.08rem] leading-8 text-white/78 sm:text-[1.18rem]">
-                {content.hero.subheadline}
+        <Reveal motion="subtle" className="max-w-[42rem]">
+          <span className="eyebrow">{content.hero.brandLabel}</span>
+          <h1 className="balanced-heading mt-6 max-w-[14ch] text-[3.2rem] font-semibold leading-[0.9] tracking-[-0.065em] text-white sm:max-w-none sm:text-[4.45rem] lg:text-[5.2rem] xl:text-[5.9rem]">
+            {content.hero.headline}
+          </h1>
+          <p className="pretty-copy mt-7 max-w-[35rem] text-[1.08rem] leading-8 text-white/78 sm:text-[1.18rem]">
+            {content.hero.subheadline}
+          </p>
+          <p className="pretty-copy mt-3 max-w-[39rem] text-sm leading-7 text-white/52 sm:text-[0.96rem]">
+            {content.hero.supportingLine}
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:mt-9 sm:flex-row">
+            <Link href={buildLocalizedHref("/evidence-and-validation", locale)} className={buttonStyles("primary")}>
+              {content.hero.primaryCta}
+              <ArrowIcon />
+            </Link>
+            <Link href={buildLocalizedHref("/support-v1", locale)} className={buttonStyles("secondary")}>
+              {content.hero.secondaryCta}
+              <ArrowIcon />
+            </Link>
+          </div>
+        </Reveal>
+      </HeroSection>
+
+      <Section tone="tone-charcoal-blue">
+        <Intro eyebrow={content.whatChanges.eyebrow} title={content.whatChanges.eyebrow} body={content.whatChanges.intro} />
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {content.whatChanges.cards.map((card, index) => (
+            <Reveal key={card.title} motion="subtle" delay={index * 90}>
+              <TextCard title={card.title} body={card.body} />
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section tone="tone-deep-navy">
+        <Reveal motion="subtle">
+          <span className="eyebrow">{content.proofHighlight.eyebrow}</span>
+        </Reveal>
+        <Reveal motion="subtle" delay={60} className="surface-strong mt-8 p-6 sm:p-8">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <StaticMetricCard label={runtimeEvidenceSnapshot.evaluatedLabel} value="2521 / 2521" />
+            <StaticMetricCard label="packet accuracy" value="1.0000" />
+            <StaticMetricCard label="raw accuracy" value="0.3455" />
+            <StaticMetricCard label="lower input tokens" value="61.25%" />
+          </div>
+          <p className="pretty-copy mt-8 max-w-3xl text-base leading-8 text-white/74">
+            {content.proofHighlight.interpretation}
+          </p>
+          <div className="mt-5 rounded-[24px] border border-accent/16 bg-accent/[0.07] px-5 py-4 text-sm text-white/72">
+            {content.proofHighlight.qualification}
+          </div>
+          <div className="mt-7">
+            <Link
+              href={buildLocalizedHref("/evidence-and-validation", locale)}
+              className={buttonStyles("primary")}
+            >
+              {content.proofHighlight.primaryCta}
+              <ArrowIcon />
+            </Link>
+          </div>
+        </Reveal>
+      </Section>
+
+      <Section tone="tone-charcoal-blue-soft">
+        <Intro eyebrow={content.gateway.eyebrow} title={content.gateway.title} body="" />
+        <div className="mt-10 grid gap-5 lg:grid-cols-2">
+          {content.gateway.cards.map((card, index) => (
+            <Reveal key={card.title} motion="subtle" delay={index * 100}>
+              <article className="surface h-full p-6 sm:p-7">
+                <h3 className="balanced-heading text-2xl font-semibold tracking-[-0.04em] text-white">
+                  {card.title}
+                </h3>
+                <p className="pretty-copy mt-4 text-sm leading-7 text-white/62">{card.body}</p>
+                <div className="mt-7">
+                  <Link href={buildLocalizedHref(card.href, locale)} className={buttonStyles("secondary")}>
+                    {card.cta}
+                    <ArrowIcon />
+                  </Link>
+                </div>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section tone="tone-graphite">
+        <Reveal motion="subtle">
+          <Intro
+            eyebrow={content.maturity.eyebrow}
+            title={content.maturity.title}
+            body=""
+          />
+        </Reveal>
+        <div className="mt-10 grid gap-4">
+          {content.maturity.items.map((item, index) => (
+            <Reveal key={item} motion="subtle" delay={index * 70}>
+              <div className="surface flex items-center justify-between gap-4 px-5 py-4 sm:px-6">
+                <span className="pretty-copy text-sm leading-7 text-white/76 sm:text-base">
+                  {item}
+                </span>
+                <span className="rounded-full border border-accent/16 bg-accent/[0.08] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-accent">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section tone="tone-steel-blue">
+        <Reveal motion="minimal" className="surface-strong p-7 sm:p-9">
+          <span className="eyebrow">Pilot path</span>
+          <h2 className="balanced-heading mt-6 text-[2.2rem] font-semibold leading-[1.02] tracking-[-0.05em] text-white sm:text-[3.2rem]">
+            {content.finalCta.headline}
+          </h2>
+          <p className="pretty-copy mt-5 max-w-3xl text-base leading-8 text-white/68 sm:text-[1.03rem]">
+            {content.finalCta.supportingLine}
+          </p>
+          <div className="mt-8">
+            <Link href={buildLocalizedHref("/support-v1", locale, "contact")} className={buttonStyles("primary")}>
+              {content.finalCta.primaryCta}
+              <ArrowIcon />
+            </Link>
+          </div>
+        </Reveal>
+      </Section>
+    </>
+  );
+}
+
+function EvidencePage({ locale }: { locale: Locale }) {
+  const content = siteContent[locale].evidence;
+  const [archiveKey, setArchiveKey] = useState<ArchiveKey>("current");
+  const archiveItem = content.archive.items[archiveKey];
+  const asideCopy =
+    locale === "sk"
+      ? {
+          title: "Aktuálny signál",
+          evaluated: "Vyhodnotené",
+          packetAccuracy: "Packet accuracy",
+          inputReduction: "Zníženie vstupu"
+        }
+      : {
+          title: "Current signal",
+          evaluated: "Evaluated",
+          packetAccuracy: "Packet accuracy",
+          inputReduction: "Input reduction"
+        };
+
+  return (
+    <>
+      <HeroSection
+        assetPath={heroAssetByPage.evidence}
+        aside={
+          <Reveal motion="moderate" className="surface-strong hidden p-6 lg:block">
+            <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
+              {asideCopy.title}
+            </div>
+            <div className="mt-5 grid gap-3">
+              <CompactMetricPanel title={asideCopy.evaluated} value="2521 / 2521" />
+              <CompactMetricPanel title={asideCopy.packetAccuracy} value="1.0000" />
+              <CompactMetricPanel title={asideCopy.inputReduction} value="61.25%" />
+            </div>
+          </Reveal>
+        }
+      >
+        <Reveal motion="moderate" className="max-w-[44rem]">
+          <span className="eyebrow">{content.hero.eyebrow}</span>
+          <h1 className="balanced-heading mt-6 max-w-[14ch] text-[3.2rem] font-semibold leading-[0.9] tracking-[-0.065em] text-white sm:max-w-none sm:text-[4.45rem] lg:text-[5rem]">
+            {content.hero.headline}
+          </h1>
+          <p className="pretty-copy mt-7 max-w-[43rem] text-[1.08rem] leading-8 text-white/78 sm:text-[1.18rem]">
+            {content.hero.subheadline}
+          </p>
+          <p className="pretty-copy mt-5 max-w-[36rem] text-sm leading-7 text-white/52">
+            {content.hero.qualification}
+          </p>
+        </Reveal>
+      </HeroSection>
+
+      <Section tone="tone-charcoal-blue">
+        <Reveal motion="moderate">
+          <Intro
+            eyebrow={content.currentEvidence.eyebrow}
+            title={content.currentEvidence.eyebrow}
+            body={content.currentEvidence.interpretation}
+          />
+        </Reveal>
+        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <Reveal motion="strong" delay={0}>
+            <StaticMetricCard label="Evaluated" value="2521 / 2521" />
+          </Reveal>
+          <Reveal motion="strong" delay={70}>
+            <StaticMetricCard label="Packet accuracy" value="1.0000" />
+          </Reveal>
+          <Reveal motion="strong" delay={140}>
+            <StaticMetricCard label="Raw accuracy" value="0.3455" />
+          </Reveal>
+          <Reveal motion="strong" delay={210}>
+            <StaticMetricCard label="Input token reduction" value="61.25%" />
+          </Reveal>
+        </div>
+      </Section>
+
+      <Section tone="tone-deep-navy">
+        <Reveal motion="moderate">
+          <Intro
+            eyebrow={content.keyMetrics.eyebrow}
+            title={content.keyMetrics.eyebrow}
+            body=""
+          />
+        </Reveal>
+        <div className="mt-10 grid gap-5 xl:grid-cols-3">
+          <Reveal motion="strong">
+            <MetricsGroupCard
+              title={content.keyMetrics.coverageTitle}
+              items={[
+                "successfully evaluated cases: 2521 / 2521",
+                "failed cases: 0"
+              ]}
+            />
+          </Reveal>
+          <Reveal motion="strong" delay={90}>
+            <MetricsGroupCard
+              title={content.keyMetrics.correctnessTitle}
+              items={[
+                "actual_raw_accuracy_vs_expected = 0.3455",
+                "actual_packet_accuracy_vs_expected = 1.0",
+                "raw_correct_packet_wrong = 0",
+                "packet_correct_raw_wrong = 1650",
+                "both_wrong = 0"
+              ]}
+            />
+          </Reveal>
+          <Reveal motion="strong" delay={180}>
+            <MetricsGroupCard
+              title={content.keyMetrics.runtimeEconomicsTitle}
+              items={[
+                "average actual input tokens: raw = 319.4597",
+                "average actual input tokens: packet = 118.0079",
+                "average actual input tokens: reduction = 61.25%",
+                "average actual output tokens: raw = 6.8401",
+                "average actual output tokens: packet = 2.3328",
+                "average actual latency: raw = 715.95 ms",
+                "average actual latency: packet = 640.032 ms",
+                "average actual latency: delta = -75.918 ms",
+                "median actual latency: raw = 638.228 ms",
+                "median actual latency: packet = 551.257 ms",
+                "median actual latency: delta = -86.971 ms",
+                "p95 actual latency: raw = 1119.712 ms",
+                "p95 actual latency: packet = 1090.07 ms",
+                "p95 actual latency: delta = -29.642 ms"
+              ]}
+            />
+          </Reveal>
+        </div>
+      </Section>
+
+      <Section tone="tone-charcoal-blue-soft">
+        <Reveal motion="moderate">
+          <Intro
+            eyebrow={content.comparisons.eyebrow}
+            title={content.comparisons.title}
+            body=""
+          />
+        </Reveal>
+        <ComparisonTabs locale={locale} />
+      </Section>
+
+      <Section tone="tone-graphite">
+        <Reveal motion="moderate">
+          <Intro
+            eyebrow={content.methodology.eyebrow}
+            title={content.methodology.title}
+            body=""
+          />
+        </Reveal>
+        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-5">
+          {content.methodology.items.map((item, index) => (
+            <Reveal key={item.title} motion="moderate" delay={index * 70}>
+              <TextCard title={item.title} body={item.body} />
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section tone="tone-steel-blue">
+        <Reveal motion="moderate">
+          <Intro
+            eyebrow={content.qualification.eyebrow}
+            title={content.qualification.title}
+            body=""
+          />
+        </Reveal>
+        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {content.qualification.items.map((item, index) => (
+            <Reveal key={item} motion="moderate" delay={index * 60}>
+              <div className="surface flex items-center gap-3 px-5 py-4">
+                <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-accent shadow-[0_0_18px_rgba(137,180,255,0.38)]" />
+                <span className="pretty-copy text-sm leading-7 text-white/72">{item}</span>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section tone="tone-charcoal-blue">
+        <Reveal motion="moderate">
+          <Intro eyebrow={content.archive.eyebrow} title={content.archive.title} body="" />
+        </Reveal>
+        <Reveal motion="strong" delay={50} className="surface-strong mt-10 p-6 sm:p-8">
+          <div className="flex flex-wrap gap-2">
+            {archiveOrder.map((key) => {
+              const active = archiveKey === key;
+              const item = content.archive.items[key];
+
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setArchiveKey(key)}
+                  className={cx(
+                    "rounded-full border px-4 py-2 text-sm transition duration-300",
+                    active
+                      ? "border-accent/25 bg-accent text-ink"
+                      : "border-white/10 bg-white/[0.03] text-white/66 hover:border-accent/20 hover:text-white"
+                  )}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,0.9fr)_minmax(280px,0.7fr)]">
+            <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6">
+              <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
+                {archiveItem.eyebrow}
+              </div>
+              <h3 className="balanced-heading mt-3 text-2xl font-semibold tracking-[-0.04em] text-white">
+                {archiveItem.title}
+              </h3>
+              <p className="pretty-copy mt-4 text-sm leading-7 text-white/62">
+                {archiveItem.body}
               </p>
-              <p className="pretty-copy mt-3 max-w-[39rem] text-sm leading-7 text-white/52 sm:text-[0.96rem]">
-                {content.hero.supportingLine}
-              </p>
-              <div className="mt-8 flex flex-col gap-3 sm:mt-9 sm:flex-row">
-                <a href="#contact" className={buttonStyles("primary")}>
-                  {content.hero.primaryCta}
-                  <ArrowIcon />
-                </a>
-                <a href={content.hero.secondaryHref} className={buttonStyles("secondary")}>
-                  {content.hero.secondaryCta}
-                  <ArrowIcon />
-                </a>
+              <div className="mt-6 rounded-[22px] border border-accent/16 bg-accent/[0.07] px-5 py-4 text-sm text-white/74">
+                {archiveItem.note}
               </div>
             </div>
-          </div>
 
-          <div className="relative z-10 mt-12 max-w-7xl lg:mt-14">
-            <div className="mb-3 text-[10px] font-medium uppercase tracking-[0.28em] text-white/20">
-              {content.hero.proofLabel}
-            </div>
-            <div className="grid gap-2.5 md:grid-cols-2 xl:grid-cols-4">
-              {content.hero.proofStrip.map((item, index) => (
-                <HeroProofCard key={item} index={index + 1} body={item} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <Section id="what-imlayer-is" tone="tone-charcoal-blue">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(340px,0.78fr)] lg:items-start lg:gap-12">
-          <div>
-            <Intro {...content.technology} />
-            <div className="section-grid mt-10">
-              {content.technology.cards.map((card) => (
-                <Card key={card.title} {...card} />
-              ))}
-            </div>
-          </div>
-          <AssetCard asset={content.technology.asset} variant="layer" />
-        </div>
-      </Section>
-
-      <Section id="why-now" tone="tone-charcoal-blue-soft">
-        <Intro {...content.whyNow} />
-        <div className="section-grid mt-10">
-          {content.whyNow.cards.map((card) => (
-            <Card key={card.title} {...card} />
-          ))}
-        </div>
-      </Section>
-
-      <Section id="evidence" tone="tone-deep-navy">
-        <EvidenceSection locale={locale} />
-      </Section>
-
-      <Section id="first-product" tone="tone-graphite">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(340px,0.78fr)] lg:items-start lg:gap-12">
-          <Intro {...content.firstProduct} />
-          <AssetCard
-            asset={content.firstProduct.asset}
-            variant="workflow"
-            onExpand={setExpandedAsset}
-            expandLabel={roadmapExpandLabel}
-          />
-        </div>
-
-        <div className="section-grid mt-10">
-          {content.firstProduct.cards.map((card) => (
-            <Card key={card.title} {...card} />
-          ))}
-        </div>
-
-        <div className="mt-12 grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(300px,0.72fr)]">
-          <div className="surface-strong p-6 sm:p-8">
-            <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
-              {content.firstProduct.workflowLabel}
-            </div>
-            <h3 className="balanced-heading mt-3 text-2xl font-semibold tracking-[-0.04em] text-white">
-              {content.firstProduct.workflowTitle}
-            </h3>
-            <div className="mt-8 grid gap-4">
-              {content.firstProduct.workflow.map((step, index) => (
+            <div className="grid gap-3">
+              {archiveItem.metrics.map((metric, index) => (
                 <div
-                  key={step.title}
-                  className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5"
+                  key={metric}
+                  className="rounded-[22px] border border-white/10 bg-white/[0.03] px-5 py-4"
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full border border-accent/18 bg-accent/10 text-xs font-semibold tracking-[0.12em] text-accent">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <h4 className="text-base font-semibold text-white">{step.title}</h4>
+                  <div className="text-[10px] uppercase tracking-[0.22em] text-white/34">
+                    {String(index + 1).padStart(2, "0")}
                   </div>
-                  <p className="pretty-copy mt-3 text-sm leading-7 text-white/60">
-                    {step.body}
+                  <p className="pretty-copy mt-2 text-sm leading-7 text-white/72">{metric}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </Section>
+
+      <Section tone="tone-deep-navy">
+        <Reveal motion="minimal" className="surface-strong p-7 sm:p-9">
+          <span className="eyebrow">Next layer</span>
+          <h2 className="balanced-heading mt-6 text-[2.2rem] font-semibold leading-[1.02] tracking-[-0.05em] text-white sm:text-[3.2rem]">
+            {content.exitCta.headline}
+          </h2>
+          <div className="mt-8">
+            <Link href={buildLocalizedHref("/support-v1", locale)} className={buttonStyles("primary")}>
+              {content.exitCta.cta}
+              <ArrowIcon />
+            </Link>
+          </div>
+        </Reveal>
+      </Section>
+    </>
+  );
+}
+
+function SupportPage({
+  locale,
+  form,
+  submitState,
+  submitMessage,
+  onFieldChange,
+  onSubmit
+}: {
+  locale: Locale;
+  form: typeof emptyForm;
+  submitState: "idle" | "loading" | "success" | "error";
+  submitMessage: string;
+  onFieldChange: (field: keyof typeof emptyForm, value: string) => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
+}) {
+  const content = siteContent[locale].support;
+  const formContent = siteContent[locale].contactForm;
+  const formStatusMessages = siteContent[locale].formStatusMessages;
+  const asideCopy =
+    locale === "sk"
+      ? {
+          title: "Prvý produkt",
+          body:
+            "support_v1 je prvý produktový povrch postavený na jadre imLayeru a prvá buyer-facing validačná cesta."
+        }
+      : {
+          title: "First product",
+          body:
+            "support_v1 is the first product surface built on the imLayer core and the first buyer-facing validation path."
+        };
+
+  return (
+    <>
+      <HeroSection
+        assetPath={heroAssetByPage.support}
+        aside={
+          <Reveal motion="moderate" className="surface-strong hidden p-5 lg:block">
+            <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
+              {asideCopy.title}
+            </div>
+            <div className="asset-visual mt-4 asset-visual--workflow">
+              <Image
+                src="/assets/iml/support-v1-workflow-visual.png"
+                alt="support_v1 workflow visual"
+                width={1536}
+                height={1024}
+                sizes="(max-width: 1024px) 100vw, 34vw"
+                className="asset-visual__image object-contain object-center"
+              />
+            </div>
+            <p className="pretty-copy mt-4 text-sm leading-7 text-white/60">
+              {asideCopy.body}
+            </p>
+          </Reveal>
+        }
+      >
+        <Reveal motion="moderate" className="max-w-[42rem]">
+          <span className="eyebrow">{content.hero.eyebrow}</span>
+          <h1 className="balanced-heading mt-6 text-[3.6rem] font-semibold leading-[0.9] tracking-[-0.065em] text-white sm:text-[4.8rem] lg:text-[5.4rem]">
+            {content.hero.headline}
+          </h1>
+          <p className="pretty-copy mt-7 max-w-[35rem] text-[1.08rem] leading-8 text-white/78 sm:text-[1.18rem]">
+            {content.hero.subheadline}
+          </p>
+          <p className="pretty-copy mt-3 max-w-[39rem] text-sm leading-7 text-white/52 sm:text-[0.96rem]">
+            {content.hero.supportingLine}
+          </p>
+          <div className="mt-8">
+            <Link href={buildLocalizedHref("/support-v1", locale, "contact")} className={buttonStyles("primary")}>
+              {content.hero.cta}
+              <ArrowIcon />
+            </Link>
+          </div>
+        </Reveal>
+      </HeroSection>
+
+      <Section tone="tone-charcoal-blue">
+        <Reveal motion="moderate">
+          <Intro eyebrow={content.whatIs.eyebrow} title={content.whatIs.title} body={content.whatIs.body} />
+        </Reveal>
+        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {content.whatIs.cards.map((card, index) => (
+            <Reveal key={card.title} motion="moderate" delay={index * 70}>
+              <TextCard title={card.title} body={card.body} />
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section tone="tone-charcoal-blue-soft">
+        <Reveal motion="moderate">
+          <Intro eyebrow={content.whyWedge.eyebrow} title={content.whyWedge.title} body="" />
+        </Reveal>
+        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-5">
+          {content.whyWedge.cards.map((card, index) => (
+            <Reveal key={card.title} motion="moderate" delay={index * 60}>
+              <TextCard title={card.title} body={card.body} />
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section tone="tone-deep-navy">
+        <Reveal motion="moderate">
+          <Intro eyebrow={content.inPlace.eyebrow} title={content.inPlace.title} body="" />
+        </Reveal>
+        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {content.inPlace.items.map((item, index) => (
+            <Reveal key={item.title} motion="moderate" delay={index * 65}>
+              <TextCard title={item.title} body={item.body} />
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section tone="tone-graphite">
+        <Reveal motion="moderate">
+          <Intro eyebrow={content.pilotFlow.eyebrow} title={content.pilotFlow.title} body="" />
+        </Reveal>
+        <div className="mt-10 grid gap-4">
+          {content.pilotFlow.steps.map((step, index) => (
+            <Reveal key={step.step} motion="moderate" delay={index * 80}>
+              <div className="surface flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:p-6">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-accent/18 bg-accent/10 text-xs font-semibold tracking-[0.14em] text-accent">
+                  {step.step}
+                </span>
+                <div>
+                  <h3 className="balanced-heading text-lg font-semibold tracking-[-0.035em] text-white">
+                    {step.title}
+                  </h3>
+                  <p className="pretty-copy mt-3 text-sm leading-7 text-white/62">{step.body}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section tone="tone-steel-blue">
+        <Reveal motion="moderate">
+          <Intro eyebrow={content.materials.eyebrow} title={content.materials.title} body={content.materials.body} />
+        </Reveal>
+        <div className="mt-10 grid gap-3">
+          {content.materials.items.map((item, index) => (
+            <Reveal key={item.title} motion="moderate" delay={index * 70}>
+              <article className="surface flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                  <div className="text-[10px] uppercase tracking-[0.22em] text-accent/72">
+                    {item.label}
+                  </div>
+                  <h3 className="balanced-heading mt-2 text-lg font-semibold tracking-[-0.035em] text-white">
+                    {item.title}
+                  </h3>
+                  <p className="pretty-copy mt-3 max-w-3xl text-sm leading-7 text-white/62">
+                    {item.body}
                   </p>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="surface p-6 sm:p-8">
-            <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
-              {content.firstProduct.builtLabel}
-            </div>
-            <h3 className="balanced-heading mt-3 text-2xl font-semibold tracking-[-0.04em] text-white">
-              {content.firstProduct.builtTitle}
-            </h3>
-            <div className="mt-6 grid gap-3">
-              {content.firstProduct.built.map((item) => (
-                <div
-                  key={item}
-                  className="rounded-[22px] border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-7 text-white/64"
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-accent shadow-[0_0_18px_rgba(137,180,255,0.38)]" />
-                    <span className="pretty-copy">{item}</span>
-                  </div>
+                <div className="sm:shrink-0">
+                  <Link
+                    href={buildLocalizedHref("/support-v1", locale, "contact")}
+                    className={buttonStyles("secondary", "min-w-[10.5rem]")}
+                  >
+                    {content.materials.requestLabel}
+                    <ArrowIcon />
+                  </Link>
                 </div>
-              ))}
-            </div>
-
-            <div className="mt-8 rounded-[24px] border border-accent/16 bg-accent/[0.07] p-5">
-              <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
-                {content.firstProduct.proofLabel}
-              </div>
-              <h4 className="balanced-heading mt-3 text-lg font-semibold tracking-[-0.035em] text-white">
-                {content.firstProduct.proofTitle}
-              </h4>
-              <div className="mt-5 grid gap-3">
-                {content.firstProduct.proofItems.map((item) => (
-                  <div key={item} className="flex items-start gap-3">
-                    <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-accent shadow-[0_0_18px_rgba(137,180,255,0.34)]" />
-                    <p className="pretty-copy text-sm leading-7 text-white/70">{item}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      <Section id="pilot" tone="tone-steel-blue">
-        <div className="grid gap-10 xl:grid-cols-[minmax(0,0.96fr)_minmax(320px,0.84fr)] xl:items-start">
-          <div>
-            <Intro {...content.firstPilot} />
-            <div className="section-grid mt-10">
-              {content.firstPilot.cards.map((card) => (
-                <Card key={card.title} {...card} />
-              ))}
-            </div>
-          </div>
-
-          <PilotAssetPanel
-            assetsLabel={content.firstPilot.assetsLabel}
-            title={content.firstPilot.assetsTitle}
-            body={content.firstPilot.assetsBody}
-            assets={content.firstPilot.assets}
-            openLabel={content.firstPilot.openLabel}
-            requestLabel={content.firstPilot.requestLabel}
-          />
-        </div>
-      </Section>
-
-      <Section id="roadmap" tone="tone-charcoal-blue">
-        <div className="grid gap-10 xl:grid-cols-[minmax(0,0.94fr)_minmax(360px,1.02fr)] xl:items-start">
-          <div>
-            <Intro {...content.roadmap} />
-            <div className="mt-10 grid gap-4">
-              {content.roadmap.steps.map((step) => (
-                <div key={step.stage} className="surface flex gap-4 p-5 sm:p-6">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-accent/18 bg-accent/10 text-sm font-semibold tracking-[0.12em] text-accent">
-                    {step.stage}
-                  </div>
-                  <div>
-                    <h3 className="balanced-heading text-lg font-semibold tracking-[-0.035em] text-white">
-                      {step.title}
-                    </h3>
-                    <p className="pretty-copy mt-3 text-sm leading-7 text-white/62">
-                      {step.body}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <AssetCard
-            asset={content.roadmap.asset}
-            variant="sequence"
-            onExpand={setExpandedAsset}
-            expandLabel={roadmapExpandLabel}
-          />
+              </article>
+            </Reveal>
+          ))}
         </div>
       </Section>
 
       <Section id="contact" tone="tone-deep-navy">
-        <div className="max-w-3xl">
-          <Intro {...content.cta} />
+        <Reveal motion="minimal" className="max-w-3xl">
+          <Intro
+            eyebrow={formContent.eyebrow}
+            title={content.cta.headline}
+            body={content.cta.supportingLine}
+          />
           <p className="pretty-copy mt-6 max-w-2xl text-base leading-8 text-white/70">
-            {content.cta.guidance}
+            {formContent.guidance}
           </p>
-          <form className="mt-8 grid gap-4" onSubmit={handleSubmit}>
+        </Reveal>
+
+        <Reveal motion="minimal" delay={80} className="mt-8 max-w-3xl">
+          <form className="grid gap-4" onSubmit={onSubmit}>
             <div className="grid gap-4 md:grid-cols-2">
-              <Field label={content.cta.form.nameLabel}>
+              <Field label={formContent.form.nameLabel}>
                 <Input
                   value={form.name}
-                  placeholder={content.cta.form.namePlaceholder}
-                  onChange={(event) => handleFieldChange("name", event.target.value)}
+                  placeholder={formContent.form.namePlaceholder}
+                  onChange={(event) => onFieldChange("name", event.target.value)}
                   disabled={submitState === "loading"}
                   required
                 />
               </Field>
-              <Field label={content.cta.form.emailLabel}>
+              <Field label={formContent.form.emailLabel}>
                 <Input
                   type="email"
                   value={form.email}
-                  placeholder={content.cta.form.emailPlaceholder}
-                  onChange={(event) => handleFieldChange("email", event.target.value)}
+                  placeholder={formContent.form.emailPlaceholder}
+                  onChange={(event) => onFieldChange("email", event.target.value)}
                   disabled={submitState === "loading"}
                   required
                 />
               </Field>
             </div>
-            <Field label={content.cta.form.companyLabel}>
+
+            <Field label={formContent.form.companyLabel}>
               <Input
                 value={form.company}
-                placeholder={content.cta.form.companyPlaceholder}
-                onChange={(event) => handleFieldChange("company", event.target.value)}
+                placeholder={formContent.form.companyPlaceholder}
+                onChange={(event) => onFieldChange("company", event.target.value)}
                 disabled={submitState === "loading"}
               />
             </Field>
-            <Field label={content.cta.form.messageLabel}>
+
+            <Field label={formContent.form.messageLabel}>
               <TextArea
                 value={form.message}
-                placeholder={content.cta.form.messagePlaceholder}
-                onChange={(event) => handleFieldChange("message", event.target.value)}
+                placeholder={formContent.form.messagePlaceholder}
+                onChange={(event) => onFieldChange("message", event.target.value)}
                 disabled={submitState === "loading"}
                 required
               />
             </Field>
+
             <div className="flex flex-col gap-3">
               <button
                 type="submit"
@@ -522,8 +949,8 @@ export function LandingPage() {
                 )}
               >
                 {submitState === "loading"
-                  ? formStatusMessages[locale].submitLoadingLabel
-                  : content.cta.form.submitLabel}
+                  ? formStatusMessages.submitLoadingLabel
+                  : formContent.form.submitLabel}
                 <ArrowIcon />
               </button>
               <p
@@ -541,51 +968,49 @@ export function LandingPage() {
               </p>
             </div>
           </form>
-        </div>
+        </Reveal>
       </Section>
+    </>
+  );
+}
 
-      {expandedAsset ? (
-        <ImageLightbox
-          asset={expandedAsset}
-          closeLabel={closeLightboxLabel}
-          dialogLabel={roadmapDialogLabel}
-          onClose={() => setExpandedAsset(null)}
-        />
-      ) : null}
-
-      <footer className="border-t border-white/10 bg-[rgba(4,7,16,0.96)]">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-white/48 sm:px-6 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-col gap-2">
-            <span>{PUBLIC_BRAND_NAME}</span>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/34">
-              <span>{creatorAttribution[locale].footer}</span>
-              <a
-                href={creatorLinkedInUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="text-white/42 underline decoration-white/12 underline-offset-4 transition duration-300 hover:text-accent hover:decoration-accent/45"
-              >
-                {creatorAttribution[locale].linkLabel}
-              </a>
-            </div>
-          </div>
-          <span className="pretty-copy max-w-2xl text-left md:text-right">
-            {content.footer.oneLine}
-          </span>
+function HeroSection({
+  children,
+  assetPath,
+  aside
+}: {
+  children: ReactNode;
+  assetPath: string;
+  aside?: ReactNode;
+}) {
+  return (
+    <section className="tone-deep-navy hero-section relative overflow-hidden px-5 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:pb-24 lg:pt-20">
+      <HeroBackdrop path={assetPath} />
+      <SectionGlow />
+      <div className="mx-auto max-w-7xl">
+        <div
+          className={cx(
+            "hero-content-shell",
+            Boolean(aside) &&
+              "lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.72fr)] lg:gap-8 lg:items-center"
+          )}
+        >
+          {children}
+          {aside}
         </div>
-      </footer>
-    </main>
+      </div>
+    </section>
   );
 }
 
 function Section({
-  id,
+  children,
   tone,
-  children
+  id
 }: {
-  id?: string;
-  tone: string;
   children: ReactNode;
+  tone: string;
+  id?: string;
 }) {
   return (
     <section id={id} className={cx("anchor-soft relative overflow-hidden", tone)}>
@@ -610,14 +1035,16 @@ function Intro({
       <h2 className="balanced-heading mt-5 text-[2.2rem] font-semibold leading-[1.02] tracking-[-0.05em] text-white sm:text-[3.2rem]">
         {title}
       </h2>
-      <p className="pretty-copy mt-5 text-base leading-8 text-white/68 sm:text-[1.03rem]">
-        {body}
-      </p>
+      {body ? (
+        <p className="pretty-copy mt-5 text-base leading-8 text-white/68 sm:text-[1.03rem]">
+          {body}
+        </p>
+      ) : null}
     </div>
   );
 }
 
-function Card({ title, body }: { title: string; body: string }) {
+function TextCard({ title, body }: { title: string; body: string }) {
   return (
     <article className="surface h-full p-6 sm:p-7">
       <h3 className="balanced-heading text-xl font-semibold tracking-[-0.04em] text-white">
@@ -628,122 +1055,664 @@ function Card({ title, body }: { title: string; body: string }) {
   );
 }
 
-function EvidenceSection({ locale }: { locale: Locale }) {
-  const artwork = evidenceArtworks[locale];
-
+function StaticMetricCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="mx-auto max-w-[78rem]">
-      <div className="lg:hidden">
-        <Image
-          src={artwork.mobile.src}
-          alt={artwork.mobile.alt}
-          width={artwork.mobile.width}
-          height={artwork.mobile.height}
-          priority
-          sizes="(max-width: 1023px) 100vw, 0px"
-          className="block h-auto w-full"
-        />
-      </div>
-
-      <div className="hidden lg:block">
-        <Image
-          src={artwork.desktop.src}
-          alt={artwork.desktop.alt}
-          width={artwork.desktop.width}
-          height={artwork.desktop.height}
-          priority
-          sizes="(max-width: 1279px) 100vw, 78rem"
-          className="block h-auto w-full"
-        />
+    <div className="surface h-full p-5 sm:p-6">
+      <div className="text-[11px] uppercase tracking-[0.22em] text-white/34">{label}</div>
+      <div className="mt-3 text-[2rem] font-semibold tracking-[-0.05em] text-white sm:text-[2.35rem]">
+        {value}
       </div>
     </div>
   );
 }
 
-function PilotAssetPanel({
-  assetsLabel,
-  title,
-  body,
-  assets,
-  openLabel,
-  requestLabel
-}: {
-  assetsLabel: string;
-  title: string;
-  body: string;
-  assets: Array<{
-    label: string;
-    title: string;
-    body: string;
-    access: "public" | "request";
-    href?: string;
-  }>;
-  openLabel: string;
-  requestLabel: string;
-}) {
+function CompactMessageCard({ label, body }: { label: string; body: string }) {
   return (
-    <div className="surface-strong p-6 sm:p-8">
-      <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
-        {assetsLabel}
-      </div>
-      <h3 className="balanced-heading mt-3 text-2xl font-semibold tracking-[-0.04em] text-white">
+    <div className="rounded-[24px] border border-white/10 bg-white/[0.03] px-5 py-4">
+      <div className="text-[10px] uppercase tracking-[0.22em] text-accent/72">{label}</div>
+      <p className="pretty-copy mt-2 text-sm leading-7 text-white/66">{body}</p>
+    </div>
+  );
+}
+
+function CompactMetricPanel({ title, value }: { title: string; value: string }) {
+  return (
+    <div className="rounded-[24px] border border-white/10 bg-white/[0.03] px-5 py-4">
+      <div className="text-[10px] uppercase tracking-[0.22em] text-white/34">{title}</div>
+      <div className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-white">{value}</div>
+    </div>
+  );
+}
+
+function MetricsGroupCard({ title, items }: { title: string; items: string[] }) {
+  return (
+    <article className="surface h-full p-6 sm:p-7">
+      <h3 className="balanced-heading text-xl font-semibold tracking-[-0.04em] text-white">
         {title}
       </h3>
-      <p className="pretty-copy mt-3 text-sm leading-7 text-white/64">{body}</p>
-      <div className="mt-7 grid gap-3">
-        {assets.map((asset) => (
-          <PilotAssetRow
-            key={asset.title}
-            asset={asset}
-            openLabel={openLabel}
-            requestLabel={requestLabel}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function PilotAssetRow({
-  asset,
-  openLabel,
-  requestLabel
-}: {
-  asset: {
-    label: string;
-    title: string;
-    body: string;
-    access: "public" | "request";
-    href?: string;
-  };
-  openLabel: string;
-  requestLabel: string;
-}) {
-  const actionHref = asset.access === "public" && asset.href ? asset.href : "#contact";
-  const actionLabel = asset.access === "public" ? openLabel : requestLabel;
-
-  return (
-    <article className="rounded-[24px] border border-white/10 bg-white/[0.03] p-4 sm:p-5">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0">
-          <div className="text-[10px] font-medium uppercase tracking-[0.24em] text-accent/72">
-            {asset.label}
+      <div className="mt-5 grid gap-3">
+        {items.map((item) => (
+          <div
+            key={item}
+            className="rounded-[20px] border border-white/10 bg-white/[0.03] px-4 py-3 text-sm leading-7 text-white/66"
+          >
+            {item}
           </div>
-          <h4 className="balanced-heading mt-2 text-base font-semibold text-white">
-            {asset.title}
-          </h4>
-          <p className="pretty-copy mt-2 text-sm leading-7 text-white/60">{asset.body}</p>
-        </div>
-
-        <div className="flex shrink-0 items-start sm:items-end">
-          <a href={actionHref} className={buttonStyles("secondary", "min-w-[9.5rem]")}>
-            {actionLabel}
-            <ArrowIcon />
-          </a>
-        </div>
+        ))}
       </div>
     </article>
   );
+}
+
+function ComparisonTabs({ locale }: { locale: Locale }) {
+  const content = siteContent[locale].evidence.comparisons;
+  const [activeTab, setActiveTab] = useState<ComparisonKey>("correctness");
+  const [ref, visible] = useInViewOnce<HTMLDivElement>(0.28);
+  const [animatedTab, setAnimatedTab] = useState<ComparisonKey | null>(null);
+
+  useEffect(() => {
+    if (visible && !animatedTab) {
+      setAnimatedTab(activeTab);
+    }
+  }, [activeTab, animatedTab, visible]);
+
+  return (
+    <div ref={ref} className="mt-10">
+      <div className="flex flex-wrap gap-2">
+        {(["correctness", "tokens", "latency"] as const).map((tab) => {
+          const active = activeTab === tab;
+
+          return (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setActiveTab(tab)}
+              className={cx(
+                "rounded-full border px-4 py-2 text-sm transition duration-300",
+                active
+                  ? "border-accent/25 bg-accent text-ink"
+                  : "border-white/10 bg-white/[0.03] text-white/66 hover:border-accent/20 hover:text-white"
+              )}
+            >
+              {content.tabs[tab]}
+            </button>
+          );
+        })}
+      </div>
+
+      <div key={activeTab} className="mt-8">
+        {activeTab === "correctness" ? (
+          <CorrectnessPanel
+            visible={visible}
+            animate={animatedTab === "correctness"}
+            rawLabel={content.descriptors.raw}
+            packetLabel={content.descriptors.packet}
+          />
+        ) : activeTab === "tokens" ? (
+          <TokensPanel
+            visible={visible}
+            animate={animatedTab === "tokens"}
+            rawLabel={content.descriptors.raw}
+            packetLabel={content.descriptors.packet}
+          />
+        ) : (
+          <LatencyPanel
+            visible={visible}
+            animate={animatedTab === "latency"}
+            rawLabel={content.descriptors.raw}
+            packetLabel={content.descriptors.packet}
+            deltaLabel={content.descriptors.delta}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function CorrectnessPanel({
+  visible,
+  animate,
+  rawLabel,
+  packetLabel
+}: {
+  visible: boolean;
+  animate: boolean;
+  rawLabel: string;
+  packetLabel: string;
+}) {
+  return (
+    <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(280px,0.74fr)]">
+      <div className="surface-strong p-6 sm:p-8">
+        <div className="grid gap-6 md:grid-cols-2">
+          <AnimatedMetricCard
+            label={rawLabel}
+            value={runtimeEvidenceSnapshot.rawAccuracy}
+            decimals={4}
+            visible={visible}
+            animate={animate}
+          />
+          <AnimatedMetricCard
+            label={packetLabel}
+            value={runtimeEvidenceSnapshot.packetAccuracy}
+            decimals={4}
+            visible={visible}
+            animate={animate}
+          />
+        </div>
+
+        <div className="mt-8 grid gap-4">
+          <BarRow
+            label={rawLabel}
+            value={runtimeEvidenceSnapshot.rawAccuracy}
+            maxValue={1}
+            decimals={4}
+            visible={visible}
+            durationMs={1200}
+            animate={animate}
+          />
+          <BarRow
+            label={packetLabel}
+            value={runtimeEvidenceSnapshot.packetAccuracy}
+            maxValue={1}
+            decimals={4}
+            visible={visible}
+            accent
+            durationMs={1200}
+            animate={animate}
+          />
+        </div>
+      </div>
+
+      <div className="grid gap-4">
+        <AnimatedSideStat
+          label="packet_correct_raw_wrong"
+          value={runtimeEvidenceSnapshot.packetCorrectRawWrong}
+          visible={visible}
+          animate={animate}
+        />
+        <AnimatedSideStat
+          label="raw_correct_packet_wrong"
+          value={runtimeEvidenceSnapshot.rawCorrectPacketWrong}
+          visible={visible}
+          animate={animate}
+        />
+        <AnimatedSideStat
+          label="both_wrong"
+          value={runtimeEvidenceSnapshot.bothWrong}
+          visible={visible}
+          animate={animate}
+        />
+      </div>
+    </div>
+  );
+}
+
+function TokensPanel({
+  visible,
+  animate,
+  rawLabel,
+  packetLabel
+}: {
+  visible: boolean;
+  animate: boolean;
+  rawLabel: string;
+  packetLabel: string;
+}) {
+  return (
+    <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(280px,0.74fr)]">
+      <div className="surface-strong p-6 sm:p-8">
+        <div className="text-[11px] uppercase tracking-[0.22em] text-accent/72">Average actual input tokens</div>
+        <div className="mt-5 grid gap-4">
+          <BarRow
+            label={rawLabel}
+            value={runtimeEvidenceSnapshot.inputTokens.raw}
+            maxValue={runtimeEvidenceSnapshot.inputTokens.raw}
+            decimals={4}
+            visible={visible}
+            durationMs={1200}
+            animate={animate}
+          />
+          <BarRow
+            label={packetLabel}
+            value={runtimeEvidenceSnapshot.inputTokens.packet}
+            maxValue={runtimeEvidenceSnapshot.inputTokens.raw}
+            decimals={4}
+            visible={visible}
+            accent
+            durationMs={1200}
+            animate={animate}
+          />
+        </div>
+
+        <div className="mt-8 text-[11px] uppercase tracking-[0.22em] text-accent/72">Average actual output tokens</div>
+        <div className="mt-5 grid gap-4">
+          <BarRow
+            label={rawLabel}
+            value={runtimeEvidenceSnapshot.outputTokens.raw}
+            maxValue={runtimeEvidenceSnapshot.outputTokens.raw}
+            decimals={4}
+            visible={visible}
+            durationMs={1200}
+            animate={animate}
+          />
+          <BarRow
+            label={packetLabel}
+            value={runtimeEvidenceSnapshot.outputTokens.packet}
+            maxValue={runtimeEvidenceSnapshot.outputTokens.raw}
+            decimals={4}
+            visible={visible}
+            accent
+            durationMs={1200}
+            animate={animate}
+          />
+        </div>
+      </div>
+
+      <div className="grid gap-4">
+        <AnimatedSideStat
+          label="input token reduction"
+          value={runtimeEvidenceSnapshot.inputReductionPercent}
+          decimals={2}
+          suffix="%"
+          visible={visible}
+          accent
+          animate={animate}
+        />
+        <AnimatedSideStat
+          label="raw input tokens"
+          value={runtimeEvidenceSnapshot.inputTokens.raw}
+          decimals={4}
+          visible={visible}
+          animate={animate}
+        />
+        <AnimatedSideStat
+          label="packet input tokens"
+          value={runtimeEvidenceSnapshot.inputTokens.packet}
+          decimals={4}
+          visible={visible}
+          accent
+          animate={animate}
+        />
+      </div>
+    </div>
+  );
+}
+
+function LatencyPanel({
+  visible,
+  animate,
+  rawLabel,
+  packetLabel,
+  deltaLabel
+}: {
+  visible: boolean;
+  animate: boolean;
+  rawLabel: string;
+  packetLabel: string;
+  deltaLabel: string;
+}) {
+  return (
+    <div className="grid gap-4">
+      <LatencyGroup
+        title="average actual latency"
+        rawLabel={rawLabel}
+        packetLabel={packetLabel}
+        deltaLabel={deltaLabel}
+        rawValue={runtimeEvidenceSnapshot.latencyAverageMs.raw}
+        packetValue={runtimeEvidenceSnapshot.latencyAverageMs.packet}
+        deltaValue={runtimeEvidenceSnapshot.latencyAverageMs.delta}
+        visible={visible}
+        animate={animate}
+      />
+      <LatencyGroup
+        title="median actual latency"
+        rawLabel={rawLabel}
+        packetLabel={packetLabel}
+        deltaLabel={deltaLabel}
+        rawValue={runtimeEvidenceSnapshot.latencyMedianMs.raw}
+        packetValue={runtimeEvidenceSnapshot.latencyMedianMs.packet}
+        deltaValue={runtimeEvidenceSnapshot.latencyMedianMs.delta}
+        visible={visible}
+        animate={animate}
+      />
+      <LatencyGroup
+        title="p95 actual latency"
+        rawLabel={rawLabel}
+        packetLabel={packetLabel}
+        deltaLabel={deltaLabel}
+        rawValue={runtimeEvidenceSnapshot.latencyP95Ms.raw}
+        packetValue={runtimeEvidenceSnapshot.latencyP95Ms.packet}
+        deltaValue={runtimeEvidenceSnapshot.latencyP95Ms.delta}
+        visible={visible}
+        animate={animate}
+      />
+    </div>
+  );
+}
+
+function LatencyGroup({
+  title,
+  rawLabel,
+  packetLabel,
+  deltaLabel,
+  rawValue,
+  packetValue,
+  deltaValue,
+  visible,
+  animate
+}: {
+  title: string;
+  rawLabel: string;
+  packetLabel: string;
+  deltaLabel: string;
+  rawValue: number;
+  packetValue: number;
+  deltaValue: number;
+  visible: boolean;
+  animate: boolean;
+}) {
+  const maxValue = Math.max(rawValue, packetValue);
+
+  return (
+    <div className="surface-strong p-6 sm:p-7">
+      <div className="text-[11px] uppercase tracking-[0.22em] text-accent/72">{title}</div>
+      <div className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(220px,0.4fr)]">
+        <div className="grid gap-4">
+          <BarRow
+            label={rawLabel}
+            value={rawValue}
+            maxValue={maxValue}
+            decimals={3}
+            visible={visible}
+            suffix=" ms"
+            durationMs={1200}
+            animate={animate}
+          />
+          <BarRow
+            label={packetLabel}
+            value={packetValue}
+            maxValue={maxValue}
+            decimals={3}
+            visible={visible}
+            suffix=" ms"
+            accent
+            durationMs={1200}
+            animate={animate}
+          />
+        </div>
+        <div className="rounded-[22px] border border-white/10 bg-white/[0.03] px-5 py-4">
+          <div className="text-[10px] uppercase tracking-[0.22em] text-white/34">{deltaLabel}</div>
+          <div className="mt-3 text-[1.7rem] font-semibold tracking-[-0.05em] text-accent">
+            <AnimatedNumber
+              value={deltaValue}
+              decimals={3}
+              visible={visible}
+              animate={animate}
+              suffix=" ms"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AnimatedMetricCard({
+  label,
+  value,
+  decimals,
+  visible,
+  animate
+}: {
+  label: string;
+  value: number;
+  decimals: number;
+  visible: boolean;
+  animate: boolean;
+}) {
+  return (
+    <div className="rounded-[24px] border border-white/10 bg-white/[0.03] px-5 py-5">
+      <div className="text-[10px] uppercase tracking-[0.22em] text-white/34">{label}</div>
+      <div className="mt-3 text-[2.1rem] font-semibold tracking-[-0.05em] text-white">
+        <AnimatedNumber value={value} decimals={decimals} visible={visible} animate={animate} />
+      </div>
+    </div>
+  );
+}
+
+function AnimatedSideStat({
+  label,
+  value,
+  visible,
+  decimals = 0,
+  suffix = "",
+  accent = false,
+  animate
+}: {
+  label: string;
+  value: number;
+  visible: boolean;
+  decimals?: number;
+  suffix?: string;
+  accent?: boolean;
+  animate: boolean;
+}) {
+  return (
+    <div className="surface h-full px-5 py-5">
+      <div className="text-[10px] uppercase tracking-[0.22em] text-white/34">{label}</div>
+      <div className={cx("mt-3 text-[2rem] font-semibold tracking-[-0.05em]", accent ? "text-accent" : "text-white")}>
+        <AnimatedNumber
+          value={value}
+          decimals={decimals}
+          visible={visible}
+          animate={animate}
+          suffix={suffix}
+        />
+      </div>
+    </div>
+  );
+}
+
+function BarRow({
+  label,
+  value,
+  maxValue,
+  decimals,
+  visible,
+  suffix = "",
+  accent = false,
+  durationMs = 1000,
+  animate = true
+}: {
+  label: string;
+  value: number;
+  maxValue: number;
+  decimals: number;
+  visible: boolean;
+  suffix?: string;
+  accent?: boolean;
+  durationMs?: number;
+  animate?: boolean;
+}) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const width = maxValue === 0 ? 0 : (value / maxValue) * 100;
+
+  return (
+    <div className="rounded-[22px] border border-white/10 bg-white/[0.03] px-5 py-4">
+      <div className="flex items-center justify-between gap-4">
+        <span className="text-sm text-white/68">{label}</span>
+        <span className={cx("text-sm font-semibold", accent ? "text-accent" : "text-white")}>
+          <AnimatedNumber
+            value={value}
+            decimals={decimals}
+            visible={visible}
+            animate={animate}
+            suffix={suffix}
+          />
+        </span>
+      </div>
+      <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-white/[0.06]">
+        <div
+          className={cx(
+            "h-full rounded-full transition-[width] ease-out",
+            accent ? "bg-accent" : "bg-white/65"
+          )}
+          style={{
+            width: prefersReducedMotion || visible ? `${width}%` : "0%",
+            transitionDuration: `${prefersReducedMotion || !animate ? 10 : durationMs}ms`
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function AnimatedNumber({
+  value,
+  decimals,
+  visible,
+  animate = true,
+  suffix = ""
+}: {
+  value: number;
+  decimals: number;
+  visible: boolean;
+  animate?: boolean;
+  suffix?: string;
+}) {
+  const [displayValue, setDisplayValue] = useState(0);
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  useEffect(() => {
+    if (!visible) {
+      return;
+    }
+
+    if (prefersReducedMotion || !animate) {
+      setDisplayValue(value);
+      return;
+    }
+
+    let frame = 0;
+    let startTime = 0;
+    const duration = 1100;
+
+    const tick = (time: number) => {
+      if (!startTime) {
+        startTime = time;
+      }
+
+      const progress = Math.min((time - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplayValue(value * eased);
+
+      if (progress < 1) {
+        frame = window.requestAnimationFrame(tick);
+      }
+    };
+
+    frame = window.requestAnimationFrame(tick);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
+  }, [animate, prefersReducedMotion, value, visible]);
+
+  return (
+    <>
+      {formatNumber(displayValue, decimals)}
+      {suffix}
+    </>
+  );
+}
+
+function Reveal({
+  children,
+  className,
+  delay = 0,
+  motion = "subtle"
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  motion?: MotionLevel;
+}) {
+  const [ref, visible] = useInViewOnce<HTMLDivElement>(0.18);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const config = motionConfig[motion];
+  const style = {
+    transitionDelay: `${prefersReducedMotion ? 0 : delay}ms`,
+    transitionDuration: `${prefersReducedMotion ? 10 : config.duration}ms`,
+    transform:
+      visible || prefersReducedMotion ? "translateY(0px)" : `translateY(${config.distance}px)`
+  } as CSSProperties;
+
+  return (
+    <div
+      ref={ref}
+      style={style}
+      className={cx(
+        "transition-[opacity,transform] ease-out",
+        visible || prefersReducedMotion ? "opacity-100" : "opacity-0",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+function useInViewOnce<T extends HTMLElement>(threshold = 0.2) {
+  const ref = useRef<T | null>(null);
+  const [visible, setVisible] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setVisible(true);
+      return;
+    }
+
+    if (!ref.current || visible) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+
+    observer.observe(ref.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [prefersReducedMotion, threshold, visible]);
+
+  return [ref, visible] as const;
+}
+
+function usePrefersReducedMotion() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setPrefersReducedMotion(mediaQuery.matches);
+
+    update();
+    mediaQuery.addEventListener("change", update);
+
+    return () => {
+      mediaQuery.removeEventListener("change", update);
+    };
+  }, []);
+
+  return prefersReducedMotion;
 }
 
 function HeroBackdrop({ path }: { path: string }) {
@@ -758,116 +1727,6 @@ function HeroBackdrop({ path }: { path: string }) {
         className="hero-backdrop__image"
       />
       <div className="hero-backdrop__veil" />
-    </div>
-  );
-}
-
-function HeroProofCard({ index, body }: { index: number; body: string }) {
-  return (
-    <div className="hero-proof-card">
-      <div className="hero-proof-card__index">{String(index).padStart(2, "0")}</div>
-      <p className="pretty-copy mt-1.5 text-sm leading-6 text-white/54">{body}</p>
-    </div>
-  );
-}
-
-function AssetCard({
-  asset,
-  variant,
-  onExpand,
-  expandLabel
-}: {
-  asset: { label: string; title: string; body: string; path: string };
-  variant: "layer" | "workflow" | "sequence";
-  onExpand?: (asset: { path: string; title: string }) => void;
-  expandLabel?: string;
-}) {
-  return (
-    <div className={assetCardClass(variant)}>
-      <span className="text-[11px] uppercase tracking-[0.22em] text-white/42">
-        {asset.label}
-      </span>
-      <div
-        className={cx("asset-visual", assetVisualSpacing(variant), `asset-visual--${variant}`)}
-      >
-        {onExpand ? (
-          <button
-            type="button"
-            className="asset-visual__button"
-            aria-haspopup="dialog"
-            aria-label={expandLabel ?? asset.title}
-            onClick={() => onExpand({ path: asset.path, title: asset.title })}
-          >
-            <Image
-              src={asset.path}
-              alt={asset.title}
-              width={1536}
-              height={1024}
-              sizes={assetSizes(variant)}
-              className={cx("asset-visual__image", assetImageClass(variant))}
-            />
-          </button>
-        ) : (
-          <Image
-            src={asset.path}
-            alt={asset.title}
-            width={1536}
-            height={1024}
-            sizes={assetSizes(variant)}
-            className={cx("asset-visual__image", assetImageClass(variant))}
-          />
-        )}
-      </div>
-      <div className="mt-5 max-w-sm">
-        <div className="text-[11px] uppercase tracking-[0.22em] text-white/42">
-          {asset.title}
-        </div>
-        <p className="pretty-copy mt-3 text-sm leading-7 text-white/62">{asset.body}</p>
-      </div>
-    </div>
-  );
-}
-
-function ImageLightbox({
-  asset,
-  closeLabel,
-  dialogLabel,
-  onClose
-}: {
-  asset: { path: string; title: string };
-  closeLabel: string;
-  dialogLabel: string;
-  onClose: () => void;
-}) {
-  return (
-    <div
-      className="image-lightbox"
-      role="dialog"
-      aria-modal="true"
-      aria-label={dialogLabel}
-      onClick={onClose}
-    >
-      <div className="image-lightbox__panel" onClick={(event) => event.stopPropagation()}>
-        <button
-          type="button"
-          className="image-lightbox__close"
-          aria-label={closeLabel}
-          onClick={onClose}
-          autoFocus
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <div className="image-lightbox__frame">
-          <Image
-            src={asset.path}
-            alt={asset.title}
-            width={1536}
-            height={1024}
-            sizes="100vw"
-            className="image-lightbox__image"
-          />
-        </div>
-      </div>
     </div>
   );
 }
@@ -950,39 +1809,27 @@ function buttonStyles(variant: "primary" | "secondary", className = "") {
   );
 }
 
-function assetImageClass(variant: "layer" | "workflow" | "sequence") {
-  if (variant === "sequence") {
-    return "object-contain object-center scale-[1.04]";
+function buildLocalizedHref(path: string, locale: Locale, hash?: string) {
+  const normalizedPath = path || "/";
+  const url = `${normalizedPath}?lang=${locale}`;
+  return hash ? `${url}#${hash}` : url;
+}
+
+function formatNumber(value: number, decimals: number) {
+  if (decimals === 0) {
+    return Math.round(value).toString();
   }
 
-  if (variant === "workflow") {
-    return "object-contain object-center scale-[1]";
-  }
-
-  return "object-contain object-center scale-[1.04]";
+  return value.toFixed(decimals);
 }
 
-function assetCardClass(variant: "layer" | "workflow" | "sequence") {
-  return cx(
-    "surface relative overflow-hidden",
-    variant === "sequence" ? "p-4 sm:p-5" : "p-5 sm:p-6"
-  );
-}
-
-function assetVisualSpacing(variant: "layer" | "workflow" | "sequence") {
-  return variant === "sequence" ? "mt-4" : "mt-5";
-}
-
-function assetSizes(variant: "layer" | "workflow" | "sequence") {
-  if (variant === "sequence") {
-    return "(max-width: 1279px) 100vw, 42vw";
-  }
-
-  return "(max-width: 1024px) 100vw, 34vw";
-}
+const motionConfig: Record<MotionLevel, { duration: number; distance: number }> = {
+  minimal: { duration: 480, distance: 6 },
+  subtle: { duration: 560, distance: 10 },
+  moderate: { duration: 620, distance: 14 },
+  strong: { duration: 680, distance: 18 }
+};
 
 function cx(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(" ");
 }
-
-

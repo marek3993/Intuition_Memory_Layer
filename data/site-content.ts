@@ -1,711 +1,932 @@
 export type Locale = "en" | "sk";
+export type PageKey = "home" | "evidence" | "support";
 
 export const PUBLIC_BRAND_NAME = "imLayer";
 export const PUBLIC_BRAND_EXPANDED_NAME = "Intuition Memory Layer";
+export const creatorLinkedInUrl = "https://www.linkedin.com/in/marek-benda-imlayer/";
+export const localeLabels: Record<Locale, string> = { en: "EN", sk: "SK" };
 
-type NavItem = { label: string; href: string };
-type Card = { title: string; body: string };
-type AssetSlot = { label: string; title: string; body: string; path: string };
-type PilotAsset = {
-  label: string;
-  title: string;
-  body: string;
-  access: "public" | "request";
-  href?: string;
-};
-type WorkflowStep = { title: string; body: string };
-type RoadmapStep = { stage: string; title: string; body: string };
+export function resolveLocale(value: string | string[] | undefined): Locale {
+  const candidate = Array.isArray(value) ? value[0] : value;
+  return candidate === "sk" ? "sk" : "en";
+}
 
-type SiteLocaleContent = {
-  brand: { expandedName: string; subtitle: string };
-  nav: { items: NavItem[]; cta: string };
-  hero: {
-    eyebrow: string;
-    headline: string;
-    subheadline: string;
-    supportingLine: string;
-    primaryCta: string;
-    secondaryCta: string;
-    secondaryHref: string;
-    proofLabel: string;
-    proofStrip: string[];
-    asset: AssetSlot;
-  };
-  technology: { eyebrow: string; title: string; body: string; cards: Card[]; asset: AssetSlot };
-  whyNow: { eyebrow: string; title: string; body: string; cards: Card[] };
-  firstProduct: {
-    eyebrow: string;
-    title: string;
-    body: string;
-    cards: Card[];
-    workflowLabel: string;
-    workflowTitle: string;
-    workflow: WorkflowStep[];
-    builtLabel: string;
-    builtTitle: string;
-    built: string[];
-    proofLabel: string;
-    proofTitle: string;
-    proofItems: string[];
-    asset: AssetSlot;
-  };
-  firstPilot: {
-    eyebrow: string;
-    title: string;
-    body: string;
-    cards: Card[];
-    assetsLabel: string;
-    assetsTitle: string;
-    assetsBody: string;
-    assets: PilotAsset[];
-    openLabel: string;
-    requestLabel: string;
-  };
-  roadmap: { eyebrow: string; title: string; body: string; steps: RoadmapStep[]; asset: AssetSlot };
-  cta: {
-    eyebrow: string;
-    title: string;
-    body: string;
-    guidance: string;
-    form: {
-      nameLabel: string;
-      namePlaceholder: string;
-      emailLabel: string;
-      emailPlaceholder: string;
-      companyLabel: string;
-      companyPlaceholder: string;
-      messageLabel: string;
-      messagePlaceholder: string;
-      submitLabel: string;
-      subject: string;
-    };
-  };
-  footer: { oneLine: string };
-};
-
-const enNavItems: NavItem[] = [
-  { label: "What imLayer is", href: "#what-imlayer-is" },
-  { label: "Why now", href: "#why-now" },
-  { label: "Internal evidence", href: "#evidence" },
-  { label: "First product", href: "#first-product" },
-  { label: "Pilot", href: "#pilot" },
-  { label: "Roadmap", href: "#roadmap" },
-  { label: "Contact", href: "#contact" }
-];
-
-const enContent: SiteLocaleContent = {
-  brand: {
-    expandedName: PUBLIC_BRAND_EXPANDED_NAME,
-    subtitle: "Decision-memory infrastructure"
+export const runtimeEvidenceSnapshot = {
+  evaluatedLabel: "2521 / 2521 evaluated",
+  evaluatedCompleted: 2521,
+  evaluatedTotal: 2521,
+  packetAccuracy: 1,
+  rawAccuracy: 0.3455,
+  inputReductionPercent: 61.25,
+  failedCases: 0,
+  rawCorrectPacketWrong: 0,
+  packetCorrectRawWrong: 1650,
+  bothWrong: 0,
+  inputTokens: {
+    raw: 319.4597,
+    packet: 118.0079
   },
-  nav: {
-    items: enNavItems,
-    cta: "Discuss first pilot fit"
+  outputTokens: {
+    raw: 6.8401,
+    packet: 2.3328
   },
-  hero: {
-    eyebrow: PUBLIC_BRAND_EXPANDED_NAME,
-    headline: PUBLIC_BRAND_NAME,
-    subheadline: "Decision-memory infrastructure for workflow AI.",
-    supportingLine:
-      "Turns fragmented workflow history into compact, decision-ready state. support_v1 is the first product built on top of the layer and the first path to external validation.",
-    primaryCta: "Discuss first pilot fit",
-    secondaryCta: "See internal evidence",
-    secondaryHref: "#evidence",
-    proofLabel: "Positioning",
-    proofStrip: [
-      "History -> compact state -> decision",
-      "Built for workflow AI, not generic memory storage",
-      "Major internal runtime evidence now exists on a large evaluated workflow surface",
-      "support_v1 is the first product, first applied workflow, and first pilot wedge"
-    ],
-    asset: {
-      label: "Hero brand asset",
-      title: "Editorial brand visual for the imLayer core layer",
-      body:
-        "A restrained hero visual that keeps the brand centered on the imLayer core rather than on a single workflow application.",
-      path: "/assets/iml/hero-environment-visual.png"
-    }
+  latencyAverageMs: {
+    raw: 715.95,
+    packet: 640.032,
+    delta: -75.918
   },
-  technology: {
-    eyebrow: "What imLayer is",
-    title: "History -> compact state -> decision.",
-    body:
-      "imLayer turns fragmented workflow history into compact decision-ready state. It is not generic memory storage, not generic orchestration, and not a broad autonomous AI claim. It is the decision-memory layer that helps a workflow use the right prior context at the moment a choice has to be made.",
-    cards: [
-      {
-        title: "Reconstructs workflow history",
-        body:
-          "imLayer rebuilds the parts of prior activity that materially shape the current workflow decision instead of dumping raw history back into the prompt."
-      },
-      {
-        title: "Compresses to compact state",
-        body:
-          "The output is a bounded working state that is easier to inspect, compare, and evaluate than a long chain of fragmented records."
-      },
-      {
-        title: "Feeds a real decision point",
-        body:
-          "The layer is meant to support a concrete workflow choice such as routing, escalation, or next-step selection at decision time."
-      },
-      {
-        title: "Not storage, orchestration, or autonomy theater",
-        body:
-          "The claim is narrower and more useful: a disciplined decision layer for workflow AI where context quality directly affects the decision outcome."
-      }
-    ],
-    asset: {
-      label: "Core layer view",
-      title: "From history to decision-ready state",
-      body:
-        "A simple view of imLayer as the layer that transforms fragmented workflow history into compact state for a decision system.",
-      path: "/assets/iml/iml-conceptual-layer-visual.png"
-    }
+  latencyMedianMs: {
+    raw: 638.228,
+    packet: 551.257,
+    delta: -86.971
   },
-  whyNow: {
-    eyebrow: "Why this matters now",
-    title: "Workflows can store history and run models. They still miss a disciplined decision layer.",
-    body:
-      "Buyers can already add memory systems, retrieval, and model calls to workflows. The harder gap is turning scattered operational history into a compact state that can support a reviewable decision. That gap is where imLayer is positioned.",
-    cards: [
-      {
-        title: "More history is not enough",
-        body:
-          "Teams can keep bigger logs and longer context windows, but decision quality still breaks when the relevant history is fragmented or poorly shaped."
-      },
-      {
-        title: "Operational decisions need structure",
-        body:
-          "A buyer does not need another generic AI layer. They need a way to make one workflow decision more disciplined, inspectable, and reviewable."
-      },
-      {
-        title: "The buying path has to stay bounded",
-        body:
-          "The credible first step is not a platform-wide promise. It is one workflow slice where the decision layer can be tested under controlled conditions."
-      }
-    ]
-  },
-  firstProduct: {
-    eyebrow: "First product: support_v1",
-    title: "support_v1 is the first product, first applied workflow, and first pilot wedge.",
-    body:
-      "support_v1 is the first external validation path for imLayer. It applies the core layer to one support workflow slice so the decision-memory thesis can be tested in a bounded environment with reviewable outputs.",
-    cards: [
-      {
-        title: "First product",
-        body:
-          "support_v1 is the first commercial surface built on top of imLayer rather than the full company or platform story."
-      },
-      {
-        title: "First applied workflow",
-        body:
-          "Support is the first workflow because exports, histories, and routing decisions are concrete enough to evaluate with discipline."
-      },
-      {
-        title: "First pilot wedge",
-        body:
-          "The intended buying motion is one bounded workflow slice, not a broad rollout across every support process."
-      },
-      {
-        title: "First external validation path",
-        body:
-          "Customer-facing proof should come through controlled pilot review and external evaluation, not through inflated product claims."
-      }
-    ],
-    workflowLabel: "Applied workflow",
-    workflowTitle: "How support_v1 applies the imLayer core",
-    workflow: [
-      {
-        title: "Support export intake",
-        body:
-          "The workflow starts from bounded support exports that can be reviewed, validated, and prepared for evaluation."
-      },
-      {
-        title: "History reconstruction",
-        body:
-          "Relevant case and event history is rebuilt so the routing context reflects the real workflow path rather than isolated records."
-      },
-      {
-        title: "Compact decision state",
-        body:
-          "The reconstructed history is compressed into a compact state that can inform the routing or escalation choice."
-      },
-      {
-        title: "Reviewable decision output",
-        body:
-          "The output is a reviewable routing layer for a bounded pilot, not a claim of unattended production automation."
-      }
-    ],
-    builtLabel: "Current stack",
-    builtTitle: "What already exists for the first product",
-    built: [
-      "Bounded support export intake and validation before deeper evaluation begins",
-      "Normalization into the working schema used by the current evaluation stack",
-      "Case and event-history reconstruction for decision-ready support context",
-      "Internal evaluation paths for comparing imLayer-driven outputs against a baseline",
-      "Pilot packaging material for first external review and onboarding"
-    ],
-    proofLabel: "Support proof layer",
-    proofTitle: "What makes support_v1 pilot-ready already",
-    proofItems: [
-      "A pilot-ready stack already exists for support export intake, validation, and downstream processing",
-      "A reviewable path already exists from support export to reconstructed history and decision output",
-      "Pilot materials and an external review path already exist for a controlled first evaluation"
-    ],
-    asset: {
-      label: "First product view",
-      title: "support_v1 as the first applied workflow",
-      body:
-        "A restrained workflow visual showing support_v1 as the first applied layer on top of imLayer, not as the entire platform story.",
-      path: "/assets/iml/support-v1-workflow-visual.png"
-    }
-  },
-  firstPilot: {
-    eyebrow: "First pilot framing",
-    title: "A controlled first pilot with clear review criteria.",
-    body:
-      "The first pilot is intentionally narrow: one workflow slice, support exports, explicit review criteria, and a controlled validation path that stays easy to inspect.",
-    cards: [
-      {
-        title: "One workflow slice",
-        body:
-          "The pilot is scoped to a single support workflow slice so outcomes stay reviewable and the claim stays disciplined."
-      },
-      {
-        title: "Support exports as source material",
-        body:
-          "The pilot starts from bounded exports that make ingestion, review, and evaluation transparent for both sides."
-      },
-      {
-        title: "Clear review criteria",
-        body:
-          "Review method, success gates, and pass criteria are agreed before evaluation starts so the pilot can be judged against explicit standards."
-      },
-      {
-        title: "Controlled validation path",
-        body:
-          "The pilot is a validation exercise for the imLayer core in a real workflow environment, not an open-ended production deployment."
-      }
-    ],
-    assetsLabel: "Pilot materials",
-    assetsTitle: "Reviewable materials for a bounded pilot",
-    assetsBody:
-      "The materials stay compact and buyer-facing: scope, review criteria, data handling assumptions, and the evidence pack used to review the first pilot.",
-    assets: [
-      {
-        label: "Pilot scope",
-        title: "Bounded pilot scope",
-        body:
-          "The workflow slice, export boundaries, decision owners, and review cadence used for the first pilot.",
-        access: "request"
-      },
-      {
-        label: "Review criteria",
-        title: "Pilot review criteria",
-        body:
-          "The method, acceptance thresholds, and review checkpoints used to determine whether the pilot passes.",
-        access: "request"
-      },
-      {
-        label: "Data handling",
-        title: "Support export handling note",
-        body:
-          "The compact note covering source data assumptions, handling limits, privacy posture, and review controls.",
-        access: "request"
-      },
-      {
-        label: "Evidence pack",
-        title: "Pilot evidence pack",
-        body:
-          "The review pack summarizing scope, internal evidence context, outputs, reviewer notes, and next-step recommendations.",
-        access: "request"
-      }
-    ],
-    openLabel: "Open document",
-    requestLabel: "Request access"
-  },
-  roadmap: {
-    eyebrow: "Roadmap",
-    title: "A bounded path from IML core to broader AI systems",
-    body:
-      "The path begins with the IML core layer, gains proof in support_v1, validates itself in a real pilot, and then expands into additional workflow environments and broader AI decision infrastructure.",
-    steps: [
-      {
-        stage: "01",
-        title: "IML core layer",
-        body:
-          "Keep hardening the decision-memory core that converts workflow history into compact decision-ready state."
-      },
-      {
-        stage: "02",
-        title: "First product: support_v1",
-        body:
-          "Use support_v1 as the first applied workflow where the core layer is tested against real support history and decision points."
-      },
-      {
-        stage: "03",
-        title: "First real pilot",
-        body:
-          "Validate the layer in one bounded support workflow slice with explicit review criteria and controlled scope."
-      },
-      {
-        stage: "04",
-        title: "Second use case",
-        body:
-          "Only after the first pilot produces credible evidence should the same decision-memory logic be tested in a second workflow environment."
-      },
-      {
-        stage: "05",
-        title: "Broader AI systems",
-        body:
-          "Expand from validated workflow slices into wider AI decision infrastructure only after evidence compounds across multiple environments."
-      }
-    ],
-    asset: {
-      label: "Roadmap view",
-      title: "From IML core to broader AI systems",
-      body:
-        "A sequenced view of the technology-first path: core layer first, support_v1 second, pilot validation third, and broader systems only after that.",
-      path: "/assets/iml/platform-expansion-visual.png"
-    }
-  },
-  cta: {
-    eyebrow: "CTA",
-    title: "Discuss a bounded first pilot for support_v1",
-    body:
-      "Validate the imLayer core in one real workflow slice with clear review criteria and controlled scope.",
-    guidance:
-      "Share your support export shape, current routing workflow, review constraints, and what the first pilot should prove.",
-    form: {
-      nameLabel: "Name",
-      namePlaceholder: "Jane Smith",
-      emailLabel: "Work email",
-      emailPlaceholder: "jane@company.com",
-      companyLabel: "Company",
-      companyPlaceholder: "Company name",
-      messageLabel: "Message",
-      messagePlaceholder:
-        "Support export shape, routing workflow, review constraints, and what the first pilot should prove.",
-      submitLabel: "Open pilot discussion",
-      subject: "Pilot discussion request | imLayer"
-    }
-  },
-  footer: {
-    oneLine:
-      "imLayer is the brand and core decision-memory layer. support_v1 is the first product and first pilot wedge."
+  latencyP95Ms: {
+    raw: 1119.712,
+    packet: 1090.07,
+    delta: -29.642
   }
-};
+} as const;
 
-const skContent: SiteLocaleContent = {
-  brand: {
-    expandedName: PUBLIC_BRAND_EXPANDED_NAME,
-    subtitle: "Decision-memory infraštruktúra"
-  },
-  nav: {
-    items: [
-      { label: "Čo je imLayer", href: "#what-imlayer-is" },
-      { label: "Prečo teraz", href: "#why-now" },
-      { label: "Interné dôkazy", href: "#evidence" },
-      { label: "Prvý produkt", href: "#first-product" },
-      { label: "Pilot", href: "#pilot" },
-      { label: "Roadmap", href: "#roadmap" },
-      { label: "Kontakt", href: "#contact" }
-    ],
-    cta: "Prediskutovať pilot"
-  },
-  hero: {
-    eyebrow: PUBLIC_BRAND_EXPANDED_NAME,
-    headline: PUBLIC_BRAND_NAME,
-    subheadline: "Decision-memory infraštruktúra pre workflow AI.",
-    supportingLine:
-      "Mení fragmentovanú workflow históriu na kompaktný stav pripravený na rozhodnutie. support_v1 je prvý produkt postavený na tejto vrstve.",
-    primaryCta: "Prediskutovať pilot",
-    secondaryCta: "Pozrieť interné dôkazy",
-    secondaryHref: "#evidence",
-    proofLabel: "Pozicionovanie",
-    proofStrip: [
-      "História -> kompaktný stav -> rozhodnutie",
-      "Navrhnuté pre workflow AI, nie pre generickú pamäťovú vrstvu",
-      "Veľký interný runtime dôkaz už existuje na rozsiahlej evaluovanej workflow ploche",
-      "support_v1 je prvý produkt, prvý aplikovaný workflow a prvý pilotný wedge"
-    ],
-    asset: {
-      label: "Hero vizuál",
-      title: "Brand vizuál pre jadro vrstvy imLayer",
-      body:
-        "Striedmy hero vizuál, ktorý drží značku ukotvenú v jadre imLayer, nie v jednom workflow produkte.",
-      path: "/assets/iml/hero-environment-visual.png"
-    }
-  },
-  technology: {
-    eyebrow: "Čo je imLayer",
-    title: "História -> kompaktný stav -> rozhodnutie.",
-    body:
-      "imLayer mení fragmentovanú workflow históriu na kompaktný stav pripravený na rozhodnutie. Nie je to generické memory storage, generická orchestration vrstva ani široký autonomous AI claim. Je to decision-memory vrstva, ktorá pomáha workflowu použiť správny predchádzajúci kontext presne v momente rozhodnutia.",
-    cards: [
-      {
-        title: "Rekonštruuje workflow históriu",
-        body:
-          "imLayer skladá tie časti predchádzajúcej aktivity, ktoré reálne menia aktuálne workflow rozhodnutie, namiesto vracania surovej histórie do promptu."
-      },
-      {
-        title: "Komprimuje do kompaktného stavu",
-        body:
-          "Výstupom je ohraničený pracovný stav, ktorý sa ľahšie kontroluje, porovnáva a vyhodnocuje než dlhý reťazec fragmentovaných záznamov."
-      },
-      {
-        title: "Vstupuje do reálneho rozhodnutia",
-        body:
-          "Vrstva je určená pre konkrétne workflow rozhodnutie, napríklad routing, eskaláciu alebo voľbu ďalšieho kroku v okamihu rozhodnutia."
-      },
-      {
-        title: "Nie storage, orchestration ani autonomy theater",
-        body:
-          "Tvrdenie je užšie a užitočnejšie: disciplinovaná decision vrstva pre workflow AI, kde kvalita kontextu priamo ovplyvňuje výsledok rozhodnutia."
-      }
-    ],
-    asset: {
-      label: "Pohľad na jadro vrstvy",
-      title: "Od histórie k stavu pripravenému na rozhodnutie",
-      body:
-        "Jednoduchý pohľad na imLayer ako vrstvu, ktorá mení fragmentovanú workflow históriu na kompaktný stav pre rozhodovací systém.",
-      path: "/assets/iml/iml-conceptual-layer-visual.png"
-    }
-  },
-  whyNow: {
-    eyebrow: "Prečo na tom záleží práve teraz",
-    title: "Workflowy už vedia ukladať históriu a volať modely. Stále im chýba disciplinovaná decision vrstva.",
-    body:
-      "Kupujúci už dnes vedia do workflowu pridať memory systémy, retrieval aj model calls. Ťažší problém je premeniť rozptýlenú operačnú históriu na kompaktný stav, ktorý podporí preskúmateľné rozhodnutie. Práve tam je imLayer.",
-    cards: [
-      {
-        title: "Viac histórie nestačí",
-        body:
-          "Tímy môžu držať väčšie logy a dlhšie context windows, no kvalita rozhodnutia sa aj tak láme, keď je relevantná história rozbitá alebo zle tvarovaná."
-      },
-      {
-        title: "Operačné rozhodnutia potrebujú štruktúru",
-        body:
-          "Kupujúci nepotrebuje ďalšiu generickú AI vrstvu. Potrebuje spôsob, ako spraviť jedno workflow rozhodnutie disciplinovanejším, kontrolovateľným a preskúmateľným."
-      },
-      {
-        title: "Nákupná cesta musí zostať ohraničená",
-        body:
-          "Prvý dôveryhodný krok nie je prísľub platformy pre všetko. Je to jeden workflow slice, na ktorom sa decision vrstva dá otestovať v kontrolovaných podmienkach."
-      }
-    ]
-  },
-  firstProduct: {
-    eyebrow: "Prvý produkt: support_v1",
-    title: "support_v1 je prvý produkt, prvý aplikovaný workflow a prvý pilotný wedge.",
-    body:
-      "support_v1 je prvá externá validačná cesta pre imLayer. Aplikuje jadro vrstvy na jeden support workflow slice, aby sa decision-memory téza dala testovať v ohraničenom prostredí so skontrolovateľnými výstupmi.",
-    cards: [
-      {
-        title: "Prvý produkt",
-        body:
-          "support_v1 je prvá komerčná vrstva postavená na imLayeri, nie celý firemný alebo platformový príbeh."
-      },
-      {
-        title: "Prvý aplikovaný workflow",
-        body:
-          "Support je prvý workflow preto, že exporty, histórie a routing rozhodnutia sú dosť konkrétne na disciplinované vyhodnotenie."
-      },
-      {
-        title: "Prvý pilotný wedge",
-        body:
-          "Zamýšľaný buying motion je jeden ohraničený workflow slice, nie široký rollout naprieč každým support procesom."
-      },
-      {
-        title: "Prvá externá validačná cesta",
-        body:
-          "Customer-facing proof má prísť cez kontrolovaný pilot a externú evaluáciu, nie cez nafúknuté produktové tvrdenia."
-      }
-    ],
-    workflowLabel: "Aplikovaný workflow",
-    workflowTitle: "Ako support_v1 aplikuje jadro imLayer",
-    workflow: [
-      {
-        title: "Intake support exportov",
-        body:
-          "Workflow sa začína ohraničenými support exportmi, ktoré sa dajú skontrolovať, validovať a pripraviť na evaluáciu."
-      },
-      {
-        title: "Rekonštrukcia histórie",
-        body:
-          "Relevantná história prípadu a eventov sa znovu skladá tak, aby routing kontext zodpovedal reálnej workflow ceste, nie izolovaným záznamom."
-      },
-      {
-        title: "Kompaktný rozhodovací stav",
-        body:
-          "Rekonštruovaná história sa komprimuje do kompaktného stavu, ktorý vie informovať routing alebo eskalačné rozhodnutie."
-      },
-      {
-        title: "Skontrolovateľný výstup rozhodnutia",
-        body:
-          "Výstupom je skontrolovateľná routing vrstva pre ohraničený pilot, nie tvrdenie o unattended production automation."
-      }
-    ],
-    builtLabel: "Aktuálny stack",
-    builtTitle: "Čo už pre prvý produkt existuje",
-    built: [
-      "Ohraničený intake support exportov a validačná cesta pred tým, než sa začne hlbšia evaluácia",
-      "Normalizácia do pracovnej schémy používanej v aktuálnom evaluačnom stacku",
-      "Rekonštrukcia case a event histórie pre support kontext pripravený na rozhodnutie",
-      "Interné evaluačné cesty na porovnanie imLayer výstupov oproti baseline",
-      "Pilotné materiály pre prvý externý review a onboarding"
-    ],
-    proofLabel: "Podporný dôkaz",
-    proofTitle: "Čo robí support_v1 pilot-ready už dnes",
-    proofItems: [
-      "Existuje pilot-ready stack pre intake support exportov, validáciu a ďalšie spracovanie",
-      "Existuje cesta od support exportu po rekonštrukciu histórie a rozhodovací výstup na review",
-      "Existujú pilotné materiály aj review cesta pre prvé externé posúdenie"
-    ],
-    asset: {
-      label: "Pohľad na prvý produkt",
-      title: "support_v1 ako prvý aplikovaný workflow",
-      body:
-        "Striedmy workflow vizuál ukazujúci support_v1 ako prvú aplikovanú vrstvu nad imLayerom, nie ako celý platformový príbeh.",
-      path: "/assets/iml/support-v1-workflow-visual.png"
-    }
-  },
-  firstPilot: {
-    eyebrow: "Rámec prvého pilotu",
-    title: "Kontrolovaný prvý pilot s jasnými kritériami review.",
-    body:
-      "Prvý pilot je zámerne úzky: jeden workflow slice, support exporty, explicitné review kritériá a kontrolovaná validačná cesta, ktorú je ľahké skontrolovať.",
-    cards: [
-      {
-        title: "Jeden workflow slice",
-        body:
-          "Pilot je ohraničený na jeden support workflow slice, aby výsledky zostali skontrolovateľné a tvrdenie ostalo disciplinované."
-      },
-      {
-        title: "Support exporty ako vstup",
-        body:
-          "Pilot sa začína ohraničenými exportmi, ktoré robia ingest, review aj evaluáciu transparentnou pre obe strany."
-      },
-      {
-        title: "Jasné review kritériá",
-        body:
-          "Review metóda, success gates a pass kritériá sa dohodnú pred štartom evaluácie, aby sa pilot hodnotil podľa explicitných štandardov."
-      },
-      {
-        title: "Kontrolovaná validačná cesta",
-        body:
-          "Pilot je validačný krok pre jadro imLayer v reálnom workflow prostredí, nie otvorený production deployment."
-      }
-    ],
-    assetsLabel: "Pilotné materiály",
-    assetsTitle: "Materiály na review pre ohraničený pilot",
-    assetsBody:
-      "Materiály ostávajú stručné a vhodné pre kupujúceho: rozsah, review kritériá, predpoklady pre prácu s dátami a evidence pack pre vyhodnotenie prvého pilotu.",
-    assets: [
-      {
-        label: "Rozsah pilotu",
-        title: "Ohraničený rozsah pilotu",
-        body:
-          "Workflow slice, hranice exportov, decision owners a review cadence použité pre prvý pilot.",
-        access: "request"
-      },
-      {
-        label: "Review kritériá",
-        title: "Pilotné review kritériá",
-        body:
-          "Metóda, acceptance thresholds a review checkpointy použité na rozhodnutie, či pilot prešiel.",
-        access: "request"
-      },
-      {
-        label: "Práca s dátami",
-        title: "Poznámka k práci so support exportmi",
-        body:
-          "Stručná poznámka o predpokladoch zdrojových dát, limitoch práce s dátami, zásadách ochrany súkromia a review kontrolách.",
-        access: "request"
-      },
-      {
-        label: "Evidence pack",
-        title: "Pilotný evidence pack",
-        body:
-          "Review balík so zhrnutím scope, interného dôkazového kontextu, výstupov, reviewer notes a odporúčaní pre ďalší krok.",
-        access: "request"
-      }
-    ],
-    openLabel: "Otvoriť dokument",
-    requestLabel: "Požiadať o prístup"
-  },
-  roadmap: {
-    eyebrow: "Roadmap",
-    title: "Ohraničená cesta od IML core k širším AI systémom",
-    body:
-      "Cesta sa začína IML core vrstvou, získava dôkaz v support_v1, validuje sa v reálnom pilote a až potom sa rozširuje do ďalších workflow prostredí a širšej AI decision infraštruktúry.",
-    steps: [
-      {
-        stage: "01",
-        title: "IML core layer",
-        body:
-          "Pokračovať v spevňovaní decision-memory jadra, ktoré mení workflow históriu na kompaktný stav pripravený na rozhodnutie."
-      },
-      {
-        stage: "02",
-        title: "Prvý produkt: support_v1",
-        body:
-          "Použiť support_v1 ako prvý aplikovaný workflow, kde sa jadro vrstvy testuje na reálnej support histórii a decision points."
-      },
-      {
-        stage: "03",
-        title: "Prvý reálny pilot",
-        body:
-          "Validovať vrstvu v jednom ohraničenom support workflow slice s explicitnými review kritériami a kontrolovaným scope."
-      },
-      {
-        stage: "04",
-        title: "Druhý use case",
-        body:
-          "Až po kredibilnom dôkaze z prvého pilotu testovať rovnakú decision-memory logiku v druhom workflow prostredí."
-      },
-      {
-        stage: "05",
-        title: "Širšie AI systémy",
-        body:
-          "Rozšíriť sa z validovaných workflow slices do širšej AI decision infraštruktúry až potom, keď sa dôkaz znásobí naprieč viacerými prostrediami."
-      }
-    ],
-    asset: {
-      label: "Pohľad na roadmap",
-      title: "Od IML core k širším AI systémom",
-      body:
-        "Sekvenčný pohľad na cestu orientovanú na technológiu: najprv core vrstva, potom support_v1, potom pilotná validácia a až následne širšie systémy.",
-      path: "/assets/iml/platform-expansion-visual.png"
-    }
-  },
-  cta: {
-    eyebrow: "Kontakt",
-    title: "Prediskutujme ohraničený prvý pilot pre support_v1",
-    body:
-      "Overte jadro imLayer v jednom reálnom workflow slice s jasnými review kritériami a kontrolovaným scope.",
-    guidance:
-      "Pošlite podobu support exportov, aktuálny routing workflow, review constraints a to, čo má prvý pilot dokázať.",
-    form: {
-      nameLabel: "Meno",
-      namePlaceholder: "Jana Nováková",
-      emailLabel: "Pracovný e-mail",
-      emailPlaceholder: "jana@firma.sk",
-      companyLabel: "Firma",
-      companyPlaceholder: "Názov firmy",
-      messageLabel: "Správa",
-      messagePlaceholder:
-        "Podoba support exportov, routing workflow, review constraints a to, čo má prvý pilot dokázať.",
-      submitLabel: "Otvoriť pilotnú diskusiu",
-      subject: "Pilotná diskusia | imLayer"
-    }
-  },
-  footer: {
-    oneLine:
-      "imLayer je značka a jadrová decision-memory vrstva. support_v1 je prvý produkt a prvý pilotný wedge."
+export const historicalBenchmarks = {
+  heldout: {
+    totalExamples: 573,
+    heldoutExamples: 347,
+    packetAccuracy: 0.6381,
+    rawAccuracy: 0.159,
+    delta: 0.4791
   }
-};
+} as const;
 
-export const siteContent: Record<Locale, SiteLocaleContent> = {
-  en: enContent,
-  sk: skContent
-};
+export const siteContent = {
+  en: {
+    header: {
+      routeLinks: [
+        { label: "Landing", href: "/" },
+        { label: "Evidence and validation", href: "/evidence-and-validation" },
+        { label: "support_v1", href: "/support-v1" }
+      ],
+      contactCta: "Discuss pilot fit",
+      brandSubtitle: "Runtime decision-memory infrastructure"
+    },
+    footer: {
+      summary:
+        "imLayer is the core technology story. support_v1 is the first product and the first external validation path.",
+      creatorFooter: "Created by Marek Benda",
+      creatorLinkLabel: "LinkedIn"
+    },
+    formStatusMessages: {
+      submitLoadingLabel: "Sending request...",
+      success: "Your pilot request was sent. Expect a reply by email.",
+      validationError: "Please complete the required fields with a valid work email.",
+      error: "The form could not be sent. Please try again in a moment."
+    },
+    contactForm: {
+      eyebrow: "Discuss pilot fit",
+      title: "Discuss a bounded support_v1 pilot.",
+      body:
+        "Use one real workflow slice to evaluate the imLayer core under controlled review and clear success criteria.",
+      guidance:
+        "Share the workflow slice, support export format, review criteria, and what the pilot should prove.",
+      form: {
+        nameLabel: "Name",
+        namePlaceholder: "Jane Smith",
+        emailLabel: "Work email",
+        emailPlaceholder: "jane@company.com",
+        companyLabel: "Company",
+        companyPlaceholder: "Company name",
+        messageLabel: "Message",
+        messagePlaceholder:
+          "Workflow slice, export format, review criteria, and what the pilot should prove.",
+        submitLabel: "Discuss pilot fit"
+      }
+    },
+    home: {
+      hero: {
+        brandLabel: "imLayer",
+        headline: "Restructures workflow history into compact, decision-ready state.",
+        subheadline: "Runtime decision-memory infrastructure for workflow AI.",
+        supportingLine:
+          "support_v1 is the first product built on top of the layer and the first path to external validation.",
+        primaryCta: "Open Evidence and validation",
+        secondaryCta: "Explore support_v1"
+      },
+      whatChanges: {
+        eyebrow: "What imLayer changes",
+        intro:
+          "Instead of passing raw workflow history forward, imLayer compresses it into bounded state for the next runtime decision.",
+        cards: [
+          {
+            title: "From fragmented history",
+            body:
+              "Raw workflow history stays noisy, over-long, and hard to evaluate when each downstream step has to recover the same decision context again."
+          },
+          {
+            title: "To compact decision state",
+            body:
+              "imLayer condenses that history into bounded state that carries the parts of prior workflow activity that actually matter for the next decision."
+          },
+          {
+            title: "To better runtime decisions",
+            body:
+              "The result is a narrower, more decision-ready runtime surface where next-action quality can improve without dragging full history forward."
+          }
+        ]
+      },
+      proofHighlight: {
+        eyebrow: "Main proof highlight",
+        interpretation:
+          "Internal runtime evidence shows stronger next-action correctness with materially lower input overhead.",
+        qualification: "Internal runtime evidence. Not customer validation, not production proof.",
+        primaryCta: "Open Evidence and validation"
+      },
+      gateway: {
+        eyebrow: "Gateway",
+        title: "Choose the next layer.",
+        cards: [
+          {
+            title: "Evidence and validation",
+            body:
+              "Current runtime evidence, benchmark history, methodology, and qualification boundaries.",
+            cta: "Open Evidence and validation",
+            href: "/evidence-and-validation"
+          },
+          {
+            title: "support_v1",
+            body:
+              "The first product, first commercial wedge, and first external validation path built on top of imLayer.",
+            cta: "Explore support_v1",
+            href: "/support-v1"
+          }
+        ]
+      },
+      maturity: {
+        eyebrow: "Current maturity",
+        title: "Current maturity",
+        items: [
+          "Core runtime thesis — established",
+          "Internal runtime evidence — established",
+          "Benchmark expansion — active",
+          "support_v1 pilot path — ready",
+          "External validation — next"
+        ]
+      },
+      finalCta: {
+        headline: "Discuss a bounded support_v1 pilot.",
+        supportingLine:
+          "Use one real workflow slice to evaluate the imLayer core under controlled review and clear success criteria.",
+        primaryCta: "Discuss pilot fit"
+      }
+    },
+    evidence: {
+      hero: {
+        eyebrow: "Evidence and validation",
+        headline: "Internal runtime evidence for the imLayer core.",
+        subheadline:
+          "The current strongest signal is a large internal runtime evaluation showing higher next-action correctness, materially lower input load, and preserved or improved latency on a bounded live-model workflow surface.",
+        qualification: "Internal evidence only. Not production proof. Not customer proof."
+      },
+      currentEvidence: {
+        eyebrow: "Current primary runtime evidence",
+        interpretation:
+          "Compact decision state outperformed raw workflow history on next-action correctness while materially reducing downstream model input cost."
+      },
+      keyMetrics: {
+        eyebrow: "Key metrics",
+        coverageTitle: "Coverage",
+        correctnessTitle: "Correctness",
+        runtimeEconomicsTitle: "Runtime economics"
+      },
+      comparisons: {
+        eyebrow: "Interactive comparisons",
+        title: "Interactive comparisons",
+        tabs: {
+          correctness: "Correctness",
+          tokens: "Tokens",
+          latency: "Latency"
+        },
+        descriptors: {
+          raw: "Raw workflow history",
+          packet: "Compact decision state",
+          delta: "Delta"
+        }
+      },
+      methodology: {
+        eyebrow: "Methodology",
+        title: "Methodology",
+        items: [
+          {
+            title: "What was measured",
+            body:
+              "The evaluation measured next-action correctness, input/output token usage, and latency on a bounded workflow decision surface."
+          },
+          {
+            title: "What raw means",
+            body:
+              "Raw means the downstream model received raw workflow history directly, without imLayer compression into bounded decision state."
+          },
+          {
+            title: "What packet means",
+            body:
+              "Packet means the downstream model received the compact decision-ready state produced by imLayer instead of full raw history."
+          },
+          {
+            title: "What expected means",
+            body:
+              "Expected refers to the bounded target next action used as the evaluation reference for correctness comparison."
+          },
+          {
+            title: "What surface was evaluated",
+            body:
+              "The surface was a controlled live-model workflow slice designed to test runtime decision quality, not a broad production environment."
+          }
+        ]
+      },
+      qualification: {
+        eyebrow: "Qualification",
+        title: "Qualification",
+        items: [
+          "Internal runtime evidence",
+          "Controlled evaluated surface",
+          "Not customer proof",
+          "Not production proof",
+          "Not blind external adjudication",
+          "Not broad prevalence proof"
+        ]
+      },
+      archive: {
+        eyebrow: "Historical benchmark archive",
+        title: "Historical benchmark archive",
+        items: {
+          current: {
+            label: "Current runtime evidence",
+            eyebrow: "Current primary evidence",
+            title: "Current runtime evidence",
+            body:
+              "This is the current primary internal evidence layer for the imLayer core and the strongest current signal on the bounded runtime surface.",
+            metrics: [
+              "2521 / 2521 evaluated",
+              "1.0000 packet accuracy",
+              "0.3455 raw accuracy",
+              "61.25% lower input tokens"
+            ],
+            note: "Current primary internal evidence."
+          },
+          heldout: {
+            label: "Heldout benchmark snapshot",
+            eyebrow: "Historical archive item",
+            title: "Previous heldout benchmark",
+            body:
+              "Historical heldout benchmark snapshot retained for comparison context. It is not the current primary evidence layer.",
+            metrics: [
+              "573 total examples",
+              "347 heldout",
+              "0.6381 vs 0.1590",
+              "+0.4791"
+            ],
+            note: "Historical snapshot. Not current primary evidence."
+          },
+          earlier: {
+            label: "Earlier benchmark snapshots",
+            eyebrow: "Historical archive item",
+            title: "Earlier benchmark snapshots",
+            body:
+              "Earlier internal benchmark snapshots remain in archive form for chronology and method history only.",
+            metrics: [
+              "Historical internal runs",
+              "Superseded by the current runtime evidence",
+              "Useful for benchmark progression context"
+            ],
+            note: "Historical archive. Not current primary evidence."
+          },
+          support: {
+            label: "Support benchmark snapshots",
+            eyebrow: "Historical archive item",
+            title: "Support benchmark snapshots",
+            body:
+              "Support-specific benchmark snapshots remain archived as context for the support_v1 path, but they do not replace the current primary runtime evidence.",
+            metrics: [
+              "Historical support-focused runs",
+              "Context for support_v1 evaluation path",
+              "Not the current primary evidence layer"
+            ],
+            note: "Historical archive. Not current primary evidence."
+          }
+        }
+      },
+      exitCta: {
+        headline: "See how this becomes a first commercial wedge.",
+        cta: "Explore support_v1"
+      }
+    },
+    support: {
+      hero: {
+        eyebrow: "First product",
+        headline: "support_v1",
+        subheadline: "The first product built on top of imLayer.",
+        supportingLine:
+          "A bounded support workflow wedge designed for first external validation. It is the first controlled path for testing the imLayer core against real workflow review.",
+        cta: "Discuss pilot"
+      },
+      whatIs: {
+        eyebrow: "What support_v1 is",
+        title: "What support_v1 is",
+        body:
+          "support_v1 stays tightly scoped. It is the first product built on top of imLayer, the first applied workflow, the first commercial wedge, and the first external validation path.",
+        cards: [
+          {
+            title: "First product",
+            body:
+              "support_v1 is the first product built on top of the imLayer core, not the whole company story."
+          },
+          {
+            title: "First applied workflow",
+            body:
+              "Support is the first workflow surface where the layer can be tested against bounded real operational history."
+          },
+          {
+            title: "First commercial wedge",
+            body:
+              "The commercial entry point is one reviewable workflow slice, not a broad multi-team deployment promise."
+          },
+          {
+            title: "First external validation path",
+            body:
+              "support_v1 is the first buyer-facing path for validating the imLayer core with controlled real workflow review."
+          }
+        ]
+      },
+      whyWedge: {
+        eyebrow: "Why this is the first wedge",
+        title: "Why this is the first wedge",
+        cards: [
+          {
+            title: "Bounded workflow",
+            body:
+              "Support workflows can be scoped to one slice, which keeps the test surface bounded enough for disciplined comparison."
+          },
+          {
+            title: "Reviewable outputs",
+            body:
+              "Routing and next-action outputs can be inspected by humans under explicit review rules."
+          },
+          {
+            title: "Clear success criteria",
+            body:
+              "The wedge supports defined pass criteria before evaluation begins, which keeps claims disciplined."
+          },
+          {
+            title: "Pilot-friendly scope",
+            body:
+              "Data intake, review cadence, and operational ownership can stay narrow enough for a first external pilot."
+          },
+          {
+            title: "Commercial relevance",
+            body:
+              "Support operations already care about speed, consistency, and reviewable next-action quality, which makes the wedge commercially legible."
+          }
+        ]
+      },
+      inPlace: {
+        eyebrow: "What is already in place",
+        title: "What is already in place",
+        items: [
+          {
+            title: "export intake",
+            body:
+              "Bounded intake exists for support exports entering the support_v1 workflow."
+          },
+          {
+            title: "validation",
+            body:
+              "Validation steps are in place to check export shape and readiness before deeper evaluation."
+          },
+          {
+            title: "normalization",
+            body:
+              "Exports are normalized into the working structure used by the evaluation path."
+          },
+          {
+            title: "history reconstruction",
+            body:
+              "Case and event history can already be rebuilt into the decision context required for the next step."
+          },
+          {
+            title: "evaluation path",
+            body:
+              "A controlled evaluation path exists for comparing support_v1 outputs under bounded review."
+          },
+          {
+            title: "pilot materials",
+            body:
+              "Pilot-facing materials already exist to frame scope, access, review, and next-step discussion."
+          }
+        ]
+      },
+      pilotFlow: {
+        eyebrow: "What a pilot looks like",
+        title: "What a pilot looks like",
+        steps: [
+          {
+            step: "01",
+            title: "Select one workflow slice",
+            body:
+              "Choose one bounded support workflow slice with clear owners, export boundaries, and review rules."
+          },
+          {
+            step: "02",
+            title: "Ingest support exports and history",
+            body:
+              "Bring support exports into the workflow, validate them, normalize them, and reconstruct the decision history."
+          },
+          {
+            step: "03",
+            title: "Apply bounded review criteria",
+            body:
+              "Use agreed review criteria so the pilot is judged against explicit standards rather than broad impressions."
+          },
+          {
+            step: "04",
+            title: "Evaluate outputs under controlled comparison",
+            body:
+              "Compare the resulting outputs under controlled review to determine whether the bounded pilot passes."
+          }
+        ]
+      },
+      materials: {
+        eyebrow: "Pilot materials",
+        title: "Pilot materials",
+        body:
+          "The materials stay buyer-facing and bounded: access is request-based, and each item supports controlled pilot review rather than broad product positioning.",
+        requestLabel: "Request access",
+        items: [
+          {
+            label: "Pilot scope",
+            title: "Bounded pilot scope",
+            body:
+              "Scope definition for one workflow slice, review ownership, and success boundaries."
+          },
+          {
+            label: "Review criteria",
+            title: "Controlled review criteria",
+            body:
+              "The review method, pass criteria, and comparison rules used to judge the pilot."
+          },
+          {
+            label: "Data handling",
+            title: "Support export handling note",
+            body:
+              "The operating note covering export assumptions, handling boundaries, and review controls."
+          },
+          {
+            label: "Evidence pack",
+            title: "Pilot evidence pack",
+            body:
+              "The compact review pack used to frame outputs, review notes, and next-step decisions."
+          }
+        ]
+      },
+      cta: {
+        headline: "Discuss a bounded support_v1 pilot.",
+        supportingLine:
+          "Use one real workflow slice to evaluate the imLayer core under controlled review and clear success criteria.",
+        primaryCta: "Discuss pilot fit"
+      }
+    }
+  },
+  sk: {
+    header: {
+      routeLinks: [
+        { label: "Úvod", href: "/" },
+        { label: "Dôkazy a validácia", href: "/evidence-and-validation" },
+        { label: "support_v1", href: "/support-v1" }
+      ],
+      contactCta: "Prediskutovať pilot",
+      brandSubtitle: "Runtime decision-memory infraštruktúra"
+    },
+    footer: {
+      summary:
+        "imLayer je jadrový technologický príbeh. support_v1 je prvý produkt a prvá cesta k externej validácii.",
+      creatorFooter: "Vytvoril Marek Benda",
+      creatorLinkLabel: "LinkedIn"
+    },
+    formStatusMessages: {
+      submitLoadingLabel: "Odosielam žiadosť...",
+      success: "Žiadosť o pilot bola odoslaná. Odpoveď príde e-mailom.",
+      validationError: "Vyplňte povinné polia a zadajte platný pracovný e-mail.",
+      error: "Formulár sa nepodarilo odoslať. Skúste to znova o chvíľu."
+    },
+    contactForm: {
+      eyebrow: "Prediskutovať pilot",
+      title: "Prediskutujme ohraničený pilot support_v1.",
+      body:
+        "Použite jeden reálny workflow slice na vyhodnotenie jadra imLayeru pod kontrolovaným review a s jasnými kritériami úspechu.",
+      guidance:
+        "Pošlite workflow slice, formát support exportov, review kritériá a to, čo má pilot dokázať.",
+      form: {
+        nameLabel: "Meno",
+        namePlaceholder: "Jana Nováková",
+        emailLabel: "Pracovný e-mail",
+        emailPlaceholder: "jana@firma.sk",
+        companyLabel: "Firma",
+        companyPlaceholder: "Názov firmy",
+        messageLabel: "Správa",
+        messagePlaceholder:
+          "Workflow slice, formát exportov, review kritériá a to, čo má pilot dokázať.",
+        submitLabel: "Prediskutovať pilot"
+      }
+    },
+    home: {
+      hero: {
+        brandLabel: "imLayer",
+        headline: "Mení workflow históriu na kompaktný stav pripravený na rozhodnutie.",
+        subheadline: "Runtime decision-memory infraštruktúra pre workflow AI.",
+        supportingLine:
+          "support_v1 je prvý produkt postavený na vrstve a prvá cesta k externej validácii.",
+        primaryCta: "Otvoriť Dôkazy a validáciu",
+        secondaryCta: "Preskúmať support_v1"
+      },
+      whatChanges: {
+        eyebrow: "Čo imLayer mení",
+        intro:
+          "Namiesto posúvania surovej workflow histórie ďalej imLayer komprimuje históriu do ohraničeného stavu pre ďalšie runtime rozhodnutie.",
+        cards: [
+          {
+            title: "Zo fragmentovanej histórie",
+            body:
+              "Surová workflow história zostáva hlučná, dlhá a ťažko vyhodnotiteľná, keď si každý ďalší krok musí znovu skladať rovnaký rozhodovací kontext."
+          },
+          {
+            title: "Do kompaktného rozhodovacieho stavu",
+            body:
+              "imLayer zhusťuje túto históriu do ohraničeného stavu, ktorý nesie len tie časti predchádzajúcej aktivity, ktoré naozaj menia ďalšie rozhodnutie."
+          },
+          {
+            title: "K lepším runtime rozhodnutiam",
+            body:
+              "Výsledkom je užší a rozhodnutie-pripravený runtime povrch, kde sa kvalita ďalšieho kroku môže zlepšiť bez vláčenia celej histórie dopredu."
+          }
+        ]
+      },
+      proofHighlight: {
+        eyebrow: "Hlavný dôkazový blok",
+        interpretation:
+          "Interné runtime dôkazy ukazujú vyššiu správnosť ďalšieho kroku pri citeľne nižšej vstupnej záťaži.",
+        qualification:
+          "Interné runtime dôkazy. Nie zákaznícka validácia, nie produkčný dôkaz.",
+        primaryCta: "Otvoriť Dôkazy a validáciu"
+      },
+      gateway: {
+        eyebrow: "Ďalšia vrstva",
+        title: "Vyberte ďalšiu vrstvu.",
+        cards: [
+          {
+            title: "Dôkazy a validácia",
+            body:
+              "Aktuálne runtime dôkazy, história benchmarkov, metodika a hranice kvalifikácie.",
+            cta: "Otvoriť Dôkazy a validáciu",
+            href: "/evidence-and-validation"
+          },
+          {
+            title: "support_v1",
+            body:
+              "Prvý produkt, prvý komerčný wedge a prvá externá validačná cesta postavená na imLayeri.",
+            cta: "Preskúmať support_v1",
+            href: "/support-v1"
+          }
+        ]
+      },
+      maturity: {
+        eyebrow: "Aktuálna vyspelosť",
+        title: "Aktuálna vyspelosť",
+        items: [
+          "Core runtime téza — etablovaná",
+          "Interné runtime dôkazy — etablované",
+          "Rozšírenie benchmarkov — aktívne",
+          "Pilotná cesta support_v1 — pripravená",
+          "Externá validácia — ďalší krok"
+        ]
+      },
+      finalCta: {
+        headline: "Prediskutujme ohraničený pilot support_v1.",
+        supportingLine:
+          "Použite jeden reálny workflow slice na vyhodnotenie jadra imLayeru pod kontrolovaným review a s jasnými kritériami úspechu.",
+        primaryCta: "Prediskutovať pilot"
+      }
+    },
+    evidence: {
+      hero: {
+        eyebrow: "Dôkazy a validácia",
+        headline: "Interné runtime dôkazy pre jadro imLayeru.",
+        subheadline:
+          "Aktuálne najsilnejším signálom je veľká interná runtime evaluácia ukazujúca vyššiu správnosť ďalšieho kroku, citeľne nižšiu vstupnú záťaž a zachovanú alebo lepšiu latenciu na ohraničenom live-model workflow povrchu.",
+        qualification: "Len interné dôkazy. Nie produkčný dôkaz. Nie zákaznícky dôkaz."
+      },
+      currentEvidence: {
+        eyebrow: "Aktuálny primárny runtime dôkaz",
+        interpretation:
+          "Kompaktný rozhodovací stav prekonal surovú workflow históriu v správnosti ďalšieho kroku a zároveň citeľne znížil downstream vstupné náklady modelu."
+      },
+      keyMetrics: {
+        eyebrow: "Kľúčové metriky",
+        coverageTitle: "Pokrytie",
+        correctnessTitle: "Správnosť",
+        runtimeEconomicsTitle: "Runtime ekonomika"
+      },
+      comparisons: {
+        eyebrow: "Interaktívne porovnania",
+        title: "Interaktívne porovnania",
+        tabs: {
+          correctness: "Správnosť",
+          tokens: "Tokeny",
+          latency: "Latencia"
+        },
+        descriptors: {
+          raw: "Surová workflow história",
+          packet: "Kompaktný rozhodovací stav",
+          delta: "Rozdiel"
+        }
+      },
+      methodology: {
+        eyebrow: "Metodika",
+        title: "Metodika",
+        items: [
+          {
+            title: "Čo sa meralo",
+            body:
+              "Evaluácia merala správnosť ďalšieho kroku, spotrebu vstupných a výstupných tokenov a latenciu na ohraničenom workflow rozhodovacom povrchu."
+          },
+          {
+            title: "Čo znamená raw",
+            body:
+              "Raw znamená, že downstream model dostal priamo surovú workflow históriu bez kompresie cez imLayer do ohraničeného rozhodovacieho stavu."
+          },
+          {
+            title: "Čo znamená packet",
+            body:
+              "Packet znamená, že downstream model dostal kompaktný rozhodnutie-pripravený stav vytvorený imLayerom namiesto plnej surovej histórie."
+          },
+          {
+            title: "Čo znamená expected",
+            body:
+              "Expected je ohraničený referenčný ďalší krok použitý ako evaluačný cieľ pre porovnanie správnosti."
+          },
+          {
+            title: "Aký povrch sa vyhodnocoval",
+            body:
+              "Vyhodnocoval sa kontrolovaný live-model workflow slice navrhnutý na testovanie runtime kvality rozhodovania, nie široké produkčné prostredie."
+          }
+        ]
+      },
+      qualification: {
+        eyebrow: "Kvalifikácia",
+        title: "Kvalifikácia",
+        items: [
+          "Interné runtime dôkazy",
+          "Kontrolovaný evaluovaný povrch",
+          "Nie zákaznícky dôkaz",
+          "Nie produkčný dôkaz",
+          "Nie slepé externé adjudikovanie",
+          "Nie dôkaz širokej prevalencie"
+        ]
+      },
+      archive: {
+        eyebrow: "Historický archív benchmarkov",
+        title: "Historický archív benchmarkov",
+        items: {
+          current: {
+            label: "Aktuálny runtime dôkaz",
+            eyebrow: "Aktuálny primárny dôkaz",
+            title: "Aktuálny runtime dôkaz",
+            body:
+              "Toto je aktuálna primárna interná dôkazová vrstva pre jadro imLayeru a najsilnejší súčasný signál na ohraničenom runtime povrchu.",
+            metrics: [
+              "2521 / 2521 vyhodnotených",
+              "1.0000 packet accuracy",
+              "0.3455 raw accuracy",
+              "61.25% nižšie vstupné tokeny"
+            ],
+            note: "Aktuálny primárny interný dôkaz."
+          },
+          heldout: {
+            label: "Heldout benchmark snapshot",
+            eyebrow: "Historická archívna položka",
+            title: "Predchádzajúci heldout benchmark",
+            body:
+              "Historický heldout benchmark snapshot ponechaný pre porovnávací kontext. Nie je to aktuálna primárna dôkazová vrstva.",
+            metrics: [
+              "573 total examples",
+              "347 heldout",
+              "0.6381 vs 0.1590",
+              "+0.4791"
+            ],
+            note: "Historický snapshot. Nie aktuálny primárny dôkaz."
+          },
+          earlier: {
+            label: "Skoršie benchmark snapshots",
+            eyebrow: "Historická archívna položka",
+            title: "Skoršie benchmark snapshots",
+            body:
+              "Skoršie interné benchmark snapshots zostávajú v archíve len pre chronológiu a históriu metodiky.",
+            metrics: [
+              "Historické interné behy",
+              "Nahradené aktuálnym runtime dôkazom",
+              "Užitočné pre kontext benchmark progresu"
+            ],
+            note: "Historický archív. Nie aktuálny primárny dôkaz."
+          },
+          support: {
+            label: "Support benchmark snapshots",
+            eyebrow: "Historická archívna položka",
+            title: "Support benchmark snapshots",
+            body:
+              "Support-špecifické benchmark snapshots zostávajú v archíve ako kontext pre cestu support_v1, ale nenahrádzajú aktuálny primárny runtime dôkaz.",
+            metrics: [
+              "Historické support-orientované behy",
+              "Kontext pre evaluačnú cestu support_v1",
+              "Nie aktuálna primárna dôkazová vrstva"
+            ],
+            note: "Historický archív. Nie aktuálny primárny dôkaz."
+          }
+        }
+      },
+      exitCta: {
+        headline: "Pozrite sa, ako sa z toho stáva prvý komerčný wedge.",
+        cta: "Preskúmať support_v1"
+      }
+    },
+    support: {
+      hero: {
+        eyebrow: "Prvý produkt",
+        headline: "support_v1",
+        subheadline: "Prvý produkt postavený na imLayeri.",
+        supportingLine:
+          "Ohraničený support workflow wedge navrhnutý pre prvú externú validáciu. Je to prvá kontrolovaná cesta na testovanie jadra imLayeru proti reálnemu workflow review.",
+        cta: "Prediskutovať pilot"
+      },
+      whatIs: {
+        eyebrow: "Čo je support_v1",
+        title: "Čo je support_v1",
+        body:
+          "support_v1 zostáva úzko ohraničený. Je to prvý produkt postavený na imLayeri, prvý aplikovaný workflow, prvý komerčný wedge a prvá externá validačná cesta.",
+        cards: [
+          {
+            title: "Prvý produkt",
+            body:
+              "support_v1 je prvý produkt postavený na jadre imLayeru, nie celý firemný príbeh."
+          },
+          {
+            title: "Prvý aplikovaný workflow",
+            body:
+              "Support je prvý workflow povrch, kde sa dá vrstva testovať proti ohraničenej reálnej operačnej histórii."
+          },
+          {
+            title: "Prvý komerčný wedge",
+            body:
+              "Komerčný vstup je jeden reviewovateľný workflow slice, nie široký prísľub nasadenia naprieč tímami."
+          },
+          {
+            title: "Prvá externá validačná cesta",
+            body:
+              "support_v1 je prvá buyer-facing cesta na validáciu jadra imLayeru cez kontrolované reálne workflow review."
+          }
+        ]
+      },
+      whyWedge: {
+        eyebrow: "Prečo je to prvý wedge",
+        title: "Prečo je to prvý wedge",
+        cards: [
+          {
+            title: "Ohraničený workflow",
+            body:
+              "Support workflow sa dá zúžiť na jeden slice, čo drží testovací povrch dostatočne ohraničený pre disciplinované porovnanie."
+          },
+          {
+            title: "Reviewovateľné výstupy",
+            body:
+              "Routing a next-action výstupy sa dajú kontrolovať ľuďmi podľa explicitných review pravidiel."
+          },
+          {
+            title: "Jasné kritériá úspechu",
+            body:
+              "Wedge podporuje definované pass kritériá ešte pred štartom evaluácie, čo drží tvrdenia disciplinované."
+          },
+          {
+            title: "Pilot-friendly rozsah",
+            body:
+              "Data intake, review cadence aj operačné vlastníctvo môžu zostať dostatočne úzke pre prvý externý pilot."
+          },
+          {
+            title: "Komerčná relevancia",
+            body:
+              "Support operácie už dnes riešia rýchlosť, konzistentnosť a reviewovateľnú kvalitu ďalšieho kroku, takže wedge je komerčne čitateľný."
+          }
+        ]
+      },
+      inPlace: {
+        eyebrow: "Čo je už pripravené",
+        title: "What is already in place",
+        items: [
+          {
+            title: "export intake",
+            body:
+              "Existuje ohraničený intake pre support exporty vstupujúce do workflow support_v1."
+          },
+          {
+            title: "validation",
+            body:
+              "Validačné kroky už kontrolujú tvar exportu a pripravenosť pred hlbšou evaluáciou."
+          },
+          {
+            title: "normalization",
+            body:
+              "Exporty sa normalizujú do pracovnej štruktúry používanej evaluačnou cestou."
+          },
+          {
+            title: "history reconstruction",
+            body:
+              "Case a event história sa už dá zrekonštruovať do rozhodovacieho kontextu potrebného pre ďalší krok."
+          },
+          {
+            title: "evaluation path",
+            body:
+              "Existuje kontrolovaná evaluačná cesta na porovnanie výstupov support_v1 pod ohraničeným review."
+          },
+          {
+            title: "pilot materials",
+            body:
+              "Pilot-facing materiály už existujú na rámcovanie scope, prístupu, review a ďalších krokov."
+          }
+        ]
+      },
+      pilotFlow: {
+        eyebrow: "Ako vyzerá pilot",
+        title: "Ako vyzerá pilot",
+        steps: [
+          {
+            step: "01",
+            title: "Vyberte jeden workflow slice",
+            body:
+              "Zvoľte jeden ohraničený support workflow slice s jasnými vlastníkmi, hranicami exportu a review pravidlami."
+          },
+          {
+            step: "02",
+            title: "Načítajte support exporty a históriu",
+            body:
+              "Prineste support exporty do workflow, validujte ich, normalizujte ich a zrekonštruujte rozhodovaciu históriu."
+          },
+          {
+            step: "03",
+            title: "Aplikujte ohraničené review kritériá",
+            body:
+              "Použite dohodnuté review kritériá, aby sa pilot hodnotil proti explicitným štandardom a nie proti všeobecnému dojmu."
+          },
+          {
+            step: "04",
+            title: "Vyhodnoťte výstupy v kontrolovanom porovnaní",
+            body:
+              "Porovnajte vzniknuté výstupy pod kontrolovaným review a rozhodnite, či ohraničený pilot prešiel."
+          }
+        ]
+      },
+      materials: {
+        eyebrow: "Pilotné materiály",
+        title: "Pilotné materiály",
+        body:
+          "Materiály zostávajú buyer-facing a ohraničené: prístup je na vyžiadanie a každá položka podporuje kontrolované pilotné review, nie široké produktové pozicionovanie.",
+        requestLabel: "Požiadať o prístup",
+        items: [
+          {
+            label: "Rozsah pilotu",
+            title: "Ohraničený rozsah pilotu",
+            body:
+              "Definícia rozsahu pre jeden workflow slice, review vlastníctvo a hranice úspechu."
+          },
+          {
+            label: "Review kritériá",
+            title: "Kontrolované review kritériá",
+            body:
+              "Review metóda, pass kritériá a porovnávacie pravidlá použité na vyhodnotenie pilotu."
+          },
+          {
+            label: "Práca s dátami",
+            title: "Poznámka k práci so support exportmi",
+            body:
+              "Operačná poznámka pokrývajúca predpoklady exportov, hranice práce s dátami a review kontroly."
+          },
+          {
+            label: "Evidence pack",
+            title: "Pilotný evidence pack",
+            body:
+              "Kompaktný review balík používaný na rámcovanie výstupov, poznámok z review a ďalších krokov."
+          }
+        ]
+      },
+      cta: {
+        headline: "Prediskutujme ohraničený pilot support_v1.",
+        supportingLine:
+          "Použite jeden reálny workflow slice na vyhodnotenie jadra imLayeru pod kontrolovaným review a s jasnými kritériami úspechu.",
+        primaryCta: "Prediskutovať pilot"
+      }
+    }
+  }
+} as const;

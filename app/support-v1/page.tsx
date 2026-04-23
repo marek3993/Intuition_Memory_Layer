@@ -3,7 +3,11 @@ import { resolveLocale } from "@/data/site-content";
 
 type SearchParams = Promise<{ lang?: string | string[] } | undefined>;
 
-export default async function Home({ searchParams }: { searchParams?: SearchParams }) {
+export default async function SupportV1Page({
+  searchParams
+}: {
+  searchParams?: SearchParams;
+}) {
   const params = await searchParams;
-  return <LandingPage page="home" initialLocale={resolveLocale(params?.lang)} />;
+  return <LandingPage page="support" initialLocale={resolveLocale(params?.lang)} />;
 }
