@@ -15,7 +15,6 @@ type PilotAsset = {
 };
 type WorkflowStep = { title: string; body: string };
 type RoadmapStep = { stage: string; title: string; body: string };
-type EvidenceMetric = { label: string; value: string; footnote?: string };
 
 type SiteLocaleContent = {
   brand: { expandedName: string; subtitle: string };
@@ -34,16 +33,6 @@ type SiteLocaleContent = {
   };
   technology: { eyebrow: string; title: string; body: string; cards: Card[]; asset: AssetSlot };
   whyNow: { eyebrow: string; title: string; body: string; cards: Card[] };
-  evidence: {
-    eyebrow: string;
-    title: string;
-    body: string;
-    highlight: string;
-    metrics: EvidenceMetric[];
-    cards: Card[];
-    noteLabel: string;
-    note: string;
-  };
   firstProduct: {
     eyebrow: string;
     title: string;
@@ -126,7 +115,7 @@ const enContent: SiteLocaleContent = {
     proofStrip: [
       "History -> compact state -> decision",
       "Built for workflow AI, not generic memory storage",
-      "Internal benchmark evidence supports a bounded pilot discussion",
+      "Major internal runtime evidence now exists on a large evaluated workflow surface",
       "support_v1 is the first product, first applied workflow, and first pilot wedge"
     ],
     asset: {
@@ -194,51 +183,6 @@ const enContent: SiteLocaleContent = {
           "The credible first step is not a platform-wide promise. It is one workflow slice where the decision layer can be tested under controlled conditions."
       }
     ]
-  },
-  evidence: {
-    eyebrow: "Internal benchmark evidence",
-    title: "Current internal benchmark signal for the imLayer core.",
-    body:
-      "The strongest current proof point is internal benchmark evidence on a bounded workflow evaluation set. It supports a first pilot discussion because it shows signal in a concrete decision path. It does not count as production proof, customer proof, or broad cross-domain validation.",
-    highlight:
-      "Current internal benchmark evidence: 573 total examples, 347 heldout, 0.6381 vs 0.1590, and a +0.4791 delta.",
-    metrics: [
-      {
-        label: "Total examples",
-        value: "573"
-      },
-      {
-        label: "Heldout examples",
-        value: "347"
-      },
-      {
-        label: "IML vs baseline",
-        value: "0.6381 vs 0.1590"
-      },
-      {
-        label: "Delta",
-        value: "+0.4791"
-      }
-    ],
-    cards: [
-      {
-        title: "Bounded evidence, bounded claim",
-        body:
-          "This benchmark supports a serious internal signal claim for the current path. It should not be stretched into a production or customer claim."
-      },
-      {
-        title: "Useful for first-pilot qualification",
-        body:
-          "The benchmark gives buyers a concrete internal reference point for why a controlled first pilot is worth reviewing."
-      },
-      {
-        title: "Not broad validation",
-        body:
-          "The benchmark does not imply broad workflow coverage, broad domain transfer, or proven performance across unrelated environments."
-      }
-    ],
-    noteLabel: "Qualification",
-    note: "Internal benchmark evidence, not production proof."
   },
   firstProduct: {
     eyebrow: "First product: support_v1",
@@ -372,7 +316,7 @@ const enContent: SiteLocaleContent = {
         label: "Evidence pack",
         title: "Pilot evidence pack",
         body:
-          "The review pack summarizing scope, benchmark context, outputs, reviewer notes, and next-step recommendations.",
+          "The review pack summarizing scope, internal evidence context, outputs, reviewer notes, and next-step recommendations.",
         access: "request"
       }
     ],
@@ -458,7 +402,7 @@ const skContent: SiteLocaleContent = {
   },
   nav: {
     items: [
-      { label: "Co je imLayer", href: "#what-imlayer-is" },
+      { label: "Čo je imLayer", href: "#what-imlayer-is" },
       { label: "Prečo teraz", href: "#why-now" },
       { label: "Interné dôkazy", href: "#evidence" },
       { label: "Prvý produkt", href: "#first-product" },
@@ -475,13 +419,13 @@ const skContent: SiteLocaleContent = {
     supportingLine:
       "Mení fragmentovanú workflow históriu na kompaktný stav pripravený na rozhodnutie. support_v1 je prvý produkt postavený na tejto vrstve.",
     primaryCta: "Prediskutovať pilot",
-    secondaryCta: "Pozrieť interný benchmark",
+    secondaryCta: "Pozrieť interné dôkazy",
     secondaryHref: "#evidence",
     proofLabel: "Pozicionovanie",
     proofStrip: [
       "História -> kompaktný stav -> rozhodnutie",
       "Navrhnuté pre workflow AI, nie pre generickú pamäťovú vrstvu",
-      "Interný benchmark podporuje diskusiu o ohraničenom pilote",
+      "Veľký interný runtime dôkaz už existuje na rozsiahlej evaluovanej workflow ploche",
       "support_v1 je prvý produkt, prvý aplikovaný workflow a prvý pilotný wedge"
     ],
     asset: {
@@ -549,51 +493,6 @@ const skContent: SiteLocaleContent = {
           "Prvý dôveryhodný krok nie je prísľub platformy pre všetko. Je to jeden workflow slice, na ktorom sa decision vrstva dá otestovať v kontrolovaných podmienkach."
       }
     ]
-  },
-  evidence: {
-    eyebrow: "Interný benchmark",
-    title: "Aktuálny benchmark signál pre prvú evaluačnú cestu support_v1.",
-    body:
-      "Najsilnejší aktuálny dôkaz je interný benchmark na ohraničenom evaluačnom sete. Podporuje diskusiu o prvom pilote, pretože ukazuje signál v jednej konkrétnej ceste. Nie je to produkčný dôkaz, zákaznícky dôkaz ani široká cross-domain validácia.",
-    highlight:
-      "Aktuálny interný benchmark: 573 total examples, 347 heldout, 0.6381 vs 0.1590 a delta +0.4791.",
-    metrics: [
-      {
-        label: "Príklady celkom",
-        value: "573"
-      },
-      {
-        label: "Heldout príklady",
-        value: "347"
-      },
-      {
-        label: "IML vs baseline",
-        value: "0.6381 vs 0.1590"
-      },
-      {
-        label: "Delta",
-        value: "+0.4791"
-      }
-    ],
-    cards: [
-      {
-        title: "Ohraničený dôkaz, ohraničené tvrdenie",
-        body:
-          "Tento benchmark podporuje seriózny interný signál pre aktuálnu cestu. Netreba ho naťahovať na produkčné ani zákaznícke tvrdenie."
-      },
-      {
-        title: "Užitočné pre kvalifikáciu prvého pilotu",
-        body:
-          "Benchmark dáva kupujúcemu konkrétny interný referenčný bod, prečo sa oplatí preskúmať kontrolovaný prvý pilot."
-      },
-      {
-        title: "Nie široká validácia",
-        body:
-          "Benchmark neimplikuje široké workflow pokrytie, prenos do iných domén ani dokázaný výkon v nesúvisiacich prostrediach."
-      }
-    ],
-    noteLabel: "Kvalifikácia",
-    note: "Interný benchmark, nie produkčný dôkaz."
   },
   firstProduct: {
     eyebrow: "Prvý produkt: support_v1",
@@ -727,7 +626,7 @@ const skContent: SiteLocaleContent = {
         label: "Evidence pack",
         title: "Pilotný evidence pack",
         body:
-          "Review balík so zhrnutím scope, benchmark kontextu, výstupov, reviewer notes a odporúčaní pre ďalší krok.",
+          "Review balík so zhrnutím scope, interného dôkazového kontextu, výstupov, reviewer notes a odporúčaní pre ďalší krok.",
         access: "request"
       }
     ],

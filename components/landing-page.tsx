@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
@@ -28,10 +28,10 @@ const formStatusMessages: Record<
     error: "The form could not be sent. Please try again in a moment."
   },
   sk: {
-    submitLoadingLabel: "Odosielam žiadosť...",
-    success: "Pilotná žiadosť bola odoslaná. Odpoveď príde e-mailom.",
-    validationError: "Vyplňte povinné polia a zadajte platný pracovný e-mail.",
-    error: "Formulár sa nepodarilo odoslať. Skúste to ešte raz o chvíľu."
+    submitLoadingLabel: "Odosielam ĹľiadosĹĄ...",
+    success: "PilotnĂˇ ĹľiadosĹĄ bola odoslanĂˇ. OdpoveÄŹ prĂ­de e-mailom.",
+    validationError: "VyplĹte povinnĂ© polia a zadajte platnĂ˝ pracovnĂ˝ e-mail.",
+    error: "FormulĂˇr sa nepodarilo odoslaĹĄ. SkĂşste to eĹˇte raz o chvĂ­Äľu."
   }
 };
 const creatorAttribution: Record<
@@ -47,6 +47,42 @@ const creatorAttribution: Record<
     linkLabel: "LinkedIn"
   }
 };
+const evidenceArtworks: Record<
+  Locale,
+  {
+    desktop: { src: string; alt: string; width: number; height: number };
+    mobile: { src: string; alt: string; width: number; height: number };
+  }
+> = {
+  en: {
+    desktop: {
+      src: "/assets/evidence/evidence-en-desktop.png",
+      alt: "English internal runtime evidence artwork for desktop",
+      width: 1440,
+      height: 2320
+    },
+    mobile: {
+      src: "/assets/evidence/evidence-en-mobile.png",
+      alt: "English internal runtime evidence artwork for mobile",
+      width: 900,
+      height: 3160
+    }
+  },
+  sk: {
+    desktop: {
+      src: "/assets/evidence/evidence-sk-desktop.png",
+      alt: "Slovak internal runtime evidence artwork for desktop",
+      width: 1440,
+      height: 2320
+    },
+    mobile: {
+      src: "/assets/evidence/evidence-sk-mobile.png",
+      alt: "Slovak internal runtime evidence artwork for mobile",
+      width: 900,
+      height: 3160
+    }
+  }
+};
 
 export function LandingPage() {
   const [locale, setLocale] = useState<Locale>("en");
@@ -55,7 +91,9 @@ export function LandingPage() {
     title: string;
   } | null>(null);
   const [form, setForm] = useState(emptyForm);
-  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">(
+    "idle"
+  );
   const [submitMessage, setSubmitMessage] = useState("");
 
   const content = siteContent[locale];
@@ -139,10 +177,13 @@ export function LandingPage() {
   };
 
   const roadmapExpandLabel =
-    locale === "sk" ? "Otvoriť roadmap obrázok vo väčšom zobrazení" : "Open roadmap image in larger view";
+    locale === "sk"
+      ? "OtvoriĹĄ roadmap obrĂˇzok vo vĂ¤ÄŤĹˇom zobrazenĂ­"
+      : "Open roadmap image in larger view";
   const roadmapDialogLabel =
-    locale === "sk" ? "Zväčšený roadmap obrázok" : "Enlarged roadmap image";
-  const closeLightboxLabel = locale === "sk" ? "Zavrieť zväčšený obrázok" : "Close enlarged image";
+    locale === "sk" ? "ZvĂ¤ÄŤĹˇenĂ˝ roadmap obrĂˇzok" : "Enlarged roadmap image";
+  const closeLightboxLabel =
+    locale === "sk" ? "ZavrieĹĄ zvĂ¤ÄŤĹˇenĂ˝ obrĂˇzok" : "Close enlarged image";
 
   return (
     <main lang={locale} className="relative overflow-x-clip bg-ink text-white">
@@ -284,35 +325,7 @@ export function LandingPage() {
       </Section>
 
       <Section id="evidence" tone="tone-deep-navy">
-        <Intro {...content.evidence} />
-        <div className="mt-10 grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(300px,0.74fr)]">
-          <div className="surface-strong p-6 sm:p-8">
-            <div className="rounded-[26px] border border-accent/16 bg-accent/[0.08] p-5 sm:p-6">
-              <p className="pretty-copy text-base leading-7 text-white/82">
-                {content.evidence.highlight}
-              </p>
-            </div>
-            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {content.evidence.metrics.map((metric) => (
-                <Metric key={metric.label} label={metric.label} value={metric.value} />
-              ))}
-            </div>
-          </div>
-
-          <div className="surface p-6 sm:p-8">
-            <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
-              {content.evidence.noteLabel}
-            </div>
-            <p className="pretty-copy mt-3 text-sm leading-7 text-white/66">
-              {content.evidence.note}
-            </p>
-          </div>
-        </div>
-        <div className="section-grid mt-8">
-          {content.evidence.cards.map((card) => (
-            <Card key={card.title} {...card} />
-          ))}
-        </div>
+        <EvidenceSection locale={locale} />
       </Section>
 
       <Section id="first-product" tone="tone-graphite">
@@ -342,7 +355,10 @@ export function LandingPage() {
             </h3>
             <div className="mt-8 grid gap-4">
               {content.firstProduct.workflow.map((step, index) => (
-                <div key={step.title} className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5">
+                <div
+                  key={step.title}
+                  className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5"
+                >
                   <div className="flex items-center gap-3">
                     <span className="flex h-8 w-8 items-center justify-center rounded-full border border-accent/18 bg-accent/10 text-xs font-semibold tracking-[0.12em] text-accent">
                       {String(index + 1).padStart(2, "0")}
@@ -366,7 +382,10 @@ export function LandingPage() {
             </h3>
             <div className="mt-6 grid gap-3">
               {content.firstProduct.built.map((item) => (
-                <div key={item} className="rounded-[22px] border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-7 text-white/64">
+                <div
+                  key={item}
+                  className="rounded-[22px] border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-7 text-white/64"
+                >
                   <div className="flex items-start gap-3">
                     <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-accent shadow-[0_0_18px_rgba(137,180,255,0.38)]" />
                     <span className="pretty-copy">{item}</span>
@@ -550,7 +569,9 @@ export function LandingPage() {
               </a>
             </div>
           </div>
-          <span className="pretty-copy max-w-2xl text-left md:text-right">{content.footer.oneLine}</span>
+          <span className="pretty-copy max-w-2xl text-left md:text-right">
+            {content.footer.oneLine}
+          </span>
         </div>
       </footer>
     </main>
@@ -604,6 +625,38 @@ function Card({ title, body }: { title: string; body: string }) {
       </h3>
       <p className="pretty-copy mt-3 text-sm leading-7 text-white/62">{body}</p>
     </article>
+  );
+}
+
+function EvidenceSection({ locale }: { locale: Locale }) {
+  const artwork = evidenceArtworks[locale];
+
+  return (
+    <div className="mx-auto max-w-[78rem]">
+      <div className="lg:hidden">
+        <Image
+          src={artwork.mobile.src}
+          alt={artwork.mobile.alt}
+          width={artwork.mobile.width}
+          height={artwork.mobile.height}
+          priority
+          sizes="(max-width: 1023px) 100vw, 0px"
+          className="block h-auto w-full"
+        />
+      </div>
+
+      <div className="hidden lg:block">
+        <Image
+          src={artwork.desktop.src}
+          alt={artwork.desktop.alt}
+          width={artwork.desktop.width}
+          height={artwork.desktop.height}
+          priority
+          sizes="(max-width: 1279px) 100vw, 78rem"
+          className="block h-auto w-full"
+        />
+      </div>
+    </div>
   );
 }
 
@@ -734,7 +787,9 @@ function AssetCard({
       <span className="text-[11px] uppercase tracking-[0.22em] text-white/42">
         {asset.label}
       </span>
-      <div className={cx("asset-visual", assetVisualSpacing(variant), `asset-visual--${variant}`)}>
+      <div
+        className={cx("asset-visual", assetVisualSpacing(variant), `asset-visual--${variant}`)}
+      >
         {onExpand ? (
           <button
             type="button"
@@ -844,17 +899,6 @@ function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   );
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-[22px] border border-white/10 bg-white/[0.04] p-5">
-      <div className="text-[11px] uppercase tracking-[0.22em] text-white/40">{label}</div>
-      <div className="mt-3 text-[2rem] font-semibold tracking-[-0.05em] text-white">
-        {value}
-      </div>
-    </div>
-  );
-}
-
 function SectionGlow() {
   return (
     <>
@@ -940,4 +984,5 @@ function assetSizes(variant: "layer" | "workflow" | "sequence") {
 function cx(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(" ");
 }
+
 

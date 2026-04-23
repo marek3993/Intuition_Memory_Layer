@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440" height="2320" viewBox="0 0 1440 2320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="40" x2="1320" y2="2280" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#09111f" />
+      <stop offset="1" stop-color="#040913" />
+    </linearGradient>
+    <radialGradient id="orbA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(220 180) rotate(40) scale(420 560)">
+      <stop stop-color="#2f7cff" stop-opacity="0.22" />
+      <stop offset="1" stop-color="#2f7cff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="orbB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1220 420) rotate(120) scale(440 640)">
+      <stop stop-color="#8ad0ff" stop-opacity="0.14" />
+      <stop offset="1" stop-color="#8ad0ff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1440" height="2320" rx="48" fill="url(#bg)" />
+  <rect width="1440" height="2320" rx="48" fill="url(#orbA)" />
+  <rect width="1440" height="2320" rx="48" fill="url(#orbB)" />
+  <rect x="26" y="26" width="1388" height="2268" rx="38" fill="none" stroke="rgba(255,255,255,0.08)" />
+  <foreignObject x="0" y="0" width="1440" height="2320">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="root desktop">
+      <style>
+        * { box-sizing: border-box; }
+        .root { width: 100%; height: 100%; padding: 68px; color: #f5f8ff; font-family: Satoshi, Avenir Next, "Segoe UI", sans-serif; }
+        .eyebrow { display: inline-flex; padding: 10px 16px; border-radius: 999px; border: 1px solid rgba(137,180,255,0.22); background: rgba(137,180,255,0.12); font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; color: #97c0ff; font-weight: 600; }
+        .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+        .badges { display: flex; gap: 10px; }
+        .badge { padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #d6e9ff; background: rgba(255,255,255,0.05); }
+        .badge.green { background: rgba(126,226,193,0.12); color: #9ce2ca; }
+        .headline { margin-top: 26px; max-width: 980px; font-size: 60px; line-height: 1.02; letter-spacing: -0.05em; font-weight: 700; }
+        .intro { margin-top: 18px; max-width: 860px; font-size: 24px; line-height: 1.55; color: rgba(230,240,255,0.8); }
+        .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; margin-top: 40px; }
+        .card { background: rgba(7,12,24,0.9); border: 1px solid rgba(255,255,255,0.08); border-radius: 30px; padding: 28px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 24px 80px rgba(0,0,0,0.34); position: relative; overflow: hidden; }
+        .card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0)); pointer-events: none; }
+        .span-8 { grid-column: span 8; } .span-4 { grid-column: span 4; } .span-12 { grid-column: span 12; } .span-5 { grid-column: span 5; } .span-7 { grid-column: span 7; }
+        .label { font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: #8ea6c2; }
+        .title { margin-top: 14px; font-size: 36px; line-height: 1.12; font-weight: 650; letter-spacing: -0.04em; }
+        .body { margin-top: 14px; font-size: 20px; line-height: 1.55; color: rgba(224,234,247,0.82); }
+        .mega { margin-top: 18px; font-size: 88px; line-height: 0.96; letter-spacing: -0.08em; font-weight: 700; }
+        .sub { margin-top: 8px; font-size: 18px; color: #9ab0cb; text-transform: uppercase; letter-spacing: 0.12em; }
+        .metric-stack { display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 18px; align-items: start; margin-top: 22px; }
+        .mini-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; padding: 18px 20px; }
+        .value { margin-top: 12px; font-size: 42px; font-weight: 700; line-height: 1; letter-spacing: -0.04em; }
+        .value.blue { color: #95d4ff; } .value.green { color: #7ee2c1; } .value.orange { color: #ffb06e; }
+        .signal-chip { display: inline-flex; margin-top: 18px; padding: 12px 16px; border-radius: 999px; background: rgba(126,226,193,0.12); border: 1px solid rgba(126,226,193,0.18); font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: #a7e6d1; font-weight: 600; }
+        .correctness { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 28px; align-items: start; }
+        .bar-row { margin-top: 22px; }
+        .bar-meta { display: flex; justify-content: space-between; align-items: baseline; color: #dce7f8; font-size: 20px; }
+        .bar-meta strong { font-size: 22px; }
+        .track { height: 16px; margin-top: 10px; border-radius: 999px; background: rgba(255,255,255,0.07); overflow: hidden; }
+        .fill { height: 100%; border-radius: 999px; }
+        .fill.orange, .orange { background: #ffb06e; color: #ffb06e; }
+        .fill.blue, .blue { background: #95d4ff; color: #95d4ff; }
+        .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 24px; }
+        .economy-grid { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 16px; margin-top: 22px; }
+        .delta-chip { display: inline-flex; margin-top: 16px; padding: 8px 12px; border-radius: 999px; background: rgba(69,144,255,0.18); border: 1px solid rgba(69,144,255,0.18); color: #97c4ff; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; }
+        .latency-row { display: grid; grid-template-columns: 0.8fr 1fr 1fr 0.9fr; gap: 10px; padding: 12px 14px; margin-top: 10px; border-radius: 16px; background: rgba(255,255,255,0.03); color: #dce7f8; font-size: 18px; }
+        .latency-row .raw { color: #ffb06e; } .latency-row .packet { color: #95d4ff; } .latency-row .delta { color: #7ee2c1; text-align: right; }
+        .qual-list { margin: 22px 0 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+        .qual-list li { position: relative; padding-left: 22px; font-size: 20px; line-height: 1.45; color: rgba(224,234,247,0.84); }
+        .qual-list li::before { content: ""; position: absolute; left: 0; top: 11px; width: 8px; height: 8px; border-radius: 999px; background: #8fd3ff; }
+        .insights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 22px; }
+        .insight-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; padding: 20px; }
+        .insight-title { font-size: 26px; line-height: 1.15; font-weight: 650; letter-spacing: -0.03em; }
+        .footer { margin-top: 26px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 18px; line-height: 1.55; color: rgba(176,189,209,0.9); }
+      </style>
+      <div class="top">
+        <div class="eyebrow">Internal Evidence</div>
+        <div class="badges"><div class="badge green">Internal only</div><div class="badge">Non-support runtime</div></div>
+      </div>
+      <div class="headline">Major internal runtime evidence now exists for the imLayer core.</div>
+      <div class="intro">Major internal non-support runtime evidence now exists across a large evaluated live-model workflow surface.</div>
+      <div class="grid">
+        <div class="card span-8">
+          <div class="label">Large evaluated runtime surface</div>
+          <div class="title">Every evaluated case completed successfully.</div>
+          <div class="metric-stack">
+            <div>
+              <div class="mega">2,521 / 2,521</div>
+              <div class="sub">Successfully evaluated cases</div>
+              <div class="body">All 2,521 evaluated cases completed successfully, with the packet path matching the expected next action on every case.</div>
+            </div>
+            <div class="mini-card"><div class="label">Failed cases</div><div class="value green">0</div></div>
+          </div>
+        </div>
+        <div class="card span-4">
+          <div class="label">Key takeaway</div>
+          <div class="title">Compact decision state beat raw workflow history on next-action correctness.</div>
+          <div class="body">Packet correctness vs expected next action reached 100.0%, while raw workflow history reached 34.55% on the same evaluated surface.</div>
+          <div class="signal-chip">100.0% vs 34.55%</div>
+        </div>
+        <div class="card span-12">
+          <div class="label">Correctness comparison</div>
+          <div class="title">Packet vs raw against expected next action</div>
+          <div class="correctness">
+            <div>
+              <div class="body">Packet-correct / raw-wrong occurred 1,650 times. The reverse never occurred. Both-wrong never occurred.</div>
+              <div class="bar-row"><div class="bar-meta"><span>Raw history</span><strong class="orange">34.55%</strong></div><div class="track"><div class="fill orange" style="width:34.55%"></div></div></div>
+              <div class="bar-row"><div class="bar-meta"><span>Compact packet</span><strong class="blue">100.0%</strong></div><div class="track"><div class="fill blue" style="width:100%"></div></div></div>
+            </div>
+            <div>
+              <div class="stat-row">
+                <div class="mini-card"><div class="label">Packet &gt; Raw</div><div class="value blue">1,650</div></div>
+                <div class="mini-card"><div class="label">Raw &gt; Packet</div><div class="value orange">0</div></div>
+                <div class="mini-card"><div class="label">Both wrong</div><div class="value green">0</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card span-12">
+          <div class="label">Runtime economics</div>
+          <div class="title">Lower downstream input cost with preserved or improved latency</div>
+          <div class="economy-grid">
+            <div class="mini-card"><div class="label">Average input tokens</div><div class="title" style="font-size:28px;margin-top:10px;">319.4597 vs 118.0079</div><div class="delta-chip">-61.25%</div></div>
+            <div class="mini-card"><div class="label">Average output tokens</div><div class="title" style="font-size:28px;margin-top:10px;">6.8401 vs 2.3328</div><div class="body" style="margin-top:12px;">Packet stayed lean while reducing downstream state size.</div></div>
+            <div class="mini-card"><div class="label">Latency</div><div class="title" style="font-size:28px;margin-top:10px;">Average, median, and p95 all improved.</div><div class="latency-row"><span>Average</span><span class="raw">715.95 ms</span><span class="packet">640.032 ms</span><strong class="delta">-75.918 ms</strong></div><div class="latency-row"><span>Median</span><span class="raw">638.228 ms</span><span class="packet">551.257 ms</span><strong class="delta">-86.971 ms</strong></div><div class="latency-row"><span>P95</span><span class="raw">1119.712 ms</span><span class="packet">1090.07 ms</span><strong class="delta">-29.642 ms</strong></div></div>
+          </div>
+        </div>
+        <div class="card span-5">
+          <div class="label">Qualification</div>
+          <div class="title">Strict internal-only claim boundary</div>
+          <ul class="qual-list"><li>Major internal non-support runtime evidence</li><li>Not production proof</li><li>Not customer proof</li><li>Not blind external adjudication proof</li><li>Not broad prevalence outside tested surfaces</li></ul>
+        </div>
+        <div class="card span-7">
+          <div class="label">Interpretation</div>
+          <div class="insights"><div class="insight-card"><div class="insight-title">Compact state can outperform raw history</div><div class="body">Packet-correct / raw-wrong occurred 1,650 times. Raw-correct / packet-wrong never occurred.</div></div><div class="insight-card"><div class="insight-title">Input cost drops materially</div><div class="body">Average downstream input tokens fell from 319.4597 to 118.0079 without a correctness tradeoff inside the tested surface.</div></div><div class="insight-card"><div class="insight-title">Latency stayed disciplined</div><div class="body">Average, median, and p95 latency all improved rather than regressing on the evaluated runtime surface.</div></div></div>
+        </div>
+      </div>
+      <div class="footer">Claim boundary: strong internal runtime signal for the imLayer core. support_v1 remains the first commercial wedge and first external validation path.</div>
+    </div>
+  </foreignObject>
+</svg>

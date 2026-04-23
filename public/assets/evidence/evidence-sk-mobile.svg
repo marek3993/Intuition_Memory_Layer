@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="3160" viewBox="0 0 900 3160" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="60" y1="40" x2="840" y2="3120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#09111f" />
+      <stop offset="1" stop-color="#040913" />
+    </linearGradient>
+    <radialGradient id="orbA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(180 180) rotate(45) scale(360 480)">
+      <stop stop-color="#2f7cff" stop-opacity="0.22" />
+      <stop offset="1" stop-color="#2f7cff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="orbB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(760 520) rotate(120) scale(380 620)">
+      <stop stop-color="#8ad0ff" stop-opacity="0.14" />
+      <stop offset="1" stop-color="#8ad0ff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="900" height="3160" rx="42" fill="url(#bg)" />
+  <rect width="900" height="3160" rx="42" fill="url(#orbA)" />
+  <rect width="900" height="3160" rx="42" fill="url(#orbB)" />
+  <rect x="24" y="24" width="852" height="3112" rx="34" fill="none" stroke="rgba(255,255,255,0.08)" />
+  <foreignObject x="0" y="0" width="900" height="3160">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="root mobile">
+      <style>
+        * { box-sizing: border-box; }
+        .root { width: 100%; height: 100%; padding: 54px; color: #f5f8ff; font-family: Satoshi, Avenir Next, "Segoe UI", sans-serif; }
+        .eyebrow { display: inline-flex; padding: 10px 16px; border-radius: 999px; border: 1px solid rgba(137,180,255,0.22); background: rgba(137,180,255,0.12); font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; color: #97c0ff; font-weight: 600; }
+        .badges { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+        .badge { padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #d6e9ff; background: rgba(255,255,255,0.05); }
+        .badge.green { background: rgba(126,226,193,0.12); color: #9ce2ca; }
+        .headline { margin-top: 24px; font-size: 48px; line-height: 1.02; letter-spacing: -0.05em; font-weight: 700; }
+        .intro { margin-top: 16px; font-size: 24px; line-height: 1.55; color: rgba(230,240,255,0.8); }
+        .stack { display: grid; gap: 18px; margin-top: 34px; }
+        .card { background: rgba(7,12,24,0.9); border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; padding: 24px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 24px 80px rgba(0,0,0,0.34); position: relative; overflow: hidden; }
+        .label { font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: #8ea6c2; }
+        .title { margin-top: 14px; font-size: 32px; line-height: 1.12; font-weight: 650; letter-spacing: -0.04em; }
+        .body { margin-top: 14px; font-size: 20px; line-height: 1.55; color: rgba(224,234,247,0.82); }
+        .mega { margin-top: 18px; font-size: 72px; line-height: 0.96; letter-spacing: -0.08em; font-weight: 700; }
+        .sub { margin-top: 8px; font-size: 18px; color: #9ab0cb; text-transform: uppercase; letter-spacing: 0.12em; }
+        .mini-card { margin-top: 18px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 22px; padding: 18px 20px; }
+        .value { margin-top: 12px; font-size: 40px; font-weight: 700; line-height: 1; letter-spacing: -0.04em; }
+        .value.blue { color: #95d4ff; } .value.green { color: #7ee2c1; } .value.orange { color: #ffb06e; }
+        .signal-chip, .delta-chip { display: inline-flex; margin-top: 16px; padding: 10px 14px; border-radius: 999px; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; }
+        .signal-chip { background: rgba(126,226,193,0.12); border: 1px solid rgba(126,226,193,0.18); color: #a7e6d1; }
+        .delta-chip { background: rgba(69,144,255,0.18); border: 1px solid rgba(69,144,255,0.18); color: #97c4ff; }
+        .bar-row { margin-top: 18px; }
+        .bar-meta { display: flex; justify-content: space-between; align-items: baseline; color: #dce7f8; font-size: 20px; }
+        .bar-meta strong { font-size: 22px; }
+        .track { height: 16px; margin-top: 10px; border-radius: 999px; background: rgba(255,255,255,0.07); overflow: hidden; }
+        .fill { height: 100%; border-radius: 999px; }
+        .fill.orange, .orange { background: #ffb06e; color: #ffb06e; }
+        .fill.blue, .blue { background: #95d4ff; color: #95d4ff; }
+        .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
+        .economy-grid { display: grid; gap: 12px; margin-top: 18px; }
+        .latency-row { display: grid; grid-template-columns: 0.8fr 1fr 1fr 0.9fr; gap: 8px; padding: 12px 12px; margin-top: 10px; border-radius: 16px; background: rgba(255,255,255,0.03); color: #dce7f8; font-size: 18px; }
+        .latency-row .raw { color: #ffb06e; } .latency-row .packet { color: #95d4ff; } .latency-row .delta { color: #7ee2c1; text-align: right; }
+        .qual-list { margin: 20px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+        .qual-list li { position: relative; padding-left: 22px; font-size: 20px; line-height: 1.45; color: rgba(224,234,247,0.84); }
+        .qual-list li::before { content: ""; position: absolute; left: 0; top: 11px; width: 8px; height: 8px; border-radius: 999px; background: #8fd3ff; }
+        .insights { display: grid; gap: 12px; margin-top: 18px; }
+        .insight-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 22px; padding: 18px; }
+        .insight-title { font-size: 26px; line-height: 1.15; font-weight: 650; letter-spacing: -0.03em; }
+        .footer { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 18px; line-height: 1.55; color: rgba(176,189,209,0.9); }
+      </style>
+      <div class="eyebrow">Intern? d?kazy</div>
+      <div class="badges"><div class="badge green">Iba interne</div><div class="badge">Runtime mimo supportu</div></div>
+      <div class="headline">Ve?k? intern? runtime d?kaz u? existuje pre jadro imLayer.</div>
+      <div class="intro">Ve?k? intern? non-support runtime d?kaz u? existuje na rozsiahlej evaluovanej live-model workflow ploche.</div>
+      <div class="stack">
+        <div class="card">
+          <div class="label">Rozsiahla evaluovan? runtime plocha</div>
+          <div class="title">Ka?d? evaluovan? pr?pad pre?iel ?spe?ne.</div>
+          <div class="mega">2,521 / 2,521</div>
+          <div class="sub">?spe?ne evaluovan? pr?pady</div>
+          <div class="body">V?etk?ch 2 521 evaluovan?ch pr?padov pre?lo ?spe?ne a packet cesta trafila o?ak?van? next action v ka?dom pr?pade.</div>
+          <div class="mini-card"><div class="label">Chybn? pr?pady</div><div class="value green">0</div></div>
+        </div>
+        <div class="card">
+          <div class="label">Hlavn? takeaway</div>
+          <div class="title">Kompaktn? decision state prekonal raw workflow history v spr?vnosti ?al?ieho kroku.</div>
+          <div class="body">Packet correctness vo?i o?ak?van?mu next action dosiahla 100.0%, k?m raw workflow history dosiahla 34.55% na tej istej evaluovanej ploche.</div>
+          <div class="signal-chip">100.0% vs 34.55%</div>
+        </div>
+        <div class="card">
+          <div class="label">Porovnanie spr?vnosti</div>
+          <div class="title">Packet vs raw vo?i o?ak?van?mu next action</div>
+          <div class="body">Packet spr?vny / raw chybn? nastal 1 650-kr?t. Opa?n? pr?pad nenastal ani raz. Oba chybn? nenastali.</div>
+          <div class="bar-row"><div class="bar-meta"><span>Raw hist?ria</span><strong class="orange">34.55%</strong></div><div class="track"><div class="fill orange" style="width:34.55%"></div></div></div>
+          <div class="bar-row"><div class="bar-meta"><span>Kompaktn? packet</span><strong class="blue">100.0%</strong></div><div class="track"><div class="fill blue" style="width:100%"></div></div></div>
+          <div class="stat-row">
+            <div class="mini-card"><div class="label">Packet &gt; Raw</div><div class="value blue">1,650</div></div>
+            <div class="mini-card"><div class="label">Raw &gt; Packet</div><div class="value orange">0</div></div>
+            <div class="mini-card"><div class="label">Both wrong</div><div class="value green">0</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="label">Runtime ekonomika</div>
+          <div class="title">Ni??? downstream input cost pri zachovanej alebo lep?ej latencii</div>
+          <div class="economy-grid">
+            <div class="mini-card"><div class="label">Average input tokens</div><div class="title" style="font-size:28px;margin-top:10px;">319.4597 vs 118.0079</div><div class="delta-chip">-61.25%</div></div>
+            <div class="mini-card"><div class="label">Average output tokens</div><div class="title" style="font-size:28px;margin-top:10px;">6.8401 vs 2.3328</div></div>
+            <div class="mini-card"><div class="label">Latency</div><div class="title" style="font-size:28px;margin-top:10px;">Average, median, and p95 all improved.</div><div class="latency-row"><span>Priemer</span><span class="raw">715.95 ms</span><span class="packet">640.032 ms</span><strong class="delta">-75.918 ms</strong></div><div class="latency-row"><span>Medi?n</span><span class="raw">638.228 ms</span><span class="packet">551.257 ms</span><strong class="delta">-86.971 ms</strong></div><div class="latency-row"><span>P95</span><span class="raw">1119.712 ms</span><span class="packet">1090.07 ms</span><strong class="delta">-29.642 ms</strong></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="label">Kvalifik?cia</div>
+          <div class="title">Pr?sna hranica intern?ho tvrdenia</div>
+          <ul class="qual-list"><li>Ve?k? intern? non-support runtime d?kaz</li><li>Nie produk?n? d?kaz</li><li>Nie z?kazn?cky d?kaz</li><li>Nie d?kaz zo slepej externej adjudik?cie</li><li>Nie ?irok? prevalencia mimo testovan?ch pl?ch</li></ul>
+        </div>
+        <div class="card">
+          <div class="label">Interpret?cia</div>
+          <div class="insights"><div class="insight-card"><div class="insight-title">Kompaktn? stav m??e prekona? raw hist?riu</div><div class="body">Packet bol spr?vny a raw chybn? 1 650-kr?t. Opa?n? pr?pad sa nevyskytol.</div></div><div class="insight-card"><div class="insight-title">Vstupn? tokenov? n?klad v?razne kles?</div><div class="body">Priemern? downstream input tokeny klesli z 319.4597 na 118.0079 bez correctness tradeoffu na testovanej ploche.</div></div><div class="insight-card"><div class="insight-title">Latencia sa nezhor?ila</div><div class="body">Priemer, medi?n aj p95 sa zlep?ili namiesto regresu na evaluovanej runtime ploche.</div></div></div>
+        </div>
+      </div>
+      <div class="footer">Hranica tvrdenia: siln? intern? runtime sign?l pre jadro imLayer. support_v1 zost?va prv? komer?n? wedge a prv? extern? valida?n? cesta.</div>
+    </div>
+  </foreignObject>
+</svg>
