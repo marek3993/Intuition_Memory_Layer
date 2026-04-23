@@ -106,7 +106,7 @@ export const siteContent = {
         headline: "Restructures workflow history into compact, decision-ready state.",
         subheadline: "Runtime decision-memory infrastructure for workflow AI.",
         supportingLine:
-          "support_v1 is the first product built on top of the layer and the first path to external validation.",
+          "support_v1 is the first product on the layer and the first route to external validation.",
         primaryCta: "Open Evidence and validation",
         secondaryCta: "Explore support_v1"
       },
@@ -153,7 +153,7 @@ export const siteContent = {
           {
             title: "support_v1",
             body:
-              "The first product, first commercial wedge, and first external validation path built on top of imLayer.",
+              "The first product surface and buyer-facing validation route built on top of imLayer.",
             cta: "Explore support_v1",
             href: "/support-v1"
           }
@@ -188,7 +188,7 @@ export const siteContent = {
       currentEvidence: {
         eyebrow: "Current primary runtime evidence",
         interpretation:
-          "Compact decision state outperformed raw workflow history on next-action correctness while materially reducing downstream model input cost."
+          "Compact decision state outperformed raw workflow history on next-action correctness while materially lowering downstream model input cost."
       },
       keyMetrics: {
         eyebrow: "Key metrics",
@@ -262,7 +262,7 @@ export const siteContent = {
             eyebrow: "Current primary evidence",
             title: "Current runtime evidence",
             body:
-              "This is the current primary internal evidence layer for the imLayer core and the strongest current signal on the bounded runtime surface.",
+              "This is the current primary internal evidence layer for the imLayer core and the strongest current signal on the evaluated runtime surface.",
             metrics: [
               "2521 / 2521 evaluated",
               "1.0000 packet accuracy",
@@ -324,34 +324,34 @@ export const siteContent = {
         headline: "support_v1",
         subheadline: "The first product built on top of imLayer.",
         supportingLine:
-          "A bounded support workflow wedge designed for first external validation. It is the first controlled path for testing the imLayer core against real workflow review.",
+          "A support workflow wedge designed to test the imLayer core under real workflow review with limited scope.",
         cta: "Discuss pilot"
       },
       whatIs: {
         eyebrow: "What support_v1 is",
         title: "What support_v1 is",
         body:
-          "support_v1 stays tightly scoped. It is the first product built on top of imLayer, the first applied workflow, the first commercial wedge, and the first external validation path.",
+          "support_v1 is the first applied product surface built on top of imLayer. It gives the core a buyer-facing pilot path without standing in for the whole company story.",
         cards: [
           {
             title: "First product",
             body:
-              "support_v1 is the first product built on top of the imLayer core, not the whole company story."
+              "support_v1 is the first product built on the imLayer core, not the whole company story."
           },
           {
             title: "First applied workflow",
             body:
-              "Support is the first workflow surface where the layer can be tested against bounded real operational history."
+              "Support is the first workflow surface where the layer can be tested against real operational history."
           },
           {
             title: "First commercial wedge",
             body:
-              "The commercial entry point is one reviewable workflow slice, not a broad multi-team deployment promise."
+              "The commercial entry point is one narrow workflow slice, not a broad multi-team rollout."
           },
           {
             title: "First external validation path",
             body:
-              "support_v1 is the first buyer-facing path for validating the imLayer core with controlled real workflow review."
+              "support_v1 is the first buyer-facing route for validating the imLayer core against real workflow review."
           }
         ]
       },
@@ -362,12 +362,12 @@ export const siteContent = {
           {
             title: "Bounded workflow",
             body:
-              "Support workflows can be scoped to one slice, which keeps the test surface bounded enough for disciplined comparison."
+              "Support workflows can be scoped to one slice, which keeps comparison discipline intact."
           },
           {
             title: "Reviewable outputs",
             body:
-              "Routing and next-action outputs can be inspected by humans under explicit review rules."
+              "Routing and next-action outputs can be checked by humans against explicit review rules."
           },
           {
             title: "Clear success criteria",
@@ -377,7 +377,7 @@ export const siteContent = {
           {
             title: "Pilot-friendly scope",
             body:
-              "Data intake, review cadence, and operational ownership can stay narrow enough for a first external pilot."
+              "Data intake, review cadence, and operational ownership can stay narrow for a first pilot."
           },
           {
             title: "Commercial relevance",
@@ -393,33 +393,33 @@ export const siteContent = {
           {
             title: "export intake",
             body:
-              "Bounded intake exists for support exports entering the support_v1 workflow."
+              "Support export intake already exists for the support_v1 workflow."
           },
           {
             title: "validation",
             body:
-              "Validation steps are in place to check export shape and readiness before deeper evaluation."
+              "Validation already checks export shape and readiness before deeper evaluation."
           },
           {
             title: "normalization",
             body:
-              "Exports are normalized into the working structure used by the evaluation path."
+              "Exports are normalized into the working structure used by evaluation."
           },
           {
             title: "history reconstruction",
             body:
-              "Case and event history can already be rebuilt into the decision context required for the next step."
+              "Case and event history can already be rebuilt into the decision context for the next step."
           },
           {
             title: "evaluation path",
             body:
-              "A controlled evaluation path exists for comparing support_v1 outputs under bounded review."
+              "An evaluation path already exists for comparing support_v1 outputs under review."
           },
           {
             title: "pilot materials",
             body:
-              "Pilot-facing materials already exist to frame scope, access, review, and next-step discussion."
-          }
+              "Pilot materials already exist to frame scope, access, review, and next steps."
+            }
         ]
       },
       pilotFlow: {
@@ -430,7 +430,7 @@ export const siteContent = {
             step: "01",
             title: "Select one workflow slice",
             body:
-              "Choose one bounded support workflow slice with clear owners, export boundaries, and review rules."
+              "Choose one support workflow slice with clear owners, export boundaries, and review rules."
           },
           {
             step: "02",
@@ -442,21 +442,33 @@ export const siteContent = {
             step: "03",
             title: "Apply bounded review criteria",
             body:
-              "Use agreed review criteria so the pilot is judged against explicit standards rather than broad impressions."
+              "Use agreed review criteria so the pilot is judged against explicit standards."
           },
           {
             step: "04",
             title: "Evaluate outputs under controlled comparison",
             body:
-              "Compare the resulting outputs under controlled review to determine whether the bounded pilot passes."
+              "Compare the resulting outputs under review to determine whether the pilot passes."
           }
+        ]
+      },
+      pilotExample: {
+        eyebrow: "Bounded pilot pattern",
+        title: "One concrete bounded pilot pattern",
+        body:
+          "A realistic first pilot can stay operationally simple while still testing the imLayer core under real review.",
+        items: [
+          "One support queue: a single queue with a stable owner and a narrow routing surface.",
+          "One export path: one repeatable export feed used for intake, validation, and normalization.",
+          "One bounded review cycle: one reviewer group applying the same criteria on every pass.",
+          "One controlled evaluation window: one fixed comparison window used to judge outputs before any expansion."
         ]
       },
       materials: {
         eyebrow: "Pilot materials",
         title: "Pilot materials",
         body:
-          "The materials stay buyer-facing and bounded: access is request-based, and each item supports controlled pilot review rather than broad product positioning.",
+          "The materials stay buyer-facing and compact: access is request-based, and each item supports pilot review rather than broad product positioning.",
         requestLabel: "Request access",
         items: [
           {
@@ -541,7 +553,7 @@ export const siteContent = {
         headline: "Mení workflow históriu na kompaktný stav pripravený na rozhodnutie.",
         subheadline: "Runtime decision-memory infraštruktúra pre workflow AI.",
         supportingLine:
-          "support_v1 je prvý produkt postavený na vrstve a prvá cesta k externej validácii.",
+          "support_v1 je prvý produkt na vrstve a prvá cesta k externej validácii.",
         primaryCta: "Otvoriť Dôkazy a validáciu",
         secondaryCta: "Preskúmať support_v1"
       },
@@ -589,7 +601,7 @@ export const siteContent = {
           {
             title: "support_v1",
             body:
-              "Prvý produkt, prvý komerčný wedge a prvá externá validačná cesta postavená na imLayeri.",
+              "Prvý produktový povrch a buyer-facing cesta k validácii postavená na imLayeri.",
             cta: "Preskúmať support_v1",
             href: "/support-v1"
           }
@@ -698,7 +710,7 @@ export const siteContent = {
             eyebrow: "Aktuálny primárny dôkaz",
             title: "Aktuálny runtime dôkaz",
             body:
-              "Toto je aktuálna primárna interná dôkazová vrstva pre jadro imLayeru a najsilnejší súčasný signál na ohraničenom runtime povrchu.",
+              "Toto je aktuálna primárna interná dôkazová vrstva pre jadro imLayeru a najsilnejší súčasný signál na evaluovanom runtime povrchu.",
             metrics: [
               "2521 / 2521 vyhodnotených",
               "1.0000 packet accuracy",
@@ -760,14 +772,14 @@ export const siteContent = {
         headline: "support_v1",
         subheadline: "Prvý produkt postavený na imLayeri.",
         supportingLine:
-          "Ohraničený support workflow wedge navrhnutý pre prvú externú validáciu. Je to prvá kontrolovaná cesta na testovanie jadra imLayeru proti reálnemu workflow review.",
+          "Support workflow wedge navrhnutý na testovanie jadra imLayeru pod reálnym workflow review a s úzkym scope.",
         cta: "Prediskutovať pilot"
       },
       whatIs: {
         eyebrow: "Čo je support_v1",
         title: "Čo je support_v1",
         body:
-          "support_v1 zostáva úzko ohraničený. Je to prvý produkt postavený na imLayeri, prvý aplikovaný workflow, prvý komerčný wedge a prvá externá validačná cesta.",
+          "support_v1 je prvý aplikovaný produktový povrch postavený na imLayeri. Dáva jadru buyer-facing pilotnú cestu bez toho, aby predstieral celý firemný príbeh.",
         cards: [
           {
             title: "Prvý produkt",
@@ -777,17 +789,17 @@ export const siteContent = {
           {
             title: "Prvý aplikovaný workflow",
             body:
-              "Support je prvý workflow povrch, kde sa dá vrstva testovať proti ohraničenej reálnej operačnej histórii."
+              "Support je prvý workflow povrch, kde sa dá vrstva testovať proti reálnej operačnej histórii."
           },
           {
             title: "Prvý komerčný wedge",
             body:
-              "Komerčný vstup je jeden reviewovateľný workflow slice, nie široký prísľub nasadenia naprieč tímami."
+              "Komerčný vstup je jeden úzky workflow slice, nie široký prísľub rollout-u naprieč tímami."
           },
           {
             title: "Prvá externá validačná cesta",
             body:
-              "support_v1 je prvá buyer-facing cesta na validáciu jadra imLayeru cez kontrolované reálne workflow review."
+              "support_v1 je prvá buyer-facing cesta na validáciu jadra imLayeru cez reálne workflow review."
           }
         ]
       },
@@ -798,7 +810,7 @@ export const siteContent = {
           {
             title: "Ohraničený workflow",
             body:
-              "Support workflow sa dá zúžiť na jeden slice, čo drží testovací povrch dostatočne ohraničený pre disciplinované porovnanie."
+              "Support workflow sa dá zúžiť na jeden slice, čo drží porovnanie disciplinované."
           },
           {
             title: "Reviewovateľné výstupy",
@@ -813,7 +825,7 @@ export const siteContent = {
           {
             title: "Pilot-friendly rozsah",
             body:
-              "Data intake, review cadence aj operačné vlastníctvo môžu zostať dostatočne úzke pre prvý externý pilot."
+              "Data intake, review cadence aj operačné vlastníctvo môžu zostať úzke pre prvý pilot."
           },
           {
             title: "Komerčná relevancia",
@@ -829,32 +841,32 @@ export const siteContent = {
           {
             title: "export intake",
             body:
-              "Existuje ohraničený intake pre support exporty vstupujúce do workflow support_v1."
+              "Intake pre support exporty vo workflow support_v1 už existuje."
           },
           {
             title: "validation",
             body:
-              "Validačné kroky už kontrolujú tvar exportu a pripravenosť pred hlbšou evaluáciou."
+              "Validácia už kontroluje tvar exportu a pripravenosť pred hlbšou evaluáciou."
           },
           {
             title: "normalization",
             body:
-              "Exporty sa normalizujú do pracovnej štruktúry používanej evaluačnou cestou."
+              "Exporty sa normalizujú do pracovnej štruktúry používanej evaluáciou."
           },
           {
             title: "history reconstruction",
             body:
-              "Case a event história sa už dá zrekonštruovať do rozhodovacieho kontextu potrebného pre ďalší krok."
+              "Case a event história sa už dá zrekonštruovať do rozhodovacieho kontextu pre ďalší krok."
           },
           {
             title: "evaluation path",
             body:
-              "Existuje kontrolovaná evaluačná cesta na porovnanie výstupov support_v1 pod ohraničeným review."
+              "Existuje evaluačná cesta na porovnanie výstupov support_v1 pod review."
           },
           {
             title: "pilot materials",
             body:
-              "Pilot-facing materiály už existujú na rámcovanie scope, prístupu, review a ďalších krokov."
+              "Pilotné materiály už existujú na rámcovanie scope, prístupu, review a ďalších krokov."
           }
         ]
       },
@@ -866,7 +878,7 @@ export const siteContent = {
             step: "01",
             title: "Vyberte jeden workflow slice",
             body:
-              "Zvoľte jeden ohraničený support workflow slice s jasnými vlastníkmi, hranicami exportu a review pravidlami."
+              "Zvoľte jeden support workflow slice s jasnými vlastníkmi, hranicami exportu a review pravidlami."
           },
           {
             step: "02",
@@ -878,21 +890,33 @@ export const siteContent = {
             step: "03",
             title: "Aplikujte ohraničené review kritériá",
             body:
-              "Použite dohodnuté review kritériá, aby sa pilot hodnotil proti explicitným štandardom a nie proti všeobecnému dojmu."
+              "Použite dohodnuté review kritériá, aby sa pilot hodnotil proti explicitným štandardom."
           },
           {
             step: "04",
             title: "Vyhodnoťte výstupy v kontrolovanom porovnaní",
             body:
-              "Porovnajte vzniknuté výstupy pod kontrolovaným review a rozhodnite, či ohraničený pilot prešiel."
+              "Porovnajte vzniknuté výstupy pod review a rozhodnite, či pilot prešiel."
           }
+        ]
+      },
+      pilotExample: {
+        eyebrow: "Ohraničený pilotný vzor",
+        title: "Jeden konkrétny ohraničený pilotný vzor",
+        body:
+          "Reálny prvý pilot môže zostať operačne jednoduchý a pritom stále testovať jadro imLayeru pod reálnym review.",
+        items: [
+          "Jeden support queue: jedna fronta so stabilným owner-om a úzkym routing povrchom.",
+          "Jedna export cesta: jeden opakovateľný export feed pre intake, validáciu a normalizáciu.",
+          "Jeden ohraničený review cyklus: jedna reviewer skupina používa rovnaké kritériá pri každom priechode.",
+          "Jedno kontrolované evaluačné okno: jedno fixné porovnávacie okno na vyhodnotenie výstupov pred akýmkoľvek rozšírením."
         ]
       },
       materials: {
         eyebrow: "Pilotné materiály",
         title: "Pilotné materiály",
         body:
-          "Materiály zostávajú buyer-facing a ohraničené: prístup je na vyžiadanie a každá položka podporuje kontrolované pilotné review, nie široké produktové pozicionovanie.",
+          "Materiály zostávajú buyer-facing a kompaktné: prístup je na vyžiadanie a každá položka podporuje pilotné review, nie široké produktové pozicionovanie.",
         requestLabel: "Požiadať o prístup",
         items: [
           {

@@ -461,19 +461,67 @@ function EvidencePage({ locale }: { locale: Locale }) {
   const content = siteContent[locale].evidence;
   const [archiveKey, setArchiveKey] = useState<ArchiveKey>("current");
   const archiveItem = content.archive.items[archiveKey];
+  const proofCopy =
+    locale === "sk"
+      ? {
+          evaluatedCases: "Evaluované prípady",
+          packetAccuracy: "Packet accuracy",
+          rawAccuracy: "Raw accuracy",
+          inputTokenReduction: "Zníženie vstupných tokenov",
+          failedCases: "Zlyhané prípady",
+          packetOnlyWins: "Packet-only wins",
+          rawOnlyWins: "Raw-only wins",
+          bothWrong: "Obe nesprávne",
+          rawInputTokens: "Raw input tokens",
+          packetInputTokens: "Packet input tokens",
+          rawOutputTokens: "Raw output tokens",
+          packetOutputTokens: "Packet output tokens",
+          averageRawLatency: "Average raw latency",
+          averagePacketLatency: "Average packet latency",
+          averageLatencyDelta: "Average latency delta",
+          medianRawLatency: "Median raw latency",
+          medianPacketLatency: "Median packet latency",
+          medianLatencyDelta: "Median latency delta",
+          p95RawLatency: "p95 raw latency",
+          p95PacketLatency: "p95 packet latency",
+          p95LatencyDelta: "p95 latency delta"
+        }
+      : {
+          evaluatedCases: "Evaluated cases",
+          packetAccuracy: "Packet accuracy",
+          rawAccuracy: "Raw accuracy",
+          inputTokenReduction: "Input token reduction",
+          failedCases: "Failed cases",
+          packetOnlyWins: "Packet-only wins",
+          rawOnlyWins: "Raw-only wins",
+          bothWrong: "Both wrong",
+          rawInputTokens: "Raw input tokens",
+          packetInputTokens: "Packet input tokens",
+          rawOutputTokens: "Raw output tokens",
+          packetOutputTokens: "Packet output tokens",
+          averageRawLatency: "Average raw latency",
+          averagePacketLatency: "Average packet latency",
+          averageLatencyDelta: "Average latency delta",
+          medianRawLatency: "Median raw latency",
+          medianPacketLatency: "Median packet latency",
+          medianLatencyDelta: "Median latency delta",
+          p95RawLatency: "p95 raw latency",
+          p95PacketLatency: "p95 packet latency",
+          p95LatencyDelta: "p95 latency delta"
+        };
   const asideCopy =
     locale === "sk"
       ? {
           title: "Aktuálny signál",
-          evaluated: "Vyhodnotené",
-          packetAccuracy: "Packet accuracy",
-          inputReduction: "Zníženie vstupu"
+          evaluated: proofCopy.evaluatedCases,
+          packetAccuracy: proofCopy.packetAccuracy,
+          inputReduction: proofCopy.inputTokenReduction
         }
       : {
           title: "Current signal",
-          evaluated: "Evaluated",
-          packetAccuracy: "Packet accuracy",
-          inputReduction: "Input reduction"
+          evaluated: proofCopy.evaluatedCases,
+          packetAccuracy: proofCopy.packetAccuracy,
+          inputReduction: proofCopy.inputTokenReduction
         };
 
   return (
@@ -486,9 +534,18 @@ function EvidencePage({ locale }: { locale: Locale }) {
               {asideCopy.title}
             </div>
             <div className="mt-5 grid gap-3">
-              <CompactMetricPanel title={asideCopy.evaluated} value="2521 / 2521" />
-              <CompactMetricPanel title={asideCopy.packetAccuracy} value="1.0000" />
-              <CompactMetricPanel title={asideCopy.inputReduction} value="61.25%" />
+              <CompactMetricPanel
+                title={asideCopy.evaluated}
+                value={formatFraction(runtimeEvidenceSnapshot.evaluatedCompleted, runtimeEvidenceSnapshot.evaluatedTotal)}
+              />
+              <CompactMetricPanel
+                title={asideCopy.packetAccuracy}
+                value={formatFixed(runtimeEvidenceSnapshot.packetAccuracy, 4)}
+              />
+              <CompactMetricPanel
+                title={asideCopy.inputReduction}
+                value={formatPercent(runtimeEvidenceSnapshot.inputReductionPercent, 2)}
+              />
             </div>
           </Reveal>
         }
@@ -517,16 +574,31 @@ function EvidencePage({ locale }: { locale: Locale }) {
         </Reveal>
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <Reveal motion="strong" delay={0}>
-            <StaticMetricCard label="Evaluated" value="2521 / 2521" />
+            <StaticMetricCard
+              label={proofCopy.evaluatedCases}
+              value={formatFraction(
+                runtimeEvidenceSnapshot.evaluatedCompleted,
+                runtimeEvidenceSnapshot.evaluatedTotal
+              )}
+            />
           </Reveal>
           <Reveal motion="strong" delay={70}>
-            <StaticMetricCard label="Packet accuracy" value="1.0000" />
+            <StaticMetricCard
+              label={proofCopy.packetAccuracy}
+              value={formatFixed(runtimeEvidenceSnapshot.packetAccuracy, 4)}
+            />
           </Reveal>
           <Reveal motion="strong" delay={140}>
-            <StaticMetricCard label="Raw accuracy" value="0.3455" />
+            <StaticMetricCard
+              label={proofCopy.rawAccuracy}
+              value={formatFixed(runtimeEvidenceSnapshot.rawAccuracy, 4)}
+            />
           </Reveal>
           <Reveal motion="strong" delay={210}>
-            <StaticMetricCard label="Input token reduction" value="61.25%" />
+            <StaticMetricCard
+              label={proofCopy.inputTokenReduction}
+              value={formatPercent(runtimeEvidenceSnapshot.inputReductionPercent, 2)}
+            />
           </Reveal>
         </div>
       </Section>
@@ -544,8 +616,11 @@ function EvidencePage({ locale }: { locale: Locale }) {
             <MetricsGroupCard
               title={content.keyMetrics.coverageTitle}
               items={[
-                "successfully evaluated cases: 2521 / 2521",
-                "failed cases: 0"
+                `${proofCopy.evaluatedCases}: ${formatFraction(
+                  runtimeEvidenceSnapshot.evaluatedCompleted,
+                  runtimeEvidenceSnapshot.evaluatedTotal
+                )}`,
+                `${proofCopy.failedCases}: ${runtimeEvidenceSnapshot.failedCases}`
               ]}
             />
           </Reveal>
@@ -553,11 +628,14 @@ function EvidencePage({ locale }: { locale: Locale }) {
             <MetricsGroupCard
               title={content.keyMetrics.correctnessTitle}
               items={[
-                "actual_raw_accuracy_vs_expected = 0.3455",
-                "actual_packet_accuracy_vs_expected = 1.0",
-                "raw_correct_packet_wrong = 0",
-                "packet_correct_raw_wrong = 1650",
-                "both_wrong = 0"
+                `${proofCopy.rawAccuracy}: ${formatFixed(runtimeEvidenceSnapshot.rawAccuracy, 4)}`,
+                `${proofCopy.packetAccuracy}: ${formatFixed(
+                  runtimeEvidenceSnapshot.packetAccuracy,
+                  4
+                )}`,
+                `${proofCopy.rawOnlyWins}: ${runtimeEvidenceSnapshot.rawCorrectPacketWrong}`,
+                `${proofCopy.packetOnlyWins}: ${runtimeEvidenceSnapshot.packetCorrectRawWrong}`,
+                `${proofCopy.bothWrong}: ${runtimeEvidenceSnapshot.bothWrong}`
               ]}
             />
           </Reveal>
@@ -565,20 +643,62 @@ function EvidencePage({ locale }: { locale: Locale }) {
             <MetricsGroupCard
               title={content.keyMetrics.runtimeEconomicsTitle}
               items={[
-                "average actual input tokens: raw = 319.4597",
-                "average actual input tokens: packet = 118.0079",
-                "average actual input tokens: reduction = 61.25%",
-                "average actual output tokens: raw = 6.8401",
-                "average actual output tokens: packet = 2.3328",
-                "average actual latency: raw = 715.95 ms",
-                "average actual latency: packet = 640.032 ms",
-                "average actual latency: delta = -75.918 ms",
-                "median actual latency: raw = 638.228 ms",
-                "median actual latency: packet = 551.257 ms",
-                "median actual latency: delta = -86.971 ms",
-                "p95 actual latency: raw = 1119.712 ms",
-                "p95 actual latency: packet = 1090.07 ms",
-                "p95 actual latency: delta = -29.642 ms"
+                `${proofCopy.rawInputTokens}: ${formatFixed(
+                  runtimeEvidenceSnapshot.inputTokens.raw,
+                  4
+                )}`,
+                `${proofCopy.packetInputTokens}: ${formatFixed(
+                  runtimeEvidenceSnapshot.inputTokens.packet,
+                  4
+                )}`,
+                `${proofCopy.inputTokenReduction}: ${formatPercent(
+                  runtimeEvidenceSnapshot.inputReductionPercent,
+                  2
+                )}`,
+                `${proofCopy.rawOutputTokens}: ${formatFixed(
+                  runtimeEvidenceSnapshot.outputTokens.raw,
+                  4
+                )}`,
+                `${proofCopy.packetOutputTokens}: ${formatFixed(
+                  runtimeEvidenceSnapshot.outputTokens.packet,
+                  4
+                )}`,
+                `${proofCopy.averageRawLatency}: ${formatMs(
+                  runtimeEvidenceSnapshot.latencyAverageMs.raw,
+                  2
+                )}`,
+                `${proofCopy.averagePacketLatency}: ${formatMs(
+                  runtimeEvidenceSnapshot.latencyAverageMs.packet,
+                  3
+                )}`,
+                `${proofCopy.averageLatencyDelta}: ${formatMs(
+                  runtimeEvidenceSnapshot.latencyAverageMs.delta,
+                  3
+                )}`,
+                `${proofCopy.medianRawLatency}: ${formatMs(
+                  runtimeEvidenceSnapshot.latencyMedianMs.raw,
+                  3
+                )}`,
+                `${proofCopy.medianPacketLatency}: ${formatMs(
+                  runtimeEvidenceSnapshot.latencyMedianMs.packet,
+                  3
+                )}`,
+                `${proofCopy.medianLatencyDelta}: ${formatMs(
+                  runtimeEvidenceSnapshot.latencyMedianMs.delta,
+                  3
+                )}`,
+                `${proofCopy.p95RawLatency}: ${formatMs(
+                  runtimeEvidenceSnapshot.latencyP95Ms.raw,
+                  3
+                )}`,
+                `${proofCopy.p95PacketLatency}: ${formatMs(
+                  runtimeEvidenceSnapshot.latencyP95Ms.packet,
+                  2
+                )}`,
+                `${proofCopy.p95LatencyDelta}: ${formatMs(
+                  runtimeEvidenceSnapshot.latencyP95Ms.delta,
+                  3
+                )}`
               ]}
             />
           </Reveal>
@@ -593,7 +713,7 @@ function EvidencePage({ locale }: { locale: Locale }) {
             body=""
           />
         </Reveal>
-        <ComparisonTabs locale={locale} />
+        <ComparisonTabs locale={locale} proofCopy={proofCopy} />
       </Section>
 
       <Section tone="tone-graphite">
@@ -850,6 +970,31 @@ function SupportPage({
         </div>
       </Section>
 
+      <Section tone="tone-charcoal-blue-soft">
+        <Reveal motion="moderate">
+          <Intro
+            eyebrow={content.pilotExample.eyebrow}
+            title={content.pilotExample.title}
+            body={content.pilotExample.body}
+          />
+        </Reveal>
+        <Reveal motion="moderate" delay={70} className="surface-strong mt-10 p-6 sm:p-8">
+          <div className="grid gap-4 md:grid-cols-2">
+            {content.pilotExample.items.map((item, index) => (
+              <div
+                key={item}
+                className="rounded-[22px] border border-white/10 bg-white/[0.03] px-5 py-4"
+              >
+                <div className="text-[10px] uppercase tracking-[0.22em] text-accent/72">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+                <p className="pretty-copy mt-2 text-sm leading-7 text-white/68">{item}</p>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </Section>
+
       <Section tone="tone-steel-blue">
         <Reveal motion="moderate">
           <Intro eyebrow={content.materials.eyebrow} title={content.materials.title} body={content.materials.body} />
@@ -1104,17 +1249,38 @@ function MetricsGroupCard({ title, items }: { title: string; items: string[] }) 
   );
 }
 
-function ComparisonTabs({ locale }: { locale: Locale }) {
+function ComparisonTabs({
+  locale,
+  proofCopy
+}: {
+  locale: Locale;
+  proofCopy: {
+    evaluatedCases: string;
+    packetAccuracy: string;
+    rawAccuracy: string;
+    inputTokenReduction: string;
+    failedCases: string;
+    packetOnlyWins: string;
+    rawOnlyWins: string;
+    bothWrong: string;
+    rawInputTokens: string;
+    packetInputTokens: string;
+    rawOutputTokens: string;
+    packetOutputTokens: string;
+    averageRawLatency: string;
+    averagePacketLatency: string;
+    averageLatencyDelta: string;
+    medianRawLatency: string;
+    medianPacketLatency: string;
+    medianLatencyDelta: string;
+    p95RawLatency: string;
+    p95PacketLatency: string;
+    p95LatencyDelta: string;
+  };
+}) {
   const content = siteContent[locale].evidence.comparisons;
   const [activeTab, setActiveTab] = useState<ComparisonKey>("correctness");
   const [ref, visible] = useInViewOnce<HTMLDivElement>(0.28);
-  const [animatedTab, setAnimatedTab] = useState<ComparisonKey | null>(null);
-
-  useEffect(() => {
-    if (visible && !animatedTab) {
-      setAnimatedTab(activeTab);
-    }
-  }, [activeTab, animatedTab, visible]);
 
   return (
     <div ref={ref} className="mt-10">
@@ -1144,24 +1310,33 @@ function ComparisonTabs({ locale }: { locale: Locale }) {
         {activeTab === "correctness" ? (
           <CorrectnessPanel
             visible={visible}
-            animate={animatedTab === "correctness"}
-            rawLabel={content.descriptors.raw}
-            packetLabel={content.descriptors.packet}
+            rawLabel={proofCopy.rawAccuracy}
+            packetLabel={proofCopy.packetAccuracy}
+            packetOnlyWinsLabel={proofCopy.packetOnlyWins}
+            rawOnlyWinsLabel={proofCopy.rawOnlyWins}
+            bothWrongLabel={proofCopy.bothWrong}
           />
         ) : activeTab === "tokens" ? (
           <TokensPanel
             visible={visible}
-            animate={animatedTab === "tokens"}
-            rawLabel={content.descriptors.raw}
-            packetLabel={content.descriptors.packet}
+            inputReductionLabel={proofCopy.inputTokenReduction}
+            rawInputLabel={proofCopy.rawInputTokens}
+            packetInputLabel={proofCopy.packetInputTokens}
+            rawOutputLabel={proofCopy.rawOutputTokens}
+            packetOutputLabel={proofCopy.packetOutputTokens}
           />
         ) : (
           <LatencyPanel
             visible={visible}
-            animate={animatedTab === "latency"}
-            rawLabel={content.descriptors.raw}
-            packetLabel={content.descriptors.packet}
-            deltaLabel={content.descriptors.delta}
+            averageRawLabel={proofCopy.averageRawLatency}
+            averagePacketLabel={proofCopy.averagePacketLatency}
+            averageDeltaLabel={proofCopy.averageLatencyDelta}
+            medianRawLabel={proofCopy.medianRawLatency}
+            medianPacketLabel={proofCopy.medianPacketLatency}
+            medianDeltaLabel={proofCopy.medianLatencyDelta}
+            p95RawLabel={proofCopy.p95RawLatency}
+            p95PacketLabel={proofCopy.p95PacketLatency}
+            p95DeltaLabel={proofCopy.p95LatencyDelta}
           />
         )}
       </div>
@@ -1171,14 +1346,18 @@ function ComparisonTabs({ locale }: { locale: Locale }) {
 
 function CorrectnessPanel({
   visible,
-  animate,
   rawLabel,
-  packetLabel
+  packetLabel,
+  packetOnlyWinsLabel,
+  rawOnlyWinsLabel,
+  bothWrongLabel
 }: {
   visible: boolean;
-  animate: boolean;
   rawLabel: string;
   packetLabel: string;
+  packetOnlyWinsLabel: string;
+  rawOnlyWinsLabel: string;
+  bothWrongLabel: string;
 }) {
   return (
     <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(280px,0.74fr)]">
@@ -1189,14 +1368,12 @@ function CorrectnessPanel({
             value={runtimeEvidenceSnapshot.rawAccuracy}
             decimals={4}
             visible={visible}
-            animate={animate}
           />
           <AnimatedMetricCard
             label={packetLabel}
             value={runtimeEvidenceSnapshot.packetAccuracy}
             decimals={4}
             visible={visible}
-            animate={animate}
           />
         </div>
 
@@ -1208,7 +1385,6 @@ function CorrectnessPanel({
             decimals={4}
             visible={visible}
             durationMs={1200}
-            animate={animate}
           />
           <BarRow
             label={packetLabel}
@@ -1218,29 +1394,25 @@ function CorrectnessPanel({
             visible={visible}
             accent
             durationMs={1200}
-            animate={animate}
           />
         </div>
       </div>
 
       <div className="grid gap-4">
         <AnimatedSideStat
-          label="packet_correct_raw_wrong"
+          label={packetOnlyWinsLabel}
           value={runtimeEvidenceSnapshot.packetCorrectRawWrong}
           visible={visible}
-          animate={animate}
         />
         <AnimatedSideStat
-          label="raw_correct_packet_wrong"
+          label={rawOnlyWinsLabel}
           value={runtimeEvidenceSnapshot.rawCorrectPacketWrong}
           visible={visible}
-          animate={animate}
         />
         <AnimatedSideStat
-          label="both_wrong"
+          label={bothWrongLabel}
           value={runtimeEvidenceSnapshot.bothWrong}
           visible={visible}
-          animate={animate}
         />
       </div>
     </div>
@@ -1249,14 +1421,18 @@ function CorrectnessPanel({
 
 function TokensPanel({
   visible,
-  animate,
-  rawLabel,
-  packetLabel
+  inputReductionLabel,
+  rawInputLabel,
+  packetInputLabel,
+  rawOutputLabel,
+  packetOutputLabel
 }: {
   visible: boolean;
-  animate: boolean;
-  rawLabel: string;
-  packetLabel: string;
+  inputReductionLabel: string;
+  rawInputLabel: string;
+  packetInputLabel: string;
+  rawOutputLabel: string;
+  packetOutputLabel: string;
 }) {
   return (
     <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(280px,0.74fr)]">
@@ -1264,74 +1440,67 @@ function TokensPanel({
         <div className="text-[11px] uppercase tracking-[0.22em] text-accent/72">Average actual input tokens</div>
         <div className="mt-5 grid gap-4">
           <BarRow
-            label={rawLabel}
+            label={rawInputLabel}
             value={runtimeEvidenceSnapshot.inputTokens.raw}
             maxValue={runtimeEvidenceSnapshot.inputTokens.raw}
             decimals={4}
             visible={visible}
             durationMs={1200}
-            animate={animate}
           />
           <BarRow
-            label={packetLabel}
+            label={packetInputLabel}
             value={runtimeEvidenceSnapshot.inputTokens.packet}
             maxValue={runtimeEvidenceSnapshot.inputTokens.raw}
             decimals={4}
             visible={visible}
             accent
             durationMs={1200}
-            animate={animate}
           />
         </div>
 
         <div className="mt-8 text-[11px] uppercase tracking-[0.22em] text-accent/72">Average actual output tokens</div>
         <div className="mt-5 grid gap-4">
           <BarRow
-            label={rawLabel}
+            label={rawOutputLabel}
             value={runtimeEvidenceSnapshot.outputTokens.raw}
             maxValue={runtimeEvidenceSnapshot.outputTokens.raw}
             decimals={4}
             visible={visible}
             durationMs={1200}
-            animate={animate}
           />
           <BarRow
-            label={packetLabel}
+            label={packetOutputLabel}
             value={runtimeEvidenceSnapshot.outputTokens.packet}
             maxValue={runtimeEvidenceSnapshot.outputTokens.raw}
             decimals={4}
             visible={visible}
             accent
             durationMs={1200}
-            animate={animate}
           />
         </div>
       </div>
 
       <div className="grid gap-4">
         <AnimatedSideStat
-          label="input token reduction"
+          label={inputReductionLabel}
           value={runtimeEvidenceSnapshot.inputReductionPercent}
           decimals={2}
           suffix="%"
           visible={visible}
           accent
-          animate={animate}
         />
         <AnimatedSideStat
-          label="raw input tokens"
+          label={rawInputLabel}
           value={runtimeEvidenceSnapshot.inputTokens.raw}
           decimals={4}
           visible={visible}
-          animate={animate}
         />
         <AnimatedSideStat
-          label="packet input tokens"
+          label={packetInputLabel}
           value={runtimeEvidenceSnapshot.inputTokens.packet}
           decimals={4}
           visible={visible}
           accent
-          animate={animate}
         />
       </div>
     </div>
@@ -1340,51 +1509,67 @@ function TokensPanel({
 
 function LatencyPanel({
   visible,
-  animate,
-  rawLabel,
-  packetLabel,
-  deltaLabel
+  averageRawLabel,
+  averagePacketLabel,
+  averageDeltaLabel,
+  medianRawLabel,
+  medianPacketLabel,
+  medianDeltaLabel,
+  p95RawLabel,
+  p95PacketLabel,
+  p95DeltaLabel
 }: {
   visible: boolean;
-  animate: boolean;
-  rawLabel: string;
-  packetLabel: string;
-  deltaLabel: string;
+  averageRawLabel: string;
+  averagePacketLabel: string;
+  averageDeltaLabel: string;
+  medianRawLabel: string;
+  medianPacketLabel: string;
+  medianDeltaLabel: string;
+  p95RawLabel: string;
+  p95PacketLabel: string;
+  p95DeltaLabel: string;
 }) {
   return (
     <div className="grid gap-4">
       <LatencyGroup
         title="average actual latency"
-        rawLabel={rawLabel}
-        packetLabel={packetLabel}
-        deltaLabel={deltaLabel}
+        rawLabel={averageRawLabel}
+        packetLabel={averagePacketLabel}
+        deltaLabel={averageDeltaLabel}
         rawValue={runtimeEvidenceSnapshot.latencyAverageMs.raw}
         packetValue={runtimeEvidenceSnapshot.latencyAverageMs.packet}
         deltaValue={runtimeEvidenceSnapshot.latencyAverageMs.delta}
         visible={visible}
-        animate={animate}
+        rawDecimals={2}
+        packetDecimals={3}
+        deltaDecimals={3}
       />
       <LatencyGroup
         title="median actual latency"
-        rawLabel={rawLabel}
-        packetLabel={packetLabel}
-        deltaLabel={deltaLabel}
+        rawLabel={medianRawLabel}
+        packetLabel={medianPacketLabel}
+        deltaLabel={medianDeltaLabel}
         rawValue={runtimeEvidenceSnapshot.latencyMedianMs.raw}
         packetValue={runtimeEvidenceSnapshot.latencyMedianMs.packet}
         deltaValue={runtimeEvidenceSnapshot.latencyMedianMs.delta}
         visible={visible}
-        animate={animate}
+        rawDecimals={3}
+        packetDecimals={3}
+        deltaDecimals={3}
       />
       <LatencyGroup
         title="p95 actual latency"
-        rawLabel={rawLabel}
-        packetLabel={packetLabel}
-        deltaLabel={deltaLabel}
+        rawLabel={p95RawLabel}
+        packetLabel={p95PacketLabel}
+        deltaLabel={p95DeltaLabel}
         rawValue={runtimeEvidenceSnapshot.latencyP95Ms.raw}
         packetValue={runtimeEvidenceSnapshot.latencyP95Ms.packet}
         deltaValue={runtimeEvidenceSnapshot.latencyP95Ms.delta}
         visible={visible}
-        animate={animate}
+        rawDecimals={3}
+        packetDecimals={2}
+        deltaDecimals={3}
       />
     </div>
   );
@@ -1399,7 +1584,9 @@ function LatencyGroup({
   packetValue,
   deltaValue,
   visible,
-  animate
+  rawDecimals,
+  packetDecimals,
+  deltaDecimals
 }: {
   title: string;
   rawLabel: string;
@@ -1409,7 +1596,9 @@ function LatencyGroup({
   packetValue: number;
   deltaValue: number;
   visible: boolean;
-  animate: boolean;
+  rawDecimals: number;
+  packetDecimals: number;
+  deltaDecimals: number;
 }) {
   const maxValue = Math.max(rawValue, packetValue);
 
@@ -1422,22 +1611,20 @@ function LatencyGroup({
             label={rawLabel}
             value={rawValue}
             maxValue={maxValue}
-            decimals={3}
+            decimals={rawDecimals}
             visible={visible}
             suffix=" ms"
             durationMs={1200}
-            animate={animate}
           />
           <BarRow
             label={packetLabel}
             value={packetValue}
             maxValue={maxValue}
-            decimals={3}
+            decimals={packetDecimals}
             visible={visible}
             suffix=" ms"
             accent
             durationMs={1200}
-            animate={animate}
           />
         </div>
         <div className="rounded-[22px] border border-white/10 bg-white/[0.03] px-5 py-4">
@@ -1445,9 +1632,8 @@ function LatencyGroup({
           <div className="mt-3 text-[1.7rem] font-semibold tracking-[-0.05em] text-accent">
             <AnimatedNumber
               value={deltaValue}
-              decimals={3}
+              decimals={deltaDecimals}
               visible={visible}
-              animate={animate}
               suffix=" ms"
             />
           </div>
@@ -1462,13 +1648,13 @@ function AnimatedMetricCard({
   value,
   decimals,
   visible,
-  animate
+  animate = true
 }: {
   label: string;
   value: number;
   decimals: number;
   visible: boolean;
-  animate: boolean;
+  animate?: boolean;
 }) {
   return (
     <div className="rounded-[24px] border border-white/10 bg-white/[0.03] px-5 py-5">
@@ -1487,7 +1673,7 @@ function AnimatedSideStat({
   decimals = 0,
   suffix = "",
   accent = false,
-  animate
+  animate = true
 }: {
   label: string;
   value: number;
@@ -1495,7 +1681,7 @@ function AnimatedSideStat({
   decimals?: number;
   suffix?: string;
   accent?: boolean;
-  animate: boolean;
+  animate?: boolean;
 }) {
   return (
     <div className="surface h-full px-5 py-5">
@@ -1582,6 +1768,7 @@ function AnimatedNumber({
 }) {
   const [displayValue, setDisplayValue] = useState(0);
   const prefersReducedMotion = usePrefersReducedMotion();
+  const resolvedValue = visible && (prefersReducedMotion || !animate) ? value : displayValue;
 
   useEffect(() => {
     if (!visible) {
@@ -1620,7 +1807,7 @@ function AnimatedNumber({
 
   return (
     <>
-      {formatNumber(displayValue, decimals)}
+      {formatNumber(resolvedValue, decimals)}
       {suffix}
     </>
   );
@@ -1821,6 +2008,22 @@ function formatNumber(value: number, decimals: number) {
   }
 
   return value.toFixed(decimals);
+}
+
+function formatFixed(value: number, decimals: number) {
+  return value.toFixed(decimals);
+}
+
+function formatPercent(value: number, decimals: number) {
+  return `${value.toFixed(decimals)}%`;
+}
+
+function formatFraction(numerator: number, denominator: number) {
+  return `${numerator} / ${denominator}`;
+}
+
+function formatMs(value: number, decimals: number) {
+  return `${value.toFixed(decimals)} ms`;
 }
 
 const motionConfig: Record<MotionLevel, { duration: number; distance: number }> = {
