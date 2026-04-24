@@ -54,6 +54,15 @@ export const historicalBenchmarks = {
     packetAccuracy: 0.6381,
     rawAccuracy: 0.159,
     delta: 0.4791
+  },
+  earlier: {
+    packetAccuracy: 0.6636,
+    rawAccuracy: 0.4548,
+    delta: 0.2088
+  },
+  support: {
+    packetAccuracyPercent: 92.31,
+    rawAccuracyPercent: 69.23
   }
 } as const;
 
@@ -256,60 +265,78 @@ export const siteContent = {
       archive: {
         eyebrow: "Historical benchmark archive",
         title: "Historical benchmark archive",
+        intro:
+          "Archived internal benchmarks below show progression and strategic development. The current runtime evidence above remains the primary proof layer.",
         items: {
-          current: {
-            label: "Current runtime evidence",
-            eyebrow: "Current primary evidence",
-            title: "Current runtime evidence",
-            body:
-              "This is the current primary internal evidence layer for the imLayer core and the strongest current signal on the evaluated runtime surface.",
-            metrics: [
-              "2521 / 2521 evaluated",
-              "1.0000 packet accuracy",
-              "0.3455 raw accuracy",
-              "61.25% lower input tokens"
-            ],
-            note: "Current primary internal evidence."
-          },
           heldout: {
             label: "Heldout benchmark snapshot",
-            eyebrow: "Historical archive item",
-            title: "Previous heldout benchmark",
-            body:
-              "Historical heldout benchmark snapshot retained for comparison context. It is not the current primary evidence layer.",
+            eyebrow: "Historical internal snapshot",
+            title: "Heldout benchmark snapshot",
+            meaning:
+              "A strong heldout benchmark snapshot showing a materially stronger result than the structured non-memory baseline on a bounded internal evaluation surface.",
             metrics: [
-              "573 total examples",
-              "347 heldout",
-              "0.6381 vs 0.1590",
-              "+0.4791"
+              {
+                label: "Total examples",
+                value: String(historicalBenchmarks.heldout.totalExamples)
+              },
+              {
+                label: "Heldout subset",
+                value: String(historicalBenchmarks.heldout.heldoutExamples)
+              },
+              {
+                label: "Packet vs baseline",
+                value: `${historicalBenchmarks.heldout.packetAccuracy.toFixed(4)} vs ${historicalBenchmarks.heldout.rawAccuracy.toFixed(4)}`
+              },
+              {
+                label: "Delta",
+                value: `+${historicalBenchmarks.heldout.delta.toFixed(4)}`
+              }
             ],
-            note: "Historical snapshot. Not current primary evidence."
+            badges: ["Historical", "Internal", "Not current primary evidence"]
           },
           earlier: {
-            label: "Earlier benchmark snapshots",
-            eyebrow: "Historical archive item",
-            title: "Earlier benchmark snapshots",
-            body:
-              "Earlier internal benchmark snapshots remain in archive form for chronology and method history only.",
+            label: "Earlier benchmark snapshot",
+            eyebrow: "Historical internal snapshot",
+            title: "Earlier benchmark snapshot",
+            meaning:
+              "An earlier larger-slice benchmark state where the baseline was stronger, making this result useful as progression context rather than as the current headline proof.",
             metrics: [
-              "Historical internal runs",
-              "Superseded by the current runtime evidence",
-              "Useful for benchmark progression context"
+              {
+                label: "Packet vs baseline",
+                value: `${historicalBenchmarks.earlier.packetAccuracy.toFixed(4)} vs ${historicalBenchmarks.earlier.rawAccuracy.toFixed(4)}`
+              },
+              {
+                label: "Delta",
+                value: `+${historicalBenchmarks.earlier.delta.toFixed(4)}`
+              },
+              {
+                label: "Role",
+                value: "Earlier larger-slice progression context"
+              }
             ],
-            note: "Historical archive. Not current primary evidence."
+            badges: ["Historical", "Internal", "Progression context"]
           },
           support: {
-            label: "Support benchmark snapshots",
-            eyebrow: "Historical archive item",
-            title: "Support benchmark snapshots",
-            body:
-              "Support-specific benchmark snapshots remain archived as context for the support_v1 path, but they do not replace the current primary runtime evidence.",
+            label: "Support benchmark snapshot",
+            eyebrow: "Historical internal snapshot",
+            title: "Support benchmark snapshot",
+            meaning:
+              "A bounded support-side comparative result that matters for support_v1 as the first commercial wedge, but does not replace the broader current runtime-led proof story.",
             metrics: [
-              "Historical support-focused runs",
-              "Context for support_v1 evaluation path",
-              "Not the current primary evidence layer"
+              {
+                label: "Packet vs baseline",
+                value: `${historicalBenchmarks.support.packetAccuracyPercent.toFixed(2)}% vs ${historicalBenchmarks.support.rawAccuracyPercent.toFixed(2)}%`
+              },
+              {
+                label: "Surface",
+                value: "Bounded support-side comparative slice"
+              },
+              {
+                label: "Strategic role",
+                value: "support_v1 wedge relevance"
+              }
             ],
-            note: "Historical archive. Not current primary evidence."
+            badges: ["Historical", "Internal", "support_v1-relevant"]
           }
         }
       },

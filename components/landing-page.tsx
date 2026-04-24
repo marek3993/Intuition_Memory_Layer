@@ -41,10 +41,21 @@ const pagePathByKey: Record<PageKey, string> = {
   support: "/support-v1"
 };
 
-const archiveOrder = ["current", "heldout", "earlier", "support"] as const;
+const archiveOrder = ["heldout", "earlier", "support"] as const;
 type ArchiveKey = (typeof archiveOrder)[number];
 type ComparisonKey = "correctness" | "tokens" | "latency";
 type MotionLevel = "minimal" | "subtle" | "moderate" | "strong";
+type ArchiveMetric = string | { label: string; value: string };
+type ArchiveDisplayItem = {
+  label: string;
+  eyebrow: string;
+  title: string;
+  metrics: readonly ArchiveMetric[];
+  meaning?: string;
+  body?: string;
+  badges?: readonly string[];
+  note?: string;
+};
 
 export function LandingPage({
   page,
@@ -459,8 +470,11 @@ function HomePage({ locale }: { locale: Locale }) {
 
 function EvidencePage({ locale }: { locale: Locale }) {
   const content = siteContent[locale].evidence;
-  const [archiveKey, setArchiveKey] = useState<ArchiveKey>("current");
-  const archiveItem = content.archive.items[archiveKey];
+  const [archiveKey, setArchiveKey] = useState<ArchiveKey>("heldout");
+  const archiveItem = content.archive.items[archiveKey] as unknown as ArchiveDisplayItem;
+  const archiveIntro = (content.archive as { intro?: string }).intro ?? "";
+  const archiveMeaning = archiveItem.meaning ?? archiveItem.body ?? "";
+  const archiveBadges = Array.isArray(archiveItem.badges) ? archiveItem.badges : null;
   const proofCopy =
     locale === "sk"
       ? {
@@ -755,7 +769,11 @@ function EvidencePage({ locale }: { locale: Locale }) {
 
       <Section tone="tone-charcoal-blue">
         <Reveal motion="moderate">
-          <Intro eyebrow={content.archive.eyebrow} title={content.archive.title} body="" />
+          <Intro
+            eyebrow={content.archive.eyebrow}
+            title={content.archive.title}
+            body={archiveIntro}
+          />
         </Reveal>
         <Reveal motion="strong" delay={50} className="surface-strong mt-10 p-6 sm:p-8">
           <div className="flex flex-wrap gap-2">
@@ -781,7 +799,7 @@ function EvidencePage({ locale }: { locale: Locale }) {
             })}
           </div>
 
-          <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,0.9fr)_minmax(280px,0.7fr)]">
+          <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(320px,0.78fr)]">
             <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6">
               <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-accent/72">
                 {archiveItem.eyebrow}
@@ -790,25 +808,47 @@ function EvidencePage({ locale }: { locale: Locale }) {
                 {archiveItem.title}
               </h3>
               <p className="pretty-copy mt-4 text-sm leading-7 text-white/62">
-                {archiveItem.body}
+                {archiveMeaning}
               </p>
-              <div className="mt-6 rounded-[22px] border border-accent/16 bg-accent/[0.07] px-5 py-4 text-sm text-white/74">
-                {archiveItem.note}
-              </div>
+
+              {archiveBadges ? (
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {archiveBadges.map((badge) => (
+                    <span
+                      key={badge}
+                      className="rounded-full border border-accent/18 bg-accent/[0.08] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-accent"
+                    >
+                      {badge}
+                    </span>
+                  ))}
+                </div>
+              ) : archiveItem.note ? (
+                <div className="mt-6 rounded-[22px] border border-accent/16 bg-accent/[0.07] px-5 py-4 text-sm text-white/74">
+                  {archiveItem.note}
+                </div>
+              ) : null}
             </div>
 
-            <div className="grid gap-3">
-              {archiveItem.metrics.map((metric, index) => (
-                <div
-                  key={metric}
-                  className="rounded-[22px] border border-white/10 bg-white/[0.03] px-5 py-4"
-                >
-                  <div className="text-[10px] uppercase tracking-[0.22em] text-white/34">
-                    {String(index + 1).padStart(2, "0")}
+            <div className="grid gap-3 sm:grid-cols-2">
+              {archiveItem.metrics.map((metric, index) => {
+                const metricLabel =
+                  typeof metric === "string" ? String(index + 1).padStart(2, "0") : metric.label;
+                const metricValue = typeof metric === "string" ? metric : metric.value;
+
+                return (
+                  <div
+                    key={`${metricLabel}-${metricValue}`}
+                    className="rounded-[22px] border border-white/10 bg-white/[0.03] px-5 py-4"
+                  >
+                    <div className="text-[10px] uppercase tracking-[0.22em] text-white/34">
+                      {metricLabel}
+                    </div>
+                    <p className="mt-3 text-lg font-semibold tracking-[-0.03em] text-white">
+                      {metricValue}
+                    </p>
                   </div>
-                  <p className="pretty-copy mt-2 text-sm leading-7 text-white/72">{metric}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </Reveal>
