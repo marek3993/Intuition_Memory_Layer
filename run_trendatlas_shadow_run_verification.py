@@ -6,9 +6,11 @@ from pathlib import Path
 from iml.trendatlas_shadow_run import (
     DEFAULT_OUTPUT_DIR,
     build_demo_authoritative_output,
+    build_mode_comparison_artifact,
     build_demo_retrieval_request,
     build_shadow_run_artifact,
     seed_demo_store,
+    write_mode_comparison_artifacts,
     write_shadow_run_artifacts,
 )
 
@@ -42,6 +44,14 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Seed an isolated demo store under the output directory before verification.",
     )
+    parser.add_argument(
+        "--compare-current-winner",
+        action="store_true",
+        help=(
+            "Run a controlled comparison between planner_raw_critic_memory and "
+            "planner_raw_critic_memory_gate_v2 for the current requester."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -52,6 +62,18 @@ def main() -> int:
 
     if args.seed_demo_store:
         seed_demo_store(store_path)
+
+    if args.compare_current_winner:
+        payload = build_mode_comparison_artifact(
+            request=build_demo_retrieval_request(requester=args.requester),
+            authoritative_output=build_demo_authoritative_output(),
+            store_path=store_path,
+            output_dir=output_dir,
+        )
+        written = write_mode_comparison_artifacts(payload, output_dir=output_dir)
+        print(f"shadow_mode_compare_json: {written['json_path']}")
+        print(f"shadow_mode_compare_markdown: {written['markdown_path']}")
+        return 0
 
     artifact = build_shadow_run_artifact(
         request=build_demo_retrieval_request(requester=args.requester),

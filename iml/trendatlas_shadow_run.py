@@ -12,13 +12,80 @@ from iml.live_write_phase1b_helper import CONTRACT, DecisionEpisodeStore, utc_no
 DEFAULT_OUTPUT_DIR = Path("artifacts/trendatlas_shadow_run_verification")
 DEFAULT_OUTPUT_JSON = "shadow_run_verification.json"
 DEFAULT_OUTPUT_MARKDOWN = "shadow_run_verification.md"
+DEFAULT_COMPARISON_JSON = "shadow_run_mode_comparison.json"
+DEFAULT_COMPARISON_MARKDOWN = "shadow_run_mode_comparison.md"
 DEFAULT_AUTHORITATIVE_BASELINE_PATH = "authoritative_current_artifacts_only"
 DEFAULT_SHADOW_PATH = "shadow_retrieval_memory_augmented"
 STRONG_MATCH_FLOOR = 0.55
+CRITIC_GATE_V2_ATTACH_FLOOR = 0.74
+CURRENT_WINNER_MODE_ID = "planner_raw_critic_memory"
+CHALLENGER_MODE_ID = "planner_raw_critic_memory_gate_v2"
+CRITIC_GATE_V2_HIGH_VALUE_REASON_CODES = {
+    "contradiction_pattern",
+    "cost_failure_signal",
+    "expected_actual_mismatch",
+}
+CRITIC_GATE_V2_HIGH_VALUE_RISK_FLAGS = {
+    "contradiction_load_high",
+    "cost_blowup",
+    "mixed_evidence",
+    "promotion_not_safe",
+    "regime_instability",
+}
+CRITIC_GATE_V2_SIGNAL_KEYWORDS = {
+    "contradiction_signal": (
+        "conflict",
+        "contradiction",
+        "inconsisten",
+        "mismatch",
+    ),
+    "uncertainty_signal": (
+        "ambigu",
+        "uncertain",
+        "unclear",
+        "unknown",
+    ),
+    "policy_ambiguity_signal": (
+        "alignment",
+        "compliance",
+        "guardrail",
+        "policy",
+        "rule",
+    ),
+    "risk_cost_signal": (
+        "cost",
+        "expensive",
+        "risk",
+        "slippage",
+        "turnover",
+        "volatile",
+    ),
+    "repeat_attempt_signal": (
+        "again",
+        "duplicate",
+        "prior",
+        "repeat",
+        "same",
+        "unchanged",
+    ),
+}
+CRITIC_GATE_V2_RAW_SKIP_KEYWORDS = (
+    "clear pass",
+    "clear approve",
+    "low risk",
+    "routine",
+    "settled",
+    "straightforward",
+)
 
 
 def _tokenize(value: str) -> set[str]:
     return set(re.findall(r"[a-z0-9_]+", value.lower()))
+
+
+def _contains_keyword(value: str, keywords: tuple[str, ...] | set[str]) -> bool:
+    normalized = value.lower()
+    return any(keyword in normalized for keyword in keywords)
 
 
 def _json_default(value: Any) -> str:
@@ -406,10 +473,23 @@ def _build_divergence_markers(
     *,
     response: dict[str, Any],
     fail_closed_triggered: bool,
+    gate_observability: dict[str, Any],
 ) -> list[str]:
     markers: list[str] = []
     if fail_closed_triggered:
         markers.append("fail_closed_triggered")
+
+    gate_decision = str(gate_observability.get("gate_decision") or "").strip()
+    if gate_decision:
+        markers.append(f"gate_decision:{gate_decision}")
+
+    gate_reason_codes = [
+        str(reason_code)
+        for reason_code in gate_observability.get("gate_reason_codes") or []
+        if str(reason_code)
+    ]
+    if gate_reason_codes:
+        markers.append("gate_reason_codes:" + ",".join(sorted(set(gate_reason_codes))))
 
     matches = response.get("matches") or []
     if not matches:
@@ -444,6 +524,219 @@ def _build_divergence_markers(
     return markers
 
 
+def _empty_shadow_response(*, request: dict[str, Any], status: str, reason: str) -> dict[str, Any]:
+    return {
+        "schema_version": CONTRACT,
+        "status": status,
+        "query_id": None,
+        "requester": request.get("requester"),
+        "retrieval_confidence": 0.0,
+        "matches": [],
+        "fallback": {
+            "recommended": False,
+            "reason": reason,
+        },
+    }
+
+
+def _build_critic_gate_v2_precheck(
+    *,
+    request: dict[str, Any],
+    mode_id: str,
+    enable_critic_gate_v2: bool,
+) -> dict[str, Any]:
+    requester = str(request.get("requester") or "").strip().lower()
+    observability = {
+        "mode_id": mode_id,
+        "gate_version": "v2" if enable_critic_gate_v2 else "baseline",
+        "gate_decision": "on",
+        "gate_reason_codes": [],
+        "retrieval_attempted": False,
+        "retrieval_attached": False,
+        "authoritative_output_unchanged": True,
+        "inputs_available": True,
+        "applied": enable_critic_gate_v2 and requester == "critic",
+    }
+    if requester != "critic":
+        observability["gate_reason_codes"] = ["gate_not_applicable_non_critic_requester"]
+        return {
+            "should_attempt_retrieval": True,
+            "observability": observability,
+            "fail_closed_reason": None,
+        }
+    if not enable_critic_gate_v2:
+        observability["gate_reason_codes"] = ["current_winner_gate_disabled"]
+        return {
+            "should_attempt_retrieval": True,
+            "observability": observability,
+            "fail_closed_reason": None,
+        }
+
+    query_context = request.get("query_context", {})
+    if not isinstance(query_context, dict):
+        observability["gate_decision"] = "off"
+        observability["gate_reason_codes"] = ["gate_inputs_unavailable"]
+        observability["inputs_available"] = False
+        return {
+            "should_attempt_retrieval": False,
+            "observability": observability,
+            "fail_closed_reason": (
+                "Critic gate v2 could not read query_context, so critic memory stayed off."
+            ),
+        }
+
+    text = " ".join(
+        [
+            str(query_context.get("current_stage") or ""),
+            str(query_context.get("goal") or ""),
+            str(query_context.get("current_packet_text") or ""),
+        ]
+    ).strip()
+    if not text:
+        observability["gate_decision"] = "off"
+        observability["gate_reason_codes"] = ["gate_inputs_unavailable"]
+        observability["inputs_available"] = False
+        return {
+            "should_attempt_retrieval": False,
+            "observability": observability,
+            "fail_closed_reason": (
+                "Critic gate v2 had no explicit stage or packet text to inspect, so critic memory stayed off."
+            ),
+        }
+
+    positive_reason_codes = [
+        reason_code
+        for reason_code, keywords in CRITIC_GATE_V2_SIGNAL_KEYWORDS.items()
+        if _contains_keyword(text, keywords)
+    ]
+    raw_case_skip = _contains_keyword(text, CRITIC_GATE_V2_RAW_SKIP_KEYWORDS)
+    strong_positive_reason_codes = {
+        reason_code
+        for reason_code in positive_reason_codes
+        if reason_code
+        in {
+            "contradiction_signal",
+            "uncertainty_signal",
+            "repeat_attempt_signal",
+        }
+    }
+
+    if raw_case_skip and not strong_positive_reason_codes:
+        observability["gate_decision"] = "off"
+        observability["gate_reason_codes"] = ["obvious_raw_case_skip"]
+        return {
+            "should_attempt_retrieval": False,
+            "observability": observability,
+            "fail_closed_reason": (
+                "Critic gate v2 detected an obvious raw-case skip, so critic memory stayed off."
+            ),
+        }
+    if not positive_reason_codes:
+        observability["gate_decision"] = "off"
+        observability["gate_reason_codes"] = ["no_explicit_critic_signal"]
+        return {
+            "should_attempt_retrieval": False,
+            "observability": observability,
+            "fail_closed_reason": (
+                "Critic gate v2 found no explicit contradiction, uncertainty, policy, repeat, or risk signal."
+            ),
+        }
+
+    observability["gate_reason_codes"] = positive_reason_codes
+    return {
+        "should_attempt_retrieval": True,
+        "observability": observability,
+        "fail_closed_reason": None,
+    }
+
+
+def _apply_critic_gate_v2_postcheck(
+    *,
+    request: dict[str, Any],
+    response: dict[str, Any],
+    observability: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any] | None, str | None]:
+    if not observability.get("applied"):
+        observability["retrieval_attached"] = bool(response.get("matches"))
+        return response, observability, None, None
+
+    matches = response.get("matches") or []
+    if not matches:
+        observability["gate_decision"] = "off"
+        observability["retrieval_attached"] = False
+        observability["gate_reason_codes"] = list(observability["gate_reason_codes"]) + [
+            "no_strong_prior_episode_match"
+        ]
+        return response, observability, response, (
+            response.get("fallback", {}).get("reason")
+            or "Critic gate v2 found no strong prior episode match, so critic memory stayed off."
+        )
+
+    top_match = matches[0]
+    top_score = float(top_match.get("confidence_adjusted_score") or 0.0)
+    top_reason_codes = {
+        str(reason_code)
+        for reason_code in top_match.get("reason_codes") or []
+        if str(reason_code)
+    }
+    top_risk_flags = {
+        str(flag)
+        for flag in top_match.get("packet", {}).get("risk_flags") or []
+        if str(flag)
+    }
+
+    if top_score < CRITIC_GATE_V2_ATTACH_FLOOR:
+        observability["gate_decision"] = "off"
+        observability["retrieval_attached"] = False
+        observability["gate_reason_codes"] = list(observability["gate_reason_codes"]) + [
+            "weak_prior_episode_match"
+        ]
+        return (
+            _empty_shadow_response(
+                request=request,
+                status="gated_off",
+                reason=(
+                    "Critic gate v2 kept memory off because the best prior episode match "
+                    "was below the strict attach floor."
+                ),
+            ),
+            observability,
+            response,
+            "Critic gate v2 rejected a weak prior episode match and stayed fail-closed.",
+        )
+
+    if not (
+        top_reason_codes & CRITIC_GATE_V2_HIGH_VALUE_REASON_CODES
+        or top_risk_flags & CRITIC_GATE_V2_HIGH_VALUE_RISK_FLAGS
+    ):
+        observability["gate_decision"] = "off"
+        observability["retrieval_attached"] = False
+        observability["gate_reason_codes"] = list(observability["gate_reason_codes"]) + [
+            "no_high_value_prior_pattern"
+        ]
+        return (
+            _empty_shadow_response(
+                request=request,
+                status="gated_off",
+                reason=(
+                    "Critic gate v2 kept memory off because the retrieved match did not "
+                    "surface a high-value contradiction, cost, or instability pattern."
+                ),
+            ),
+            observability,
+            response,
+            "Critic gate v2 rejected a low-value prior pattern and stayed fail-closed.",
+        )
+
+    observability["gate_decision"] = "on"
+    observability["retrieval_attached"] = True
+    observability["gate_reason_codes"] = list(observability["gate_reason_codes"]) + [
+        "strong_prior_episode_match",
+        "high_value_prior_pattern",
+    ]
+    return response, observability, response, None
+
+
 def build_shadow_run_artifact(
     *,
     request: dict[str, Any],
@@ -452,46 +745,84 @@ def build_shadow_run_artifact(
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     authoritative_baseline_path: str = DEFAULT_AUTHORITATIVE_BASELINE_PATH,
     shadow_path: str = DEFAULT_SHADOW_PATH,
+    mode_id: str = CURRENT_WINNER_MODE_ID,
+    enable_critic_gate_v2: bool = False,
     now_utc: str | None = None,
 ) -> dict[str, Any]:
     retrieved_response: dict[str, Any] | None = None
+    retrieval_candidate_response: dict[str, Any] | None = None
     retrieval_error: str | None = None
     fail_closed_triggered = False
+    precheck = _build_critic_gate_v2_precheck(
+        request=request,
+        mode_id=mode_id,
+        enable_critic_gate_v2=enable_critic_gate_v2,
+    )
+    gate_observability = precheck["observability"]
+    gate_fail_closed_reason = precheck["fail_closed_reason"]
 
-    try:
-        retrieved_response = retrieve_shadow_matches(
-            request=request,
-            store_path=store_path,
-            now_utc=now_utc,
-        )
-        fail_closed_triggered = not bool(retrieved_response.get("matches"))
-    except Exception as error:
-        retrieval_error = f"{type(error).__name__}: {error}"
+    if precheck["should_attempt_retrieval"]:
+        gate_observability["retrieval_attempted"] = True
+        try:
+            raw_response = retrieve_shadow_matches(
+                request=request,
+                store_path=store_path,
+                now_utc=now_utc,
+            )
+            (
+                retrieved_response,
+                gate_observability,
+                retrieval_candidate_response,
+                gate_fail_closed_reason,
+            ) = _apply_critic_gate_v2_postcheck(
+                request=request,
+                response=raw_response,
+                observability=gate_observability,
+            )
+            fail_closed_triggered = not gate_observability["retrieval_attached"]
+        except Exception as error:
+            retrieval_error = f"{type(error).__name__}: {error}"
+            fail_closed_triggered = True
+            gate_observability["gate_decision"] = "off"
+            gate_observability["retrieval_attached"] = False
+            gate_observability["gate_reason_codes"] = list(
+                gate_observability["gate_reason_codes"]
+            ) + ["retrieval_unavailable"]
+            gate_fail_closed_reason = (
+                "Critic memory stayed off because retrieval was unavailable."
+            )
+    else:
         fail_closed_triggered = True
+        retrieved_response = _empty_shadow_response(
+            request=request,
+            status="gated_off",
+            reason=gate_fail_closed_reason or "Critic gate v2 stayed fail-closed.",
+        )
 
-    response = retrieved_response or {
-        "schema_version": CONTRACT,
-        "status": "unavailable",
-        "query_id": None,
-        "requester": request.get("requester"),
-        "retrieval_confidence": 0.0,
-        "matches": [],
-        "fallback": {
-            "recommended": False,
-            "reason": "Shadow retrieval was unavailable, so the run stayed fail-closed.",
-        },
-    }
+    response = retrieved_response or _empty_shadow_response(
+        request=request,
+        status="unavailable",
+        reason="Shadow retrieval was unavailable, so the run stayed fail-closed.",
+    )
     divergence_markers = _build_divergence_markers(
         response=response,
         fail_closed_triggered=fail_closed_triggered,
+        gate_observability=gate_observability,
     )
     final_authoritative_output = json.loads(json.dumps(authoritative_output))
+    authoritative_output_unchanged = final_authoritative_output == authoritative_output
+    gate_observability["authoritative_output_unchanged"] = authoritative_output_unchanged
     comparison_summary = {
-        "authoritative_output_preserved": final_authoritative_output == authoritative_output,
+        "authoritative_output_preserved": authoritative_output_unchanged,
+        "authoritative_output_unchanged": authoritative_output_unchanged,
         "retrieval_status": response.get("status"),
         "retrieval_match_count": len(response.get("matches") or []),
         "retrieval_confidence": float(response.get("retrieval_confidence") or 0.0),
-        "shadow_memory_attached": bool(response.get("matches")),
+        "shadow_memory_attached": gate_observability["retrieval_attached"],
+        "retrieval_attempted": gate_observability["retrieval_attempted"],
+        "retrieval_attached": gate_observability["retrieval_attached"],
+        "gate_decision": gate_observability["gate_decision"],
+        "gate_reason_codes": list(gate_observability["gate_reason_codes"]),
         "comparison_mode": "shadow_only",
         "divergence_marker_count": len(divergence_markers),
         "manual_inspection_ready": True,
@@ -502,6 +833,7 @@ def build_shadow_run_artifact(
         "status": "unchanged_authoritative_output",
         "reason": (
             retrieval_error
+            or gate_fail_closed_reason
             or response.get("fallback", {}).get("reason")
             or "Shadow retrieval returned matches without changing authoritative output."
         ),
@@ -515,6 +847,12 @@ def build_shadow_run_artifact(
             "store_path": str(store_path),
             "output_dir": str(output_dir),
             "mode": "shadow_only_verification",
+            "mode_id": mode_id,
+        },
+        "operating_mode": {
+            "mode_id": mode_id,
+            "planner": "raw",
+            "critic": "memory_gate_v2" if enable_critic_gate_v2 else "memory",
         },
         "authoritative_baseline_path_used": {
             "path": authoritative_baseline_path,
@@ -530,8 +868,10 @@ def build_shadow_run_artifact(
                 "top_k": request.get("top_k"),
                 "collections": request.get("collections", []),
             },
+            "retrieval_candidate_response": retrieval_candidate_response,
             "response": response,
         },
+        "critic_memory_gate_observability": gate_observability,
         "comparison_result_summary": comparison_summary,
         "divergence_markers": divergence_markers,
         "fail_closed_status": fail_closed,
@@ -556,6 +896,7 @@ def render_shadow_run_markdown(artifact: dict[str, Any]) -> str:
         f"- Generated: `{artifact['run_metadata']['generated_at']}`",
         f"- Requester: `{artifact['run_metadata']['requester']}`",
         f"- Mode: `{artifact['run_metadata']['mode']}`",
+        f"- Mode id: `{artifact['run_metadata']['mode_id']}`",
         f"- Store path: `{artifact['run_metadata']['store_path']}`",
         "",
         "## Paths",
@@ -574,7 +915,12 @@ def render_shadow_run_markdown(artifact: dict[str, Any]) -> str:
         f"- Retrieval status: `{summary['retrieval_status']}`",
         f"- Retrieval match count: `{summary['retrieval_match_count']}`",
         f"- Retrieval confidence: `{summary['retrieval_confidence']:.4f}`",
+        f"- Gate decision: `{summary['gate_decision']}`",
+        f"- Gate reason codes: `{', '.join(summary['gate_reason_codes']) or 'none'}`",
+        f"- Retrieval attempted: `{str(summary['retrieval_attempted']).lower()}`",
+        f"- Retrieval attached: `{str(summary['retrieval_attached']).lower()}`",
         f"- Authoritative output preserved: `{str(summary['authoritative_output_preserved']).lower()}`",
+        f"- Authoritative output unchanged: `{str(summary['authoritative_output_unchanged']).lower()}`",
         f"- Shadow memory attached: `{str(summary['shadow_memory_attached']).lower()}`",
         "",
         "## Divergence Markers",
@@ -609,6 +955,20 @@ def render_shadow_run_markdown(artifact: dict[str, Any]) -> str:
             lines.append(
                 f"- `{match['memory_id']}` | episode_type=`{match['episode_type']}` | score=`{float(match['confidence_adjusted_score']):.4f}` | reasons=`{', '.join(match['reason_codes'])}`"
             )
+
+    candidate_response = artifact["shadow_comparison_path_used"].get("retrieval_candidate_response")
+    if candidate_response:
+        candidate_matches = candidate_response.get("matches") or []
+        lines.extend(
+            [
+                "",
+                "## Candidate Retrieval Before Gate",
+                "",
+                f"- Candidate status: `{candidate_response.get('status')}`",
+                f"- Candidate retrieval confidence: `{float(candidate_response.get('retrieval_confidence') or 0.0):.4f}`",
+                f"- Candidate match count: `{len(candidate_matches)}`",
+            ]
+        )
 
     lines.extend(
         [
@@ -649,6 +1009,114 @@ def write_shadow_run_artifacts(
     }
 
 
+def build_mode_comparison_artifact(
+    *,
+    request: dict[str, Any],
+    authoritative_output: dict[str, Any],
+    store_path: Path,
+    output_dir: Path = DEFAULT_OUTPUT_DIR,
+    authoritative_baseline_path: str = DEFAULT_AUTHORITATIVE_BASELINE_PATH,
+    shadow_path: str = DEFAULT_SHADOW_PATH,
+    now_utc: str | None = None,
+) -> dict[str, Any]:
+    current_winner = build_shadow_run_artifact(
+        request=request,
+        authoritative_output=authoritative_output,
+        store_path=store_path,
+        output_dir=output_dir,
+        authoritative_baseline_path=authoritative_baseline_path,
+        shadow_path=shadow_path,
+        mode_id=CURRENT_WINNER_MODE_ID,
+        enable_critic_gate_v2=False,
+        now_utc=now_utc,
+    )
+    challenger = build_shadow_run_artifact(
+        request=request,
+        authoritative_output=authoritative_output,
+        store_path=store_path,
+        output_dir=output_dir,
+        authoritative_baseline_path=authoritative_baseline_path,
+        shadow_path=shadow_path,
+        mode_id=CHALLENGER_MODE_ID,
+        enable_critic_gate_v2=True,
+        now_utc=now_utc,
+    )
+    winner_gate = current_winner["critic_memory_gate_observability"]
+    challenger_gate = challenger["critic_memory_gate_observability"]
+    return {
+        "run_metadata": {
+            "generated_at": now_utc or utc_now_iso(),
+            "requester": request.get("requester"),
+            "store_path": str(store_path),
+            "output_dir": str(output_dir),
+            "comparison_mode": "current_winner_vs_gate_v2",
+        },
+        "current_winner_mode": CURRENT_WINNER_MODE_ID,
+        "challenger_mode": CHALLENGER_MODE_ID,
+        "current_winner_artifact": current_winner,
+        "challenger_artifact": challenger,
+        "comparison_summary": {
+            "authoritative_output_unchanged_in_both": (
+                winner_gate["authoritative_output_unchanged"]
+                and challenger_gate["authoritative_output_unchanged"]
+            ),
+            "final_authoritative_outputs_equal": (
+                current_winner["final_authoritative_output"]["output_hash"]
+                == challenger["final_authoritative_output"]["output_hash"]
+            ),
+            "winner_retrieval_attempted": winner_gate["retrieval_attempted"],
+            "winner_retrieval_attached": winner_gate["retrieval_attached"],
+            "challenger_retrieval_attempted": challenger_gate["retrieval_attempted"],
+            "challenger_retrieval_attached": challenger_gate["retrieval_attached"],
+            "challenger_gate_decision": challenger_gate["gate_decision"],
+            "challenger_gate_reason_codes": challenger_gate["gate_reason_codes"],
+            "retrieval_attachment_reduced": (
+                winner_gate["retrieval_attached"] and not challenger_gate["retrieval_attached"]
+            ),
+        },
+    }
+
+
+def render_mode_comparison_markdown(payload: dict[str, Any]) -> str:
+    summary = payload["comparison_summary"]
+    return "\n".join(
+        [
+            "# TrendAtlas Critic Gate v2 Comparison",
+            "",
+            f"- Generated: `{payload['run_metadata']['generated_at']}`",
+            f"- Requester: `{payload['run_metadata']['requester']}`",
+            f"- Current winner: `{payload['current_winner_mode']}`",
+            f"- Challenger: `{payload['challenger_mode']}`",
+            f"- Winner retrieval attempted: `{str(summary['winner_retrieval_attempted']).lower()}`",
+            f"- Winner retrieval attached: `{str(summary['winner_retrieval_attached']).lower()}`",
+            f"- Challenger retrieval attempted: `{str(summary['challenger_retrieval_attempted']).lower()}`",
+            f"- Challenger retrieval attached: `{str(summary['challenger_retrieval_attached']).lower()}`",
+            f"- Challenger gate decision: `{summary['challenger_gate_decision']}`",
+            f"- Challenger gate reason codes: `{', '.join(summary['challenger_gate_reason_codes']) or 'none'}`",
+            f"- Retrieval attachment reduced: `{str(summary['retrieval_attachment_reduced']).lower()}`",
+            f"- Authoritative output unchanged in both: `{str(summary['authoritative_output_unchanged_in_both']).lower()}`",
+            f"- Final authoritative outputs equal: `{str(summary['final_authoritative_outputs_equal']).lower()}`",
+            "",
+        ]
+    )
+
+
+def write_mode_comparison_artifacts(
+    payload: dict[str, Any],
+    *,
+    output_dir: Path = DEFAULT_OUTPUT_DIR,
+) -> dict[str, str]:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    json_path = output_dir / DEFAULT_COMPARISON_JSON
+    markdown_path = output_dir / DEFAULT_COMPARISON_MARKDOWN
+    json_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    markdown_path.write_text(render_mode_comparison_markdown(payload), encoding="utf-8")
+    return {
+        "json_path": str(json_path),
+        "markdown_path": str(markdown_path),
+    }
+
+
 def build_demo_authoritative_output() -> dict[str, Any]:
     return {
         "planner_action": "propose_mutation",
@@ -662,17 +1130,9 @@ def build_demo_authoritative_output() -> dict[str, Any]:
 
 
 def build_demo_retrieval_request(*, requester: str = "planner") -> dict[str, Any]:
-    return {
-        "schema_version": CONTRACT,
-        "tenant_id": "research_os_prod",
-        "namespace": "trendatlas",
-        "collections": ["decision_episodes"],
-        "requester": requester,
-        "query_context": {
+    query_context_by_requester = {
+        "planner": {
             "current_stage": "proposal_generation",
-            "cycle_id": "cy_2026_04_21_eq_mr_042",
-            "family_id": "fam_eq_mr_042",
-            "mechanism_id": "mech_spreadfade_7",
             "goal": (
                 "Propose the next mutation after mixed recent evidence and avoid "
                 "repeating the most relevant prior caution signal."
@@ -680,6 +1140,44 @@ def build_demo_retrieval_request(*, requester: str = "planner") -> dict[str, Any
             "current_packet_text": (
                 "Planner is considering lower rebalance frequency plus a volatility "
                 "gate after a recent mixed validation and a governor hold."
+            ),
+        },
+        "critic": {
+            "current_stage": "critic_review_generation",
+            "goal": (
+                "Critic should resolve contradiction risk, cost sensitivity, and repeat-attempt "
+                "exposure before confirming the reasoning note."
+            ),
+            "current_packet_text": (
+                "Current review is uncertain because the same mechanism shows cost blowup, "
+                "regime instability, and an expected-vs-actual mismatch."
+            ),
+        },
+        "governor": {
+            "current_stage": "governor_final_decision",
+            "goal": (
+                "Governor should decide whether the most relevant prior negative or mixed "
+                "decision should block promotion."
+            ),
+            "current_packet_text": (
+                "Governor is reviewing a near-promotion case after mixed validation, "
+                "cost expansion, and a recent hold decision."
+            ),
+        },
+    }
+    return {
+        "schema_version": CONTRACT,
+        "tenant_id": "research_os_prod",
+        "namespace": "trendatlas",
+        "collections": ["decision_episodes"],
+        "requester": requester,
+        "query_context": {
+            "cycle_id": "cy_2026_04_21_eq_mr_042",
+            "family_id": "fam_eq_mr_042",
+            "mechanism_id": "mech_spreadfade_7",
+            **query_context_by_requester.get(
+                requester,
+                query_context_by_requester["planner"],
             ),
         },
         "filters": {
