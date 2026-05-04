@@ -138,7 +138,11 @@ export function LandingPage({
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(form)
+        body: JSON.stringify({
+          ...form,
+          locale,
+          source_page: pathname
+        })
       });
 
       const result = (await response.json().catch(() => null)) as

@@ -1,5 +1,5 @@
-﻿import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import { NextResponse } from "next/server";
+import { insertContactSubmission } from "@/lib/contact-submissions";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -8,6 +8,8 @@ type ContactPayload = {
   email?: unknown;
   company?: unknown;
   message?: unknown;
+  locale?: unknown;
+  source_page?: unknown;
 };
 
 function normalizeString(value: unknown) {
@@ -19,6 +21,8 @@ function validateContactPayload(payload: ContactPayload) {
   const email = normalizeString(payload.email);
   const company = normalizeString(payload.company);
   const message = normalizeString(payload.message);
+  const locale = normalizeString(payload.locale);
+  const sourcePage = normalizeString(payload.source_page);
 
   if (!name || !email || !message) {
     return { error: "Missing required fields." as const };
@@ -32,12 +36,21 @@ function validateContactPayload(payload: ContactPayload) {
     name.length > 120 ||
     email.length > 320 ||
     company.length > 160 ||
-    message.length > 5000
+    message.length > 5000 ||
+    locale.length > 24 ||
+    sourcePage.length > 240
   ) {
     return { error: "Submitted fields exceed allowed length." as const };
   }
 
-  return { name, email, company, message };
+  return {
+    name,
+    email,
+    company,
+    message,
+    locale: locale || null,
+    sourcePage: sourcePage || null
+  };
 }
 
 function getErrorMessage(error: unknown) {
@@ -67,24 +80,17 @@ function getErrorMessage(error: unknown) {
   return "Unknown error.";
 }
 
-export async function POST(request: Request) {
-  const resendApiKey = process.env.RESEND_API_KEY;
-  const contactEmail = process.env.CONTACT_EMAIL;
-  const resendFrom = process.env.RESEND_FROM;
+function getClientIp(request: Request) {
+  const forwardedFor = request.headers.get("x-forwarded-for");
 
-  if (!resendApiKey || !contactEmail || !resendFrom) {
-    console.error("Contact form config missing:", {
-      hasResendApiKey: !!resendApiKey,
-      hasContactEmail: !!contactEmail,
-      hasResendFrom: !!resendFrom
-    });
-
-    return NextResponse.json(
-      { success: false, error: "Contact form is not configured correctly." },
-      { status: 500 }
-    );
+  if (forwardedFor) {
+    return forwardedFor.split(",")[0]?.trim() || null;
   }
 
+  return request.headers.get("x-real-ip")?.trim() || null;
+}
+
+export async function POST(request: Request) {
   let payload: ContactPayload;
 
   try {
@@ -107,56 +113,19 @@ export async function POST(request: Request) {
     );
   }
 
-  const resend = new Resend(resendApiKey);
-
-  const submittedAt = new Date().toISOString();
-  const { name, email, company, message } = validated;
-  const companyLine = company || "Not provided";
-  const subject = `[imLayer] New pilot inquiry from ${name}`;
-
-  const text = [
-    "Source: imLayer website contact form",
-    `Timestamp: ${submittedAt}`,
-    `Name: ${name}`,
-    `Work email: ${email}`,
-    `Company: ${companyLine}`,
-    "",
-    "Message:",
-    message
-  ].join("\n");
-
-  const html = `
-    <h2>New pilot inquiry</h2>
-    <p><strong>Source:</strong> imLayer website contact form</p>
-    <p><strong>Timestamp:</strong> ${submittedAt}</p>
-    <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-    <p><strong>Work email:</strong> ${escapeHtml(email)}</p>
-    <p><strong>Company:</strong> ${escapeHtml(companyLine)}</p>
-    <p><strong>Message:</strong></p>
-    <p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>
-  `;
-
   try {
-    const result = await resend.emails.send({
-      from: resendFrom,
-      to: [contactEmail],
-      replyTo: email,
-      subject,
-      text,
-      html
+    const id = await insertContactSubmission({
+      name: validated.name,
+      email: validated.email,
+      company: validated.company || null,
+      message: validated.message,
+      locale: validated.locale,
+      sourcePage: validated.sourcePage,
+      ip: getClientIp(request),
+      userAgent: request.headers.get("user-agent")?.trim() || null
     });
 
-    if (result.error) {
-      const resendMessage = getErrorMessage(result.error);
-      console.error("Resend API error:", result.error);
-
-      return NextResponse.json(
-        { success: false, error: `Resend error: ${resendMessage}` },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({ success: true, id: result.data?.id ?? null });
+    return NextResponse.json({ success: true, id });
   } catch (error) {
     const message = getErrorMessage(error);
     console.error("Unexpected server error in /api/contact:", error);
@@ -166,13 +135,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
 }
